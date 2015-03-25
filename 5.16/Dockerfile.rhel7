@@ -1,0 +1,19 @@
+FROM openshift/base-rhel7
+
+# This image provides a Perl 5.16 environment you can use to run your Perl applications.
+MAINTAINER  Martin Nagy <mnagy@redhat.com>
+
+# Image metadata
+ENV PERL_VERSION          5.16
+ENV IMAGE_DESCRIPTION     Perl 5.16
+ENV IMAGE_TAGS            perl,perl516
+ENV IMAGE_EXPOSE_SERVICES 8080:http
+
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+	yum-config-manager --enable rhel-7-server-optional-rpms && \
+	yum install -y --setopt=tsflags=nodocs httpd24 perl516 perl516-mod_perl perl516-perl-CPAN perl516-perl-CPANPLUS && \
+	yum clean all -y
+
+USER default
+
+EXPOSE 8080

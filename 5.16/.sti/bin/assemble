@@ -1,0 +1,36 @@
+#!/bin/bash -ue
+
+source scl_source enable perl516
+
+EXCLUDED_PRAGMAS=("perl" "strict" "warnings" "constant" "open" "lib" "vars" "base" "utf8")
+DEPS=$(find . -type f \( -name \*\.pm -o -name \*\.pl \); )
+
+for f in $(( echo "$DEPS" | xargs /usr/lib/rpm/perl.req | awk '{ print $1 }' | sed 's/^perl(\(.*\))$/\1/'; cat ${CPAN_PATH} 2>/dev/null ) | sort -u | grep . )
+do
+	# Skipping well-known perl pragmas
+	for element in ${EXCLUDED_PRAGMAS[@]}; do
+		[[ $element == $f ]] && continue 2
+	done
+
+	DISABLE_TEST="-n"
+	if [ -z "${ENABLE_CPAN_TESTS} ]
+	then
+		echo ".openshift/markers/enable_cpan_tests!  enabling default cpan tests" 1>&2
+		DISABLE_TEST=""
+	fi
+
+	# Do not error the build when the CPAN module failed to install, but report
+	# it to user. This will allow modules that are not local, nor CPAN to pass
+	# the build.
+	cpanm $DISABLE_TEST $MIRROR -L ${OPENSHIFT_PERL_DIR}perl5lib "$f"
+
+done
+
+# Installing dependencies with cpanfile
+if [ -f "cpanfile" ]
+then
+	echo "***  Installing modules from cpanfile"
+	pushd ${OPENSHIFT_REPO_DIR}.openshift > /dev/null
+	cpanm $MIRROR -L ${OPENSHIFT_PERL_DIR}perl5lib --installdeps .
+	popd > /dev/null
+fi
