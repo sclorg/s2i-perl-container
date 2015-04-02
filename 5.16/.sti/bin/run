@@ -1,1 +1,7 @@
+if [ "$PERL5LIB" ]; then
+  export PERL5LIB="$HOME/extlib/lib/perl5:$PER5LIB"
+else
+  export PERL5LIB="$HOME/extlib/lib/perl5"
+fi
+
 run
