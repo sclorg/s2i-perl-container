@@ -1,7 +1,8 @@
-if [ "$PERL5LIB" ]; then
-  export PERL5LIB="$HOME/extlib/lib/perl5:$PER5LIB"
-else
-  export PERL5LIB="$HOME/extlib/lib/perl5"
-fi
+#!/bin/bash
 
-run
+# For SCL enablement
+source .bashrc
+
+set -e
+
+exec httpd -C 'Include /opt/openshift/httpd.conf' -D FOREGROUND

@@ -28,7 +28,7 @@ if [ -z ${VERSION} ]; then
 	# Build all versions
 	dirs=${VERSIONS}
 else
-	# Build only specified version on MongoDB
+	# Build only specified version of Perl image
 	dirs=${VERSION}
 fi
 

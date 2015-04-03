@@ -16,13 +16,14 @@ RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
 
 ENV PATH $PATH:/opt/rh/perl516/root/usr/local/bin
 
-# TODO: s save system?
-# TODO: Cleanup cpanp cache?
-# TODO: We'll need to distribute these....
-RUN scl enable perl516 -- cpanp 's conf prereqs 1; s save' && \
-	scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save' && \
+# TODO: Cleanup cpanp cache after cpanminus is installed?
+RUN scl enable perl516 -- cpanp 's conf prereqs 1; s save system' && \
+	scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save system' && \
 	scl enable perl516 -- cpanp 'i App::cpanminus'
 
-USER default
+# TODO: Since there are couple of issues with running httpd as a non-root user,
+# the root user won't be dropped, in favor of the default user, until we 
+# find an reasonable approch.
+#USER default
 
 EXPOSE 8080
