@@ -1,0 +1,33 @@
+#!/bin/bash
+
+# For SCL enablement
+source .bashrc
+
+set -e
+
+echo "---> Installing application source"
+cp -Rf /tmp/src/* ./
+
+export CPAN_MIRROR=${CPAN_MIRROR:-""}
+
+# Don't test installed Perl modules by default
+if [ $ENABLE_CPAN_TEST = true ]; then
+	export ENABLE_CPAN_TEST=""
+else
+	export ENABLE_CPAN_TEST="--notest"
+fi
+
+# Installing dependencies with cpanfile
+if [ -f "cpanfile" ]; then
+	CPANM=`which cpanm`
+	echo "---> Installing modules from cpanfile ..."
+	perl $CPANM $CPAN_MIRROR $ENABLE_CPAN_TEST -l extlib Module::CoreList
+	perl -Iextlib/lib/perl5 $CPANM $CPAN_MIRROR $ENABLE_CPAN_TEST -l extlib --installdeps .
+else
+	echo "---> No cpanfile found, nothing to install"
+fi
+
+# Symlinking the application into dir from which httpd serves the app.
+# NOTE: This is only possible due to the fact the the image is running under root user. 
+rm -rf /opt/rh/httpd24/root/var/www/html/
+ln -s /opt/openshift/src/ /opt/rh/httpd24/root/var/www/html
