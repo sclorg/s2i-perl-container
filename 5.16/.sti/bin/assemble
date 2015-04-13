@@ -11,7 +11,7 @@ cp -Rf /tmp/src/* ./
 export CPAN_MIRROR=${CPAN_MIRROR:-""}
 
 # Don't test installed Perl modules by default
-if [ $ENABLE_CPAN_TEST = true ]; then
+if [ "${ENABLE_CPAN_TEST}" = true ]; then
 	export ENABLE_CPAN_TEST=""
 else
 	export ENABLE_CPAN_TEST="--notest"
