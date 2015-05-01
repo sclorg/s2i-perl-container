@@ -33,10 +33,10 @@ COPY ./contrib/ /opt/openshift
 
 RUN chown -R default:default /opt/openshift
 
-# TODO: Since there are couple of issues with running httpd as a non-root user,
-# the root user won't be dropped, in favor of the default user, until we
-# find an reasonable approch.
-#USER default
+RUN sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
+    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
+
+USER default
 
 # Set the default CMD to print the usage of the language image
 CMD ["usage"]
