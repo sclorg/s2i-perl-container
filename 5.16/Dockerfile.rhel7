@@ -4,24 +4,11 @@ FROM openshift/base-rhel7
 MAINTAINER  Martin Nagy <mnagy@redhat.com>
 
 # Image metadata
-ENV PERL_VERSION          5.16
-ENV IMAGE_DESCRIPTION     Perl 5.16
-ENV IMAGE_TAGS            perl,perl516
-ENV IMAGE_EXPOSE_SERVICES 8080:http
-
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
-	yum-config-manager --enable rhel-7-server-optional-rpms && \
-	yum install -y --setopt=tsflags=nodocs httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS && \
-	yum clean all
-
-ENV PATH $PATH:/opt/rh/perl516/root/usr/local/bin
-
-# TODO: Cleanup cpanp cache after cpanminus is installed?
-RUN scl enable perl516 -- cpanp 's conf prereqs 1; s save system' && \
-	scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save system' && \
-	scl enable perl516 -- cpanp 'i App::cpanminus'
-
-EXPOSE 8080
+ENV PERL_VERSION=5.16 \
+    IMAGE_DESCRIPTION="Perl 5.16" \
+    IMAGE_TAGS=perl,perl516 \
+    IMAGE_EXPOSE_SERVICES=8080:http \
+    PATH=$PATH:/opt/rh/perl516/root/usr/local/bin
 
 # Copy the STI scripts from the specific language image to /usr/local/sti
 COPY ./.sti/bin/ /usr/local/sti
@@ -30,10 +17,19 @@ COPY ./.sti/bin/ /usr/local/sti
 # run and build the applications.
 COPY ./contrib/ /opt/openshift
 
-RUN chown -R default:default /opt/openshift
+# TODO: Cleanup cpanp cache after cpanminus is installed?
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+	yum-config-manager --enable rhel-7-server-optional-rpms && \
+	yum install -y --setopt=tsflags=nodocs httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS && \
+	yum clean all && \
+	scl enable perl516 -- cpanp 's conf prereqs 1; s save system' && \
+	scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save system' && \
+	scl enable perl516 -- cpanp 'i App::cpanminus' && \
+	chown -R default:default /opt/openshift && \
+	sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
+	chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
 
-RUN sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
-    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
+EXPOSE 8080
 
 USER default
 
