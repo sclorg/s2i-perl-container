@@ -34,7 +34,7 @@ RUN yum install -y \
     sed -i -f /opt/openshift/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
 
-USER default
+USER 1001
 
 # Set the default CMD to print the usage of the language image
 CMD ["usage"]
