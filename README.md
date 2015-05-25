@@ -63,13 +63,13 @@ resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ sti build https://github.com/openshift/sti-perl.git --contextDir=5.16/test/sample-test-app/ openshift/perl-516-rhel7 perl-sample-app
+    $ sti build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-rhel7 perl-sample-app
     $ docker run -p 8080:8080 perl-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ sti build https://github.com/openshift/sti-perl.git --contextDir=5.16/test/sample-test-app/ openshift/perl-516-centos7 perl-sample-app
+    $ sti build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-centos7 perl-sample-app
     $ docker run -p 8080:8080 perl-sample-app
     ```
 
@@ -130,9 +130,9 @@ Repository organization
             Is used to install the sources into location from where the application
             will be run and prepare the application for deployment (eg. installing
             modules, etc.).
-            In order to install application dependencies, application has to contain 
+            In order to install application dependencies, application has to contain
             `cpanfile`, in which user specifies modules and their versions.
-            Example of [cpanfile](https://github.com/openshift/sti-perl/blob/master/5.16/test/sample-test-app/cpanfile) is available in our test application.  
+            Example of [cpanfile](https://github.com/openshift/sti-perl/blob/master/5.16/test/sample-test-app/cpanfile) is available in our test application.
 
         *   **run**
 
@@ -184,10 +184,10 @@ file inside your source code repository.
 
 * **ENABLE_CPAN_TEST**
 
-    Will install all the cpan packages and run their tests. Default value is set to 
+    Will install all the cpan packages and run their tests. Default value is set to
     `false`.
 
 * **CPAN_MIRROR**
 
-    This variable specifies mirror URL which will used by cpanminus to install dependencies. 
+    This variable specifies mirror URL which will used by cpanminus to install dependencies.
     By default the URL is not specified.

@@ -10,7 +10,7 @@ To use it, install STI: https://github.com/openshift/source-to-image
 
 Sample invocation:
 
-sti build https://github.com/openshift/sti-perl.git --contextDir=5.16/test/sample-test-app/ openshift/perl-516-${DISTRO}7 perl-sample-app
+sti build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-${DISTRO}7 perl-sample-app
 
 You can then run the resulting image via:
 docker run -p 8080:8080 perl-sample-app
