@@ -2,4 +2,4 @@
 
 set -e
 
-exec httpd -C 'Include /opt/openshift/httpd.conf' -D FOREGROUND
+exec httpd -C 'Include /opt/openshift/etc/httpd.conf' -D FOREGROUND
