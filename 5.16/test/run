@@ -105,6 +105,42 @@ test_docker_run_usage() {
   docker run ${IMAGE_NAME} &>/dev/null
 }
 
+test_scl_usage() {
+  local run_cmd="$1"
+  local expected="$2"
+
+  info "Testing the image SCL enable"
+  out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}")
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -i <<< "${run_cmd}")
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[-i /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker run --rm -i ${IMAGE_NAME} /bin/bash -l <<< "${run_cmd}")
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[-i /bin/bash -l "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker run --rm -i ${IMAGE_NAME} /bin/sh -ic "${run_cmd}")
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[/bin/sh -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/bash -c "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/bash -c "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "${run_cmd}" 2>&1)
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+}
 
 test_connection() {
   info "Testing the HTTP connection (http://$(container_ip):${test_port})"
@@ -133,6 +169,9 @@ test_application() {
 
   # Wait for the container to write it's CID file
   wait_for_cid
+
+  test_scl_usage "perl --version" "v5.16.3"
+  check_result $?
 
   test_connection
   check_result $?
