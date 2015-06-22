@@ -31,7 +31,9 @@ RUN yum install -y \
     scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save system' && \
     chown -R default:default /opt/openshift && \
     sed -i -f /opt/openshift/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
-    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd
+    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd && \
+    mkdir /opt/openshift/config && \
+    chmod -R og+rwx /opt/openshift/config
 
 USER 1001
 
