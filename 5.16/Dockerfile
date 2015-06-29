@@ -14,9 +14,6 @@ LABEL io.k8s.description="Platform for building and running Perl 5.1.6 applicati
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,perl,perl516"
 
-# Copy the STI scripts from the specific language image to /usr/local/sti
-COPY ./.sti/bin/ /usr/local/sti
-
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum install -y \
     https://www.softwarecollections.org/en/scls/rhscl/httpd24/epel-7-x86_64/download/rhscl-httpd24-epel-7-x86_64.noarch.rpm \
@@ -26,11 +23,16 @@ RUN yum install -y \
     scl enable perl516 -- cpanp 's conf prereqs 1; s save system' && \
     scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save system'
 
+# Copy the STI scripts from the specific language image to /usr/local/sti
+COPY ./.sti/bin/ /usr/local/sti
+
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
 COPY ./contrib/ /opt/openshift
 
-# Drop the root user and make the content of /opt/openshift owned by user 1001
+# In order to drop the root user, we have to make some directories world
+# writeable as OpenShift default security model is to run the container under
+# random UID.
 RUN mkdir -p /opt/openshift/etc/httpd.d && \
     sed -i -f /opt/openshift/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd /opt/openshift/etc/httpd.d && \
