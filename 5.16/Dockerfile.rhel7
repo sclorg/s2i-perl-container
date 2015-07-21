@@ -20,10 +20,11 @@ LABEL k8s.io/description="Platform for building and running Perl 5.1.6 applicati
       openshift.io/tags="builder,perl,perl516"
 
 # Labels consumed by Red Hat build service
-LABEL Component="perl516" \
+LABEL BZComponent="openshift-sti-perl-docker" \
       Name="openshift3/perl-516-rhel7" \
       Version="5.16" \
-      Release="1"
+      Release="1" \
+      Architecture="x86_64"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
