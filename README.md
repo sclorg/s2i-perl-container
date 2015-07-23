@@ -12,6 +12,7 @@ Versions
 ---------------
 Perl versions currently provided are:
 * perl-5.16
+* perl-5.20
 
 RHEL versions currently supported are:
 * RHEL7
