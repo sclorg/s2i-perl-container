@@ -1,7 +1,7 @@
 FROM openshift/base-centos7
 
 # This image provides a Perl 5.20 environment you can use to run your Perl applications.
-MAINTAINER  Martin Nagy <mnagy@redhat.com>
+MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
 
