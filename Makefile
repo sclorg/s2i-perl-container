@@ -1,5 +1,5 @@
 SKIP_SQUASH?=0
-VERSIONS="5.16"
+VERSIONS="5.16 5.20"
 
 ifeq ($(TARGET),rhel7)
 	OS := rhel7
@@ -9,6 +9,8 @@ endif
 
 ifeq ($(VERSION), 5.16)
 	VERSION := 5.16
+else ifeq ($(VERSION), 5.20)
+	VERSION := 5.20
 else
 	VERSION :=
 endif

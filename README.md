@@ -12,6 +12,7 @@ Versions
 ---------------
 Perl versions currently provided are:
 * perl-5.16
+* perl-5.20
 
 RHEL versions currently supported are:
 * RHEL7
@@ -36,13 +37,13 @@ To build a Perl image, choose either the CentOS or RHEL based image:
 
 *  **CentOS based image**
 
-    This image is available on DockerHub. To download it run:
+    This image is available on DockerHub. To download perl-5.16 image, run:
 
     ```
     $ docker pull openshift/perl-516-centos7
     ```
 
-    To build a Perl image from scratch run:
+    To build the perl-5.16 image from scratch run:
 
     ```
     $ git clone https://github.com/openshift/sti-perl.git
@@ -51,8 +52,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all provided versions of Perl. Since we are currently providing only version `5.16`,
-you can omit this parameter.**
+on all provided versions of Perl.**
 
 
 Usage
@@ -88,7 +88,7 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
 *  **RHEL based image**
 
-    To test a RHEL7-based Perl-5.16 image, you need to run the test on a properly
+    To test a RHEL7-based image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
@@ -104,8 +104,7 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
-on all the provided versions of Perl. Since we are currently providing only version `5.16`
-you can omit this parameter.**
+on all the provided versions of Perl.**
 
 
 Repository organization
