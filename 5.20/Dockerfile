@@ -17,7 +17,7 @@ LABEL io.k8s.description="Platform for building and running Perl 5.20 applicatio
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum install -y \
     https://www.softwarecollections.org/en/scls/rhscl/httpd24/epel-7-x86_64/download/rhscl-httpd24-epel-7-x86_64.noarch.rpm \
-    https://www.softwarecollections.org/en/scls/rhscl/rh-perl520/epel-7-x86_64/download/rhscl-rh-perl520-epel-7-x86_64.noarch.rpm
+    https://www.softwarecollections.org/en/scls/rhscl/rh-perl520/epel-7-x86_64/download/rhscl-rh-perl520-epel-7-x86_64.noarch.rpm && \
     yum install -y --setopt=tsflags=nodocs make rh-perl520 rh-perl520-devel rh-perl520-mod_perl rh-perl520-perl-CPAN && \
     yum clean all
 
