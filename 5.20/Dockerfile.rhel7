@@ -27,7 +27,7 @@ LABEL BZComponent="rh-perl520" \
       Architecture="x86_64"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms \
+RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     yum install -y --setopt=tsflags=nodocs make rh-perl520 rh-perl520-devel rh-perl520-mod_perl rh-perl520-perl-CPAN tar && \
     yum clean all
