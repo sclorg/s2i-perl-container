@@ -21,8 +21,8 @@ RUN yum install -y \
     yum install -y --setopt=tsflags=nodocs make rh-perl520 rh-perl520-devel rh-perl520-mod_perl rh-perl520-perl-CPAN && \
     yum clean all
 
-# Copy the STI scripts from the specific language image to /usr/local/sti
-COPY ./.sti/bin/ /usr/local/sti
+# Copy the S2I scripts from the specific language image to /usr/local/sti
+COPY ./s2i/bin/ /usr/local/sti
 
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.

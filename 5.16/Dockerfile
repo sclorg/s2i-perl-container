@@ -23,8 +23,8 @@ RUN yum install -y \
     scl enable perl516 -- cpanp 's conf prereqs 1; s save system' && \
     scl enable perl516 -- cpanp 's conf allow_build_interactivity 0; s save system'
 
-# Copy the STI scripts from the specific language image to /usr/local/sti
-COPY ./.sti/bin/ /usr/local/sti
+# Copy the S2I scripts from the specific language image to /usr/local/sti
+COPY ./s2i/bin/ /usr/local/sti
 
 # Each language image can have 'contrib' a directory with extra files needed to
 # run and build the applications.
