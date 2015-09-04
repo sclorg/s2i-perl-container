@@ -1,7 +1,7 @@
 Perl for OpenShift - Docker images
 ========================================
 
-This repository contains the source for building various versions of 
+This repository contains the source for building various versions of
 the Perl application as a reproducible Docker image using
 [source-to-image](https://github.com/openshift/source-to-image).
 Users can choose between RHEL and CentOS based builder images.
@@ -58,18 +58,18 @@ on all provided versions of Perl.**
 Usage
 ---------------------
 To build a simple [perl-sample-app](https://github.com/openshift/sti-perl/tree/master/5.16/test/sample-test-app) application,
-using standalone [STI](https://github.com/openshift/source-to-image) and then run the
+using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ sti build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-rhel7 perl-sample-app
+    $ s2i build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-rhel7 perl-sample-app
     $ docker run -p 8080:8080 perl-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ sti build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-centos7 perl-sample-app
+    $ s2i build https://github.com/openshift/sti-perl.git --context-dir=5.16/test/sample-test-app/ openshift/perl-516-centos7 perl-sample-app
     $ docker run -p 8080:8080 perl-sample-app
     ```
 
@@ -122,7 +122,7 @@ Repository organization
 
     * **`.sti/bin/`**
 
-        This folder contains scripts that are run by [STI](https://github.com/openshift/source-to-image):
+        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
 
         *   **assemble**
 
