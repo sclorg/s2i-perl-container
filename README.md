@@ -189,3 +189,7 @@ file inside your source code repository.
 
     This variable specifies a mirror URL which will used by cpanminus to install dependencies.
     By default the URL is not specified.
+
+* **PERL_APACHE2_RELOAD**
+
+    Set this to "true" to enable automatic reloading of modified Perl modules.
