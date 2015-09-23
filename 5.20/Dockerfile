@@ -6,8 +6,7 @@ MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 EXPOSE 8080
 
 # Image metadata
-ENV PERL_VERSION=5.20 \
-    PATH=$PATH:/opt/rh/rh-perl520/root/usr/local/bin
+ENV PERL_VERSION=5.20
 
 LABEL io.k8s.description="Platform for building and running Perl 5.20 applications" \
       io.k8s.display-name="Apache 2.4 with mod_perl/5.20" \
