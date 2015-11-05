@@ -250,10 +250,10 @@ test_1() {
 }
 test_1
 
-# Example how to use do_test()
-#test_2_function() {
-#    test_response '/' 200 'Usage'
-#}
-#do_test 'binpath' 'test_2_function'
+# Check scripts installed from CPAN are available to the application.
+test_2_function() {
+    test_response '/' 200 'Usage'
+}
+do_test 'binpath' 'test_2_function'
 
 info "All tests finished successfully."
