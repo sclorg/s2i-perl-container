@@ -58,6 +58,11 @@ Repository organization
             `cpanfile` file, in which the user specifies the modules and their versions.
             An example of a [cpanfile](https://github.com/openshift/sti-perl/blob/master/5.20/test/sample-test-app/cpanfile) is available within our test application.
 
+            All files with cgi and pl extension are handled by mod_perl. If
+            exactly one file with psgi extension exists in the top-level
+            directory, the mod_perl will be autoconfigured to execute the PSGI
+            application for any request URI path with Plack's mod_perl adaptor.
+
         *   **run**
 
             This script is responsible for running the application, using the
