@@ -58,8 +58,8 @@ Repository organization
             `cpanfile` file, in which the user specifies the modules and their versions.
             An example of a [cpanfile](https://github.com/openshift/sti-perl/blob/master/5.20/test/sample-test-app/cpanfile) is available within our test application.
 
-            All files with cgi and pl extension are handled by mod_perl. If
-            exactly one file with psgi extension exists in the top-level
+            All files with `.cgi` and `.pl` extension are handled by mod_perl.
+            If exactly one file with `.psgi` extension exists in the top-level
             directory, the mod_perl will be autoconfigured to execute the PSGI
             application for any request URI path with Plack's mod_perl adaptor.
 
@@ -108,3 +108,22 @@ file inside your source code repository.
 * **PERL_APACHE2_RELOAD**
 
     Set this to "true" to enable automatic reloading of modified Perl modules.
+
+* **PSGI_FILE**
+
+    Override PSGI application detection.
+
+    If the PSGI_FILE variable is set to empty value, no PSGI application will
+    be detected and mod_perl not be reconfigured.
+
+    If the PSGI_FILE variable is set and non-empty, it will define path to
+    the PSGI application file. No detection will be used.
+
+    If the PSGI_FILE variable does not exist, autodetection will be used:
+    If exactly one ./*.psgi file exists, mod_perl will be configured to
+    execute that file.
+
+* **PSGI_URI_PATH**
+
+    This variable overrides location URI path that is handled path the PSGI
+    application. Default value is "/".
