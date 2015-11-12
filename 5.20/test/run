@@ -256,4 +256,17 @@ test_2_function() {
 }
 do_test 'binpath' 'test_2_function'
 
+# Check a single PSGI application is recognized a mod_perl is autoconfigured.
+test_3_function() {
+    test_response '/' 200 '<title>Web::Paste::Simple'
+}
+do_test 'psgi' 'test_3_function'
+
+# Check variables can select a PSGI application and set URI path.
+test_4_function() {
+    test_response '/path' 200 '<title>Web::Paste::Simple'
+    test_response '/cpanfile' 200 'requires'
+}
+do_test 'psgi-variables' 'test_4_function' 'PSGI_FILE=./application2.psgi,PSGI_URI_PATH=/path'
+
 info "All tests finished successfully."
