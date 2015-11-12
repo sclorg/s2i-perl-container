@@ -2,6 +2,12 @@
 
 set -e
 
+# CPAN can install scripts. They should be available from mod_perl too.
+export PATH=${PATH}:/opt/app-root/src/extlib/bin
+# And we have to set Perl include path too because mod_perl's PerlSwitches
+# does not apply to them.
+export PERL5LIB=/opt/app-root/src/extlib/lib/perl5
+
 # Warning: Please note that this will pass all environment variables available within the
 # container to mod_perl by means of PerlPassEnv in the env.conf file
 if [ ! -f /opt/app-root/etc/httpd.d/env.conf ]; then
