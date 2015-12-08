@@ -15,9 +15,7 @@ LABEL io.k8s.description="Platform for building and running Perl 5.1.6 applicati
       io.openshift.tags="builder,perl,perl516"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
-RUN yum install -y \
-    https://www.softwarecollections.org/en/scls/rhscl/httpd24/epel-7-x86_64/download/rhscl-httpd24-epel-7-x86_64.noarch.rpm \
-    https://www.softwarecollections.org/en/scls/rhscl/perl516/epel-7-x86_64/download/rhscl-perl516-epel-7-x86_64.noarch.rpm && \
+RUN yum install -y centos-release-scl && \
     yum install -y --setopt=tsflags=nodocs httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS && \
     yum clean all && \
     scl enable perl516 -- cpanp 's conf prereqs 1; s save system' && \
