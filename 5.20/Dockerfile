@@ -15,7 +15,9 @@ LABEL io.k8s.description="Platform for building and running Perl 5.20 applicatio
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum install -y centos-release-scl && \
-    yum install -y --setopt=tsflags=nodocs make rh-perl520 rh-perl520-devel rh-perl520-mod_perl rh-perl520-perl-CPAN && \
+    INSTALL_PKGS="rh-perl520 rh-perl520-perl-devel rh-perl520-mod_perl rh-perl520-perl-CPAN" && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    rpm -V $INSTALL_PKGS && \
     yum clean all
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
