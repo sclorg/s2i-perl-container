@@ -16,7 +16,7 @@ LABEL io.k8s.description="Platform for building and running Perl 5.1.6 applicati
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS" && \
+    INSTALL_PKGS="gd-devel httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS" && \
     yum install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all && \
