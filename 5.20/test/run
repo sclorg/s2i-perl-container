@@ -294,11 +294,13 @@ test_4_function() {
 }
 do_test 'psgi-variables' 'test_4_function' 'PSGI_FILE=./application2.psgi,PSGI_URI_PATH=/path'
 
-# Check httpd access_log flows to stdout, error_log to stderr.
+# Check httpd access_log flows to stdout, error_log to stdout.
+# TODO: send error_log to stderr after dropping support for broken
+# docker < 1.9.
 test_5_function() {
     test_response '/' 200 'Text in HTTP body' && \
     test_stdout '"GET /[^"]*" 200 ' && \
-    test_stderr 'Warning on stderr'
+    test_stdout 'Warning on stderr'
 }
 do_test 'warningonstderr' 'test_5_function'
 
