@@ -23,4 +23,24 @@ PerlInitHandler Apache2::Reload
 EOF
 fi
 
+export_vars=$(cgroup-limits) ; export $export_vars
+
+# Validate server limit option
+if [[ ! "${HTTPD_MAX_REQUEST_WORKERS:-1}" =~ ^[1-9][0-9]*$ || "${HTTPD_MAX_REQUEST_WORKERS:-1}" -gt 20000 ]]; then
+  echo "HTTPD_MAX_REQUEST_WORKERS needs be an integer between 1 and 20000"
+  exit 1
+fi
+
+# If there is no server limit specified, try to guess the best value
+if [ -z "${HTTPD_MAX_REQUEST_WORKERS:-}" ]; then
+  MAX_SERVER_LIMIT=$(((MEMORY_LIMIT_IN_BYTES/1024/1024 - 30) / 7))
+  MAX_SERVER_LIMIT=$((MAX_SERVER_LIMIT > 0 ? MAX_SERVER_LIMIT : 1))
+  export HTTPD_MAX_REQUEST_WORKERS=$((MAX_SERVER_LIMIT > 256 ? 256 : MAX_SERVER_LIMIT))
+fi
+
+export HTTPD_START_SERVERS=${HTTPD_START_SERVERS:-8}
+export HTTPD_MAX_SPARE_SERVERS=$((HTTPD_START_SERVERS+10))
+
+envsubst < /opt/app-root/etc/httpd.d/50-mpm.conf.template > /opt/app-root/etc/httpd.d/50-mpm.conf
+
 exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
