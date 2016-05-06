@@ -221,7 +221,7 @@ do_test() {
 
     # Build and run the test application
     prepare
-    run_s2i_build $s2i_args --env="$test_environment"
+    run_s2i_build $s2i_args $test_environment
     check_result $?
     run_test_application >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
     wait_for_cid
@@ -292,7 +292,7 @@ test_4_function() {
     test_response '/path' 200 '<title>Web::Paste::Simple' && \
     test_response '/cpanfile' 200 'requires'
 }
-do_test 'psgi-variables' 'test_4_function' 'PSGI_FILE=./application2.psgi,PSGI_URI_PATH=/path'
+do_test 'psgi-variables' 'test_4_function' '--env=PSGI_FILE=./application2.psgi --env=PSGI_URI_PATH=/path'
 
 # Check httpd access_log flows to stdout, error_log to stdout.
 # TODO: send error_log to stderr after dropping support for broken
