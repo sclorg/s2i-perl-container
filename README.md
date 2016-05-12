@@ -32,8 +32,8 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/openshift/sti-perl.git
-    $ cd sti-perl
+    $ git clone https://github.com/openshift/s2i-perl.git
+    $ cd s2i-perl
     $ make build TARGET=rhel7 VERSION=5.16
     ```
 
@@ -48,8 +48,8 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     To build the perl-5.16 image from scratch run:
 
     ```
-    $ git clone https://github.com/openshift/sti-perl.git
-    $ cd sti-perl
+    $ git clone https://github.com/openshift/s2i-perl.git
+    $ cd s2i-perl
     $ make build VERSION=5.16
     ```
 
@@ -70,7 +70,7 @@ see [usage documentation](5.20/README.md).
 Test
 ---------------------
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
-which launches tests to check functionality of a simple Perl application built on top of the sti-perl image.
+which launches tests to check functionality of a simple Perl application built on top of the s2i-perl image.
 
 Users can choose between testing a Perl test application based on a RHEL or CentOS image.
 
@@ -80,14 +80,14 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
     subscribed RHEL machine.
 
     ```
-    $ cd sti-perl
+    $ cd s2i-perl
     $ make test TARGET=rhel7 VERSION=5.16
     ```
 
 *  **CentOS based image**
 
     ```
-    $ cd sti-perl
+    $ cd s2i-perl
     $ make test VERSION=5.16
     ```
 
