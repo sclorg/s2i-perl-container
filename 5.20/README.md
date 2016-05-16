@@ -109,6 +109,16 @@ file inside your source code repository.
 
     Set this to "true" to enable automatic reloading of modified Perl modules.
 
+* **HTTPD_START_SERVERS**
+
+    The [StartServers](https://httpd.apache.org/docs/2.4/mod/mpm_common.html#startservers)
+    directive sets the number of child server processes created on startup. Default is 8.
+
+* **HTTPD_MAX_REQUEST_WORKERS**
+
+    Number of simultaneous requests that will be handled by Apache. The default
+    is 256, but it will be automatically lowered if memory is limited.
+
 * **PSGI_FILE**
 
     Override PSGI application detection.
