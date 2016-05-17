@@ -33,7 +33,7 @@ COPY ./contrib/ /opt/app-root
 RUN mkdir -p /opt/app-root/etc/httpd.d && \
     sed -i -f /opt/app-root/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
     chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd /opt/app-root/etc/httpd.d && \
-    chown -R 1001:0 /opt/app-root
+    chown -R 1001:0 /opt/app-root && chmod -R ug+rwx /opt/app-root
 
 USER 1001
 
