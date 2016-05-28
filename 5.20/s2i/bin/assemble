@@ -27,7 +27,7 @@ fi
 # If PSGI_FILE does not exist, check if exactly one ./*.psgi file exists and
 # use that file.
 # If PSGI_URI_PATH variable has a value, use it as a location. Default is "/".
-if [ ! -n "${PSGI_FILE+true}" ]; then
+if [ ! -v PSGI_FILE ]; then
     PSGI_FILE=$(find -maxdepth 1 -name '*.psgi' -type f)
 fi
 PSGI_FILE_NUMBER=$(printf '%s' "$PSGI_FILE" | wc -l)
