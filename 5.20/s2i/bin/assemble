@@ -14,6 +14,12 @@ fi
 
 export CPAN_MIRROR=${CPAN_MIRROR:-""}
 
+MIRROR_ARGS=""
+
+if [ -n "$CPAN_MIRROR" ]; then
+  MIRROR_ARGS="--mirror $CPAN_MIRROR"
+fi
+
 # Don't test installed Perl modules by default
 if [ "${ENABLE_CPAN_TEST}" = true ]; then
   export ENABLE_CPAN_TEST=""
@@ -59,8 +65,8 @@ if [ -f "cpanfile" ]; then
     perl - App::cpanminus
   CPANM="./perl5/bin/cpanm"
   echo "---> Installing modules from cpanfile ..."
-  perl $CPANM $CPAN_MIRROR $ENABLE_CPAN_TEST -l extlib Module::CoreList
-  perl -Iextlib/lib/perl5 $CPANM $CPAN_MIRROR $ENABLE_CPAN_TEST -l extlib --installdeps .
+  perl $CPANM $MIRROR_ARGS $ENABLE_CPAN_TEST -l extlib Module::CoreList
+  perl -Iextlib/lib/perl5 $CPANM $MIRROR_ARGS $ENABLE_CPAN_TEST -l extlib --installdeps .
 else
   echo "---> No cpanfile found, nothing to install"
 fi
