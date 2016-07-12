@@ -2,8 +2,9 @@
 
 set -e
 
-echo "---> Installing application source"
-cp -Rf /tmp/src/. ./
+shopt -s dotglob
+echo "---> Installing application source ..."
+mv /tmp/src/* ./
 
 if [ -d ./cfg ]; then
   echo "---> Copying configuration files..."
