@@ -17,7 +17,7 @@ export CPAN_MIRROR=${CPAN_MIRROR:-""}
 
 MIRROR_ARGS=""
 
-if [ -n "$CPAN_MIRROR" ]; then
+if [ ! -z "$CPAN_MIRROR" ]; then
   MIRROR_ARGS="--mirror $CPAN_MIRROR"
 fi
 
