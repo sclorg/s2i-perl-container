@@ -13,6 +13,10 @@ if [ -d ./cfg ]; then
   fi
 fi
 
+if [[ -n "${HTTP_PROXY:-}" && -z "${http_proxy:-}" ]]; then
+  export http_proxy=$HTTP_PROXY
+fi
+
 export CPAN_MIRROR=${CPAN_MIRROR:-""}
 
 MIRROR_ARGS=""
@@ -32,7 +36,7 @@ fi
 if [ -f "cpanfile" ]; then
   # Install cpanm
   echo "---> Installing cpanminus 1.7102 ..."
-  curl -skL https://raw.githubusercontent.com/miyagawa/cpanminus/1.7102/cpanm |\
+  curl -sSkL https://raw.githubusercontent.com/miyagawa/cpanminus/1.7102/cpanm |\
     perl - App::cpanminus
   CPANM="./perl5/bin/cpanm"
   echo "---> Installing modules from cpanfile ..."
