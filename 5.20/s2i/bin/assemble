@@ -13,6 +13,7 @@ if [ -d ./cfg ]; then
   fi
 fi
 
+# Allow for http proxy to be specified in uppercase
 if [[ -n "${HTTP_PROXY:-}" && -z "${http_proxy:-}" ]]; then
   export http_proxy=$HTTP_PROXY
 fi
