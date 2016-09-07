@@ -15,6 +15,7 @@ Versions
 Perl versions currently provided are:
 * perl-5.16
 * perl-5.20
+* perl-5.24
 
 RHEL versions currently supported are:
 * RHEL7
@@ -65,6 +66,9 @@ see [usage documentation](5.16/README.md).
 
 For information about usage of Dockerfile for Perl 5.20,
 see [usage documentation](5.20/README.md).
+
+For information about usage of Dockerfile for Perl 5.24,
+see [usage documentation](5.24/README.md).
 
 
 Test
