@@ -204,13 +204,32 @@ test_application() {
 # Second argument is function that expects running application. The function
 # must return (or terminate with) non-zero value to report an failure,
 # 0 otherwise.
-# Third argument is s2i --env argument value.
+# Other arguments are additional s2i options, like --env=FOO=bar.
 # The test function have available container ID in $cid_file, container output
 # in ${tmp_dir}/out, container stderr in ${tmp_dir}/err.
 do_test() {
     test_name="$1"
     test_function="$2"
-    test_environment="$3"
+    shift 2
+
+    # Old source-to-image 1.0.3 does not support multiple --env options.
+    # TODO: Remove ARGUMENTS conversion after dropping support 1.0.3.
+    local old_sti=0
+    if [[ "$(LC_ALL=C s2i help build 2>&1)" =~ \
+        'Specify an environment var NAME=VALUE,NAME2=VALUE2' ]]; then
+        old_sti=1
+    fi
+    local argument arguments environment
+    for argument in "$@"; do
+        if [ "$old_sti" == '1' -a "${argument:0:6}" == '--env=' ]; then
+            environment="${environment:+${environment},}${argument:6}"
+        else
+            arguments[${#arguments[*]}]="$argument"
+        fi
+    done
+    if [ -n "$environment" ]; then
+            arguments[${#arguments[*]}]="--env=${environment}"
+    fi
 
     info "Starting tests for ${test_name}."
 
@@ -221,7 +240,7 @@ do_test() {
 
     # Build and run the test application
     prepare
-    run_s2i_build $s2i_args $test_environment
+    run_s2i_build $s2i_args "${arguments[@]}"
     check_result $?
     run_test_application >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
     wait_for_cid
@@ -292,7 +311,8 @@ test_4_function() {
     test_response '/path' 200 '<title>Web::Paste::Simple' && \
     test_response '/cpanfile' 200 'requires'
 }
-do_test 'psgi-variables' 'test_4_function' '--env=PSGI_FILE=./application2.psgi --env=PSGI_URI_PATH=/path'
+do_test 'psgi-variables' 'test_4_function' \
+    '--env=PSGI_FILE=./application2.psgi' '--env=PSGI_URI_PATH=/path'
 
 # Check httpd access_log flows to stdout, error_log to stdout.
 # TODO: send error_log to stderr after dropping support for broken
