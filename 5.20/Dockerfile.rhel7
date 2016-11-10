@@ -19,7 +19,10 @@ LABEL Name="rhscl/perl-520-rhel7" \
       Architecture="x86_64"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
-RUN yum-config-manager --enable rhel-server-rhscl-7-rpms && \
+# To use subscription inside container yum command has to be run first (before yum-config-manager)
+# https://access.redhat.com/solutions/1443553
+RUN yum repolist > /dev/null && \
+    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
     INSTALL_PKGS="rh-perl520 rh-perl520-perl-devel rh-perl520-mod_perl rh-perl520-perl-CPAN" && \
     yum install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
