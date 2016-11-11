@@ -14,6 +14,7 @@ LABEL io.k8s.description="Platform for building and running Perl 5.24 applicatio
       io.openshift.tags="builder,perl,perl524"
 
 RUN yum install -y centos-release-scl && \
+    yum-config-manager --enable centos-sclo-rh-testing && \
     INSTALL_PKGS="rh-perl524 rh-perl524-perl-devel rh-perl524-mod_perl rh-perl524-perl-CPAN rh-perl524-perl-App-cpanminus" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
