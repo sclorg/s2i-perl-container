@@ -12,11 +12,11 @@ LABEL io.k8s.description="Platform for building and running Perl 5.24 applicatio
       io.openshift.tags="builder,perl,perl524"
 
 # Labels consumed by Red Hat build service
-LABEL Name="rhscl/perl-524-rhel7" \
-      BZComponent="rh-perl524-docker" \
-      Version="5.24" \
-      Release="1" \
-      Architecture="x86_64"
+LABEL name="rhscl/perl-524-rhel7" \
+      com.redhat.component="rh-perl524-docker" \
+      version="5.24" \
+      release="1" \
+      architecture="x86_64"
 
 # To use subscription inside container yum command has to be run first (before yum-config-manager)
 # https://access.redhat.com/solutions/1443553

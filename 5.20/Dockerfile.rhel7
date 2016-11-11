@@ -12,11 +12,11 @@ LABEL io.k8s.description="Platform for building and running Perl 5.20 applicatio
       io.openshift.tags="builder,perl,perl520"
 
 # Labels consumed by Red Hat build service
-LABEL Name="rhscl/perl-520-rhel7" \
-      BZComponent="rh-perl520-docker" \
-      Version="5.20" \
-      Release="1" \
-      Architecture="x86_64"
+LABEL name="rhscl/perl-520-rhel7" \
+      com.redhat.component="rh-perl520-docker" \
+      version="5.20" \
+      release="1" \
+      architecture="x86_64"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 # To use subscription inside container yum command has to be run first (before yum-config-manager)
