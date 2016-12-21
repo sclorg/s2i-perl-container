@@ -13,7 +13,6 @@ official [OpenShift Documentation](https://docs.openshift.org/latest/using_image
 Versions
 ---------------
 Perl versions currently provided are:
-* perl-5.16
 * perl-5.20
 * perl-5.24
 
@@ -29,13 +28,13 @@ Installation
 To build a Perl image, choose either the CentOS or RHEL based image:
 *  **RHEL based image**
 
-    To build a RHEL based perl-5.16 image, you need to run the build on a properly
+    To build a RHEL based Perl image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
     $ git clone https://github.com/openshift/s2i-perl.git
     $ cd s2i-perl
-    $ make build TARGET=rhel7 VERSION=5.16
+    $ make build TARGET=rhel7 VERSION=5.24
     ```
 
 *  **CentOS based image**
@@ -43,15 +42,15 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     This image is available on DockerHub. To download perl-5.16 image, run:
 
     ```
-    $ docker pull openshift/perl-516-centos7
+    $ docker pull centos/perl-524-centos7
     ```
 
-    To build the perl-5.16 image from scratch run:
+    To build the perl-5.24 image from scratch run:
 
     ```
     $ git clone https://github.com/openshift/s2i-perl.git
     $ cd s2i-perl
-    $ make build VERSION=5.16
+    $ make build TARGET=centos7 VERSION=5.24
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
@@ -60,9 +59,6 @@ on all provided versions of Perl.**
 
 Usage
 ---------------------------------
-
-For information about usage of Dockerfile for Perl 5.16,
-see [usage documentation](5.16/README.md).
 
 For information about usage of Dockerfile for Perl 5.20,
 see [usage documentation](5.20/README.md).
@@ -85,14 +81,14 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
     ```
     $ cd s2i-perl
-    $ make test TARGET=rhel7 VERSION=5.16
+    $ make test TARGET=rhel7 VERSION=5.24
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-perl
-    $ make test VERSION=5.16
+    $ make test TARGET=centos7 VERSION=5.24
     ```
 
 **Notice: By omitting the `VERSION` parameter, the build/test action will be performed
@@ -112,11 +108,10 @@ Repository organization
 
 Image name structure
 ------------------------
-##### Structure: openshift/1-2-3
 
 1. Platform name (lowercase) - perl
-2. Platform version(without dots) - 516
+2. Platform version(without dots) - 524
 3. Base builder image - centos7/rhel7
 
-Examples: `openshift/perl-516-centos7`, `openshift/perl-516-rhel7`
+Examples: `perl-524-centos7`, `perl-524-rhel7`
 
