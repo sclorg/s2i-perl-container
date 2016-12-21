@@ -1,4 +1,4 @@
-FROM openshift/base-centos7
+FROM centos/s2i-base-centos7
 
 # This image provides a Perl 5.20 environment you can use to run your Perl applications.
 MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
