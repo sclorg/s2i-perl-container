@@ -7,7 +7,8 @@ EXPOSE 8080
 ENV PERL_VERSION=5.16 \
     PATH=$PATH:/opt/rh/perl516/root/usr/local/bin
 
-LABEL io.k8s.description="Platform for building and running Perl 5.1.6 applications" \
+LABEL summary="Platform for building and running Perl 5.1.6 applications" \
+      io.k8s.description="Platform for building and running Perl 5.1.6 applications" \
       io.k8s.display-name="Apache 2.4 with mod_perl/5.1.6" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,perl,perl516"

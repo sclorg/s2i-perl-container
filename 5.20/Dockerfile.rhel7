@@ -6,7 +6,8 @@ EXPOSE 8080
 # Image metadata
 ENV PERL_VERSION=5.20
 
-LABEL io.k8s.description="Platform for building and running Perl 5.20 applications" \
+LABEL summary="Platform for building and running Perl 5.20 applications" \
+      io.k8s.description="Platform for building and running Perl 5.20 applications" \
       io.k8s.display-name="Apache 2.4 with mod_perl/5.20" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,perl,perl520"
