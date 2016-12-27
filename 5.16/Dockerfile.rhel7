@@ -25,7 +25,7 @@ LABEL com.redhat.component="openshift-sti-perl-docker" \
 RUN yum repolist > /dev/null && \
     yum-config-manager --enable rhel-server-rhscl-7-rpms && \
     yum-config-manager --enable rhel-7-server-optional-rpms && \
-    INSTALL_PKGS="httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS" && \
+    INSTALL_PKGS="gd-devel httpd24 perl516 perl516-mod_perl perl516-perl-CPANPLUS" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all && \
