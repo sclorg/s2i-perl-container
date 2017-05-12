@@ -32,7 +32,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone https://github.com/openshift/s2i-perl.git
+    $ git clone --recursive https://github.com/openshift/s2i-perl.git
     $ cd s2i-perl
     $ make build TARGET=rhel7 VERSION=5.24
     ```
@@ -48,7 +48,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     To build the perl-5.24 image from scratch run:
 
     ```
-    $ git clone https://github.com/openshift/s2i-perl.git
+    $ git clone --recursive https://github.com/openshift/s2i-perl.git
     $ cd s2i-perl
     $ make build TARGET=centos7 VERSION=5.24
     ```
