@@ -8,10 +8,25 @@ EXPOSE 8080
 # Image metadata
 ENV PERL_VERSION=5.24
 
-LABEL io.k8s.description="Platform for building and running Perl 5.24 applications" \
+ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
+    DESCRIPTION="Perl $PERL_VERSION available as docker container is a base platform for \
+building and running various Perl $PERL_VERSION applications and frameworks. \
+Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
+Perl is good at handling processes and files, and is especially good at handling text. \
+Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
+different things, Perl's most common applications are system administration utilities \
+and web programming."
+
+LABEL summary="$SUMMARY" \
+      description="$DESCRIPTION" \
+      io.k8s.description="$SUMMARY" \
       io.k8s.display-name="Apache 2.4 with mod_perl/5.24" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,perl,perl524"
+      io.openshift.tags="builder,perl,perl524" \
+      name="centos/perl-524-centos7" \
+      com.redhat.component="rh-perl524-docker" \
+      version="5.24" \
+      release="1"
 
 RUN yum install -y centos-release-scl && \
     yum-config-manager --enable centos-sclo-rh-testing && \
