@@ -1,7 +1,6 @@
 FROM centos/s2i-base-centos7
 
 # This image provides a Perl 5.24 environment you can use to run your Perl applications.
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
 
@@ -26,7 +25,8 @@ LABEL summary="$SUMMARY" \
       name="centos/perl-524-centos7" \
       com.redhat.component="rh-perl524-docker" \
       version="5.24" \
-      release="1"
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 RUN yum install -y centos-release-scl && \
     yum-config-manager --enable centos-sclo-rh-testing && \

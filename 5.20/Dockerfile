@@ -1,7 +1,6 @@
 FROM centos/s2i-base-centos7
 
 # This image provides a Perl 5.20 environment you can use to run your Perl applications.
-MAINTAINER SoftwareCollections.org <sclorg@redhat.com>
 
 EXPOSE 8080
 
@@ -26,7 +25,8 @@ LABEL summary="$SUMMARY" \
       name="centos/perl-520-centos7" \
       com.redhat.component="rh-perl520-docker" \
       version="5.20" \
-      release="1"
+      release="1" \
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum install -y centos-release-scl && \
