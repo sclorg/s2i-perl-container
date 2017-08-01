@@ -34,7 +34,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/openshift/s2i-perl.git
     $ cd s2i-perl
-    $ make build TARGET=rhel7 VERSION=5.24
+    $ make build TARGET=rhel7 VERSIONS=5.24
     ```
 
 *  **CentOS based image**
@@ -50,10 +50,10 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/openshift/s2i-perl.git
     $ cd s2i-perl
-    $ make build TARGET=centos7 VERSION=5.24
+    $ make build TARGET=centos7 VERSIONS=5.24
     ```
 
-**Notice: By omitting the `VERSION` parameter, the build/test action will be performed
+**Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all provided versions of Perl.**
 
 
@@ -81,17 +81,17 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
     ```
     $ cd s2i-perl
-    $ make test TARGET=rhel7 VERSION=5.24
+    $ make test TARGET=rhel7 VERSIONS=5.24
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-perl
-    $ make test TARGET=centos7 VERSION=5.24
+    $ make test TARGET=centos7 VERSIONS=5.24
     ```
 
-**Notice: By omitting the `VERSION` parameter, the build/test action will be performed
+**Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all the provided versions of Perl.**
 
 
