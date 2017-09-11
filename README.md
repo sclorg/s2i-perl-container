@@ -8,38 +8,40 @@ Users can choose between RHEL and CentOS based builder images.
 The resulting image can be run using [Docker](http://docker.io).
 
 For more information about using these images with OpenShift, please see the
-official [OpenShift Documentation](https://docs.openshift.org/latest/using_images/s2i_images/perl.html).
+official [OpenShift Origin documentation](https://docs.openshift.org/latest/using_images/s2i_images/perl.html).
 
 Versions
 ---------------
-Perl versions currently provided are:
+Perl versions currently provided:
+* perl-5.16 (deprecated)
 * perl-5.20
 * perl-5.24
 
-RHEL versions currently supported are:
+RHEL versions currently supported:
 * RHEL7
 
-CentOS versions currently supported are:
+CentOS versions currently supported:
 * CentOS7
 
 
 Installation
 ---------------
 To build a Perl image, choose either the CentOS or RHEL based image:
+
 *  **RHEL based image**
 
     To build a RHEL based Perl image, you need to run the build on a properly
     subscribed RHEL machine.
 
     ```
-    $ git clone --recursive https://github.com/openshift/s2i-perl.git
-    $ cd s2i-perl
+    $ git clone --recursive https://github.com/openshift/s2i-perl-container.git
+    $ cd s2i-perl-container
     $ make build TARGET=rhel7 VERSIONS=5.24
     ```
 
 *  **CentOS based image**
 
-    This image is available on DockerHub. To download perl-5.16 image, run:
+    This image is available on DockerHub. To download the perl-5.24 image, run:
 
     ```
     $ docker pull centos/perl-524-centos7
@@ -48,8 +50,8 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     To build the perl-5.24 image from scratch run:
 
     ```
-    $ git clone --recursive https://github.com/openshift/s2i-perl.git
-    $ cd s2i-perl
+    $ git clone --recursive https://github.com/openshift/s2i-perl-container.git
+    $ cd s2i-perl-container
     $ make build TARGET=centos7 VERSIONS=5.24
     ```
 
@@ -60,10 +62,13 @@ on all provided versions of Perl.**
 Usage
 ---------------------------------
 
-For information about usage of Dockerfile for Perl 5.20,
+For information about usage of the Dockerfile for Perl 5.16,
+see [usage documentation](5.16/README.md)
+
+For information about usage of the Dockerfile for Perl 5.20,
 see [usage documentation](5.20/README.md).
 
-For information about usage of Dockerfile for Perl 5.24,
+For information about usage of the Dockerfile for Perl 5.24,
 see [usage documentation](5.24/README.md).
 
 
@@ -80,19 +85,19 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
     subscribed RHEL machine.
 
     ```
-    $ cd s2i-perl
+    $ cd s2i-perl-container
     $ make test TARGET=rhel7 VERSIONS=5.24
     ```
 
 *  **CentOS based image**
 
     ```
-    $ cd s2i-perl
+    $ cd s2i-perl-container
     $ make test TARGET=centos7 VERSIONS=5.24
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
-on all the provided versions of Perl.**
+on all of the provided versions of Perl.**
 
 
 Repository organization
@@ -101,7 +106,7 @@ Repository organization
 
     Dockerfile and scripts to build container images from.
 
-* **`hack/`**
+* **`common/`**
 
     Folder containing scripts which are responsible for the build and test actions performed by the `Makefile`.
 
