@@ -10,12 +10,18 @@ The resulting image can be run using [Docker](http://docker.io).
 For more information about using these images with OpenShift, please see the
 official [OpenShift Origin documentation](https://docs.openshift.org/latest/using_images/s2i_images/perl.html).
 
+For more information about contributing, see
+[the Contribution Guidelines](https://github.com/sclorg/welcome/blob/master/contribution.md).
+For more information about concepts used in these docker images, see the
+[Landing page](https://github.com/sclorg/welcome).
+
+
 Versions
 ---------------
 Perl versions currently provided:
 * perl-5.16 (deprecated)
-* perl-5.20
-* perl-5.24
+* [perl-5.20](5.20)
+* [perl-5.24](5.24)
 
 RHEL versions currently supported:
 * RHEL7
@@ -34,7 +40,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     subscribed RHEL machine.
 
     ```
-    $ git clone --recursive https://github.com/openshift/s2i-perl-container.git
+    $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
     $ make build TARGET=rhel7 VERSIONS=5.24
     ```
@@ -50,7 +56,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     To build the perl-5.24 image from scratch run:
 
     ```
-    $ git clone --recursive https://github.com/openshift/s2i-perl-container.git
+    $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
     $ make build TARGET=centos7 VERSIONS=5.24
     ```
@@ -99,24 +105,4 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all of the provided versions of Perl.**
 
-
-Repository organization
-------------------------
-* **`<perl-version>`**
-
-    Dockerfile and scripts to build container images from.
-
-* **`common/`**
-
-    Folder containing scripts which are responsible for the build and test actions performed by the `Makefile`.
-
-
-Image name structure
-------------------------
-
-1. Platform name (lowercase) - perl
-2. Platform version(without dots) - 524
-3. Base builder image - centos7/rhel7
-
-Examples: `perl-524-centos7`, `perl-524-rhel7`
 

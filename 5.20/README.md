@@ -10,19 +10,19 @@ The resulting image can be run using [Docker](http://docker.io).
 
 Usage
 ---------------------
-To build a simple [perl-sample-app](https://github.com/openshift/s2i-perl/tree/master/5.20/test/sample-test-app) application,
+To build a simple [perl-sample-app](https://github.com/sclorg/s2i-perl-container/tree/master/5.20/test/sample-test-app) application,
 using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
 resulting image with [Docker](http://docker.io) execute:
 
 *  **For RHEL based image**
     ```
-    $ s2i build https://github.com/openshift/s2i-perl.git --context-dir=5.20/test/sample-test-app/ rhscl/perl-520-rhel7 perl-sample-app
+    $ s2i build https://github.com/sclorg/s2i-perl-container.git --context-dir=5.20/test/sample-test-app/ rhscl/perl-520-rhel7 perl-sample-app
     $ docker run -p 8080:8080 perl-sample-app
     ```
 
 *  **For CentOS based image**
     ```
-    $ s2i build https://github.com/openshift/s2i-perl.git --context-dir=5.20/test/sample-test-app/ centos/perl-520-centos7 perl-sample-app
+    $ s2i build https://github.com/sclorg/s2i-perl-container.git --context-dir=5.20/test/sample-test-app/ centos/perl-520-centos7 perl-sample-app
     $ docker run -p 8080:8080 perl-sample-app
     ```
 
@@ -56,7 +56,7 @@ Repository organization
             modules, etc.).
             In order to install application dependencies, the application must contain a
             `cpanfile` file, in which the user specifies the modules and their versions.
-            An example of a [cpanfile](https://github.com/openshift/s2i-perl/blob/master/5.20/test/sample-test-app/cpanfile) is available within our test application.
+            An example of a [cpanfile](https://github.com/sclorg/s2i-perl-container/blob/master/5.20/test/sample-test-app/cpanfile) is available within our test application.
 
             All files with `.cgi` and `.pl` extension are handled by mod_perl.
             If exactly one file with `.psgi` extension exists in the top-level
