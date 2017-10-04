@@ -1,12 +1,24 @@
-Perl Docker image
+Perl 5.20 Docker image
 =================
 
-This repository contains the source for building various versions of
-the Perl application as a reproducible Docker image using
-[source-to-image](https://github.com/openshift/source-to-image).
+This container image includes Perl 5.20 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.20 applications.
 Users can choose between RHEL and CentOS based builder images.
+The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/perl-520-rhel7)
+as registry.access.redhat.com/rhscl/perl-520-rhel7.
+The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/perl-520-centos7/)
+as centos/perl-520-centos7. 
 The resulting image can be run using [Docker](http://docker.io).
 
+Description
+-----------
+
+Perl 5.20 available as docker container is a base platform for 
+building and running various Perl 5.20 applications and frameworks. 
+Perl is a high-level programming language with roots in C, sed, awk and shell scripting. 
+Perl is good at handling processes and files, and is especially good at handling text. 
+Perl's hallmarks are practicality and efficiency. While it is used to do a lot of 
+different things, Perl's most common applications are system administration utilities 
+and web programming.
 
 Usage
 ---------------------
@@ -30,65 +42,6 @@ resulting image with [Docker](http://docker.io) execute:
 ```
 $ curl 127.0.0.1:8080
 ```
-
-
-Repository organization
-------------------------
-* **`<perl-version>`**
-
-    * **Dockerfile**
-
-        CentOS based Dockerfile.
-
-    * **Dockerfile.rhel7**
-
-        RHEL based Dockerfile. In order to perform build or test actions on this
-        Dockerfile you need to run the action on a properly subscribed RHEL machine.
-
-    * **`s2i/bin/`**
-
-        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
-
-        *   **assemble**
-
-            Used to install the sources into a location where the application
-            will be run and prepare the application for deployment (eg. installing
-            modules, etc.).
-            In order to install application dependencies, the application must contain a
-            `cpanfile` file, in which the user specifies the modules and their versions.
-            An example of a [cpanfile](https://github.com/sclorg/s2i-perl-container/blob/master/5.20/test/sample-test-app/cpanfile) is available within our test application.
-
-            All files with `.cgi` and `.pl` extension are handled by mod_perl.
-            If exactly one file with `.psgi` extension exists in the top-level
-            directory, the mod_perl will be autoconfigured to execute the PSGI
-            application for any request URI path with Plack's mod_perl adaptor.
-
-        *   **run**
-
-            This script is responsible for running the application, using the
-            Apache web server.
-
-        *   **usage***
-
-            This script prints the usage of this image.
-
-    * **`contrib/`**
-
-        This folder contains a file with commonly used modules.
-
-    * **`test/`**
-
-        This folder contains the [S2I](https://github.com/openshift/source-to-image)
-        test framework.
-
-        * **`sample-test-app/`**
-
-            A simple Perl application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
-
-        * **run**
-
-            This script runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-
 
 Environment variables
 ---------------------
@@ -137,3 +90,10 @@ file inside your source code repository.
 
     This variable overrides location URI path that is handled path the PSGI
     application. Default value is "/".
+
+
+See also
+--------
+Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
+In that repository you also can find another versions of Python environment Dockerfiles.
+Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
