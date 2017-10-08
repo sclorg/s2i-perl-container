@@ -106,3 +106,60 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 on all of the provided versions of Perl.**
 
 
+Repository organization
+------------------------
+* **`<perl-version>`**
+
+    * **Dockerfile**
+
+        CentOS based Dockerfile.
+
+    * **Dockerfile.rhel7**
+
+        RHEL based Dockerfile. In order to perform build or test actions on this
+        Dockerfile you need to run the action on a properly subscribed RHEL machine.
+
+    * **`s2i/bin/`**
+
+        This folder contains scripts that are run by [S2I](https://github.com/openshift/source-to-image):
+
+        *   **assemble**
+
+            Used to install the sources into a location where the application
+            will be run and prepare the application for deployment (eg. installing
+            modules, etc.).
+            In order to install application dependencies, the application must contain a
+            `cpanfile` file, in which the user specifies the modules and their versions.
+            An example of a [cpanfile](https://github.com/sclorg/s2i-perl-container/blob/master/5.24/test/sample-test-app/cpanfile) is available within our test application.
+
+            All files with `.cgi` and `.pl` extension are handled by mod_perl.
+            If exactly one file with `.psgi` extension exists in the top-level
+            directory, the mod_perl will be autoconfigured to execute the PSGI
+            application for any request URI path with Plack's mod_perl adaptor.
+
+        *   **run**
+
+            This script is responsible for running the application, using the
+            Apache web server.
+
+        *   **usage***
+
+            This script prints the usage of this image.
+
+    * **`contrib/`**
+
+        This folder contains a file with commonly used modules.
+
+    * **`test/`**
+
+        This folder contains the [S2I](https://github.com/openshift/source-to-image)
+        test framework.
+
+        * **`sample-test-app/`**
+
+            A simple Perl application used for testing purposes by the [S2I](https://github.com/openshift/source-to-image) test framework.
+
+        * **run**
+
+            This script runs the [S2I](https://github.com/openshift/source-to-image) test framework.
+
