@@ -95,5 +95,5 @@ file inside your source code repository.
 See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
-In that repository you also can find another versions of Python environment Dockerfiles.
+In that repository you also can find another versions of Perl environment Dockerfiles.
 Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
