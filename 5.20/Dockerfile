@@ -5,7 +5,9 @@ FROM centos/s2i-base-centos7
 EXPOSE 8080
 
 # Image metadata
-ENV PERL_VERSION=5.20
+ENV PERL_VERSION=5.20 \
+    PERL_SHORT_VER=520 \
+    NAME=perl
 
 ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
     DESCRIPTION="Perl $PERL_VERSION available as docker container is a base platform for \
@@ -19,14 +21,18 @@ and web programming."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with mod_perl/5.20" \
+      io.k8s.display-name="Apache 2.4 with mod_perl/$PERL_VERSION" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,perl,perl520" \
-      name="centos/perl-520-centos7" \
-      com.redhat.component="rh-perl520-docker" \
-      version="5.20" \
+      io.openshift.tags="builder,$NAME,$NAME$PERL_SHORT_VER" \
+      io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
+      io.s2i.scripts-url="image:///usr/libexec/s2i" \
+      name="centos/$NAME-$PERL_SHORT_VER-centos7" \
+      com.redhat.component="rh-$NAME$PERL_SHORT_VER-docker" \
+      version="$PERL_VERSION" \
       release="1" \
-      maintainer="SoftwareCollections.org <sclorg@redhat.com>"
+      maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
+      help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
+      usage="s2i build <SOURCE-REPOSITORY> $NAME:5 <APP-NAME>"
 
 # TODO: Cleanup cpanp cache after cpanminus is installed?
 RUN yum install -y centos-release-scl && \
