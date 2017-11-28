@@ -32,7 +32,7 @@ LABEL summary="$SUMMARY" \
       release="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
-      usage="s2i build <SOURCE-REPOSITORY> $NAME:5 <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> centos/$NAME-$PERL_SHORT_VER-centos7:latest <APP-NAME>"
 
 RUN yum install -y centos-release-scl && \
     yum-config-manager --enable centos-sclo-rh-testing && \
