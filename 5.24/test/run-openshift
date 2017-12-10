@@ -39,7 +39,27 @@ function ct_os_test_s2i_app() {
   ct_os_delete_project
 }
 
+
+function test_sample_template() {
+  local image_name=${1:-centos/perl-524-centos7}
+  local image_name_no_namespace=${image_name##*/}
+  local service_name=${image_name_no_namespace}
+
+  ct_os_new_project
+  ct_os_upload_image "${image_name}" "perl:$VERSION"
+
+  ct_os_deploy_template_image ${THISDIR}/../../examples/templates/sample-test-app.json \
+                              NAMESPACE="$(oc project -q)"
+
+  ct_os_wait_pod_ready "${service_name}" 60
+  local ip=$(ct_os_get_service_ip "${service_name}")
+  ct_test_response "http://${ip}:8080" 200 "${expected_output}"
+
+  ct_os_delete_project
+}
+
 ct_os_cluster_up
 # TODO: Can we make the build against examples inside the same PR?
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" 5.24/test/sample-test-app "Everything is OK"
+ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" ${VERSION}/test/sample-test-app "Everything is OK"
+test_sample_template ${IMAGE_NAME}
 

@@ -93,7 +93,7 @@
             "from": {
               "kind": "ImageStreamTag",
               "namespace": "${NAMESPACE}",
-              "name": "perl:5.24"
+              "name": "perl:${VERSION}"
             }
           }
         },
@@ -220,6 +220,13 @@
       "description": "The name assigned to all of the frontend objects defined in this template.",
       "required": true,
       "value": "sample-test-app"
+    },
+    {
+      "name": "VERSION",
+      "displayName": "Version",
+      "description": "The version of the image.",
+      "required": true,
+      "value": "5.24"
     },
     {
       "name": "NAMESPACE",
