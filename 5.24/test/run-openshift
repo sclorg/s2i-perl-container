@@ -61,5 +61,6 @@ function test_sample_template() {
 ct_os_cluster_up
 # TODO: Can we make the build against examples inside the same PR?
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" ${VERSION}/test/sample-test-app "Everything is OK"
-test_sample_template ${IMAGE_NAME}
+# TODO: This can be enabled later
+# test_sample_template ${IMAGE_NAME}
 
