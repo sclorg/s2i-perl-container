@@ -1,6 +1,6 @@
 #!/bin/bash
 #
-# Test the MariaDB image in OpenShift.
+# Test the Perl image in OpenShift.
 #
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
@@ -35,7 +35,8 @@ function test_sample_template() {
 }
 
 ct_os_cluster_up
-# TODO: Can we make the build against examples inside the same PR?
+# TODO: We should ideally use a local directory instead of ${VERSION}/test/sample-test-app,
+# so we can test changes in that example app that are done as part of the PR
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" ${VERSION}/test/sample-test-app "Everything is OK"
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/openshift/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
 # TODO: This can be enabled later
