@@ -36,6 +36,13 @@ To build a Perl image, choose either the CentOS or RHEL based image:
 
 *  **RHEL based image**
 
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/perl-524-rhel7).
+    To download it run:
+
+    ```
+    $ docker pull registry.access.redhat.com/rhscl/perl-524-rhel7
+    ```
+
     To build a RHEL based Perl image, you need to run the build on a properly
     subscribed RHEL machine.
 
