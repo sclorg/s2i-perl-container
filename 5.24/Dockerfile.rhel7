@@ -1,6 +1,7 @@
 FROM rhscl/s2i-base-rhel7
 
 # This image provides a Perl 5.24 environment you can use to run your Perl applications.
+
 EXPOSE 8080
 
 # Image metadata
@@ -28,7 +29,6 @@ LABEL summary="$SUMMARY" \
       name="rhscl/$NAME-$PERL_SHORT_VER-rhel7" \
       com.redhat.component="rh-$NAME$PERL_SHORT_VER-docker" \
       version="$PERL_VERSION" \
-      release="1" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-$NAME-container" \
       usage="s2i build <SOURCE-REPOSITORY> rhscl/$NAME-$PERL_SHORT_VER-rhel7:latest <APP-NAME>"
