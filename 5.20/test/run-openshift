@@ -16,29 +16,18 @@ set -exo nounset
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
-function test_sample_template() {
-  local image_name=${1:-centos/perl-524-centos7}
-  local image_name_no_namespace=${image_name##*/}
-  local service_name=${image_name_no_namespace}
-
-  ct_os_new_project
-  ct_os_upload_image "${image_name}" "perl:$VERSION"
-
-  ct_os_deploy_template_image ${THISDIR}/../../examples/templates/sample-test-app.json \
-                              NAMESPACE="$(oc project -q)"
-
-  ct_os_wait_pod_ready "${service_name}" 60
-  local ip=$(ct_os_get_service_ip "${service_name}")
-  ct_test_response "http://${ip}:8080" 200 "${expected_output}"
-
-  ct_os_delete_project
-}
-
 ct_os_cluster_up
+
 # TODO: We should ideally use a local directory instead of ${VERSION}/test/sample-test-app,
 # so we can test changes in that example app that are done as part of the PR
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" ${VERSION}/test/sample-test-app "Everything is OK"
+
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/openshift/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
-# TODO: This can be enabled later
-# test_sample_template ${IMAGE_NAME}
+
+# TODO: this was not working because the referenced example dir was added as part of this commit
+#ct_os_test_template_app ${IMAGE_NAME} \
+#                        ${THISDIR}/sample-test-app.json \
+#                        perl \
+#                        "Everything is OK" \
+#                        8080 http 200 "-p VERSION=${VERSION}"
 
