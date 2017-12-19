@@ -25,9 +25,9 @@ ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.g
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/openshift/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
 
 # TODO: this was not working because the referenced example dir was added as part of this commit
-#ct_os_test_template_app ${IMAGE_NAME} \
-#                        ${THISDIR}/sample-test-app.json \
-#                        perl \
-#                        "Everything is OK" \
-#                        8080 http 200 "-p VERSION=${VERSION}"
+ct_os_test_template_app ${IMAGE_NAME} \
+                        ${THISDIR}/sample-test-app.json \
+                        perl \
+                        "Everything is OK" \
+                        8080 http 200 "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION}"
 
