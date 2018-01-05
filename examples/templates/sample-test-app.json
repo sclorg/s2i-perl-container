@@ -8,10 +8,10 @@
       "description": "An example Perl application that serves static content. For more information about using this template, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/examples/README.md.",
       "tags": "quickstart,perl",
       "iconClass": "icon-perl",
-      "template.openshift.io/long-description": "This template defines resources needed to develop a simple application served by Perl, including a package Math::Round installation from cpan.",
-      "template.openshift.io/provider-display-name": "Red Hat, Inc.",
-      "template.openshift.io/documentation-url": "https://github.com/sclorg/s2i-perl-container",
-      "template.openshift.io/support-url": "https://access.redhat.com"
+      "openshift.io/long-description": "This template defines resources needed to develop a simple application served by Perl, including a package Math::Round installation from cpan.",
+      "openshift.io/provider-display-name": "Red Hat, Inc.",
+      "openshift.io/documentation-url": "https://github.com/sclorg/s2i-perl-container",
+      "openshift.io/support-url": "https://access.redhat.com"
     }
   },
   "message": "The following service(s) have been created in your project: ${NAME}.\n\nFor more information about using this template, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/examples/README.md.",
