@@ -34,10 +34,7 @@ LABEL summary="$SUMMARY" \
       usage="s2i build <SOURCE-REPOSITORY> rhscl/${NAME}-${PERL_SHORT_VER}-rhel7:latest <APP-NAME>"
 
 RUN yum install -y yum-utils && \
-    yum-config-manager --disable \* &> /dev/null && \
-    yum-config-manager --enable rhel-server-rhscl-7-rpms && \
-    yum-config-manager --enable rhel-7-server-rpms && \
-    yum-config-manager --enable rhel-7-server-optional-rpms && \
+    prepare-yum-repositories rhel-server-rhscl-7-rpms && \
     INSTALL_PKGS="rh-perl524 rh-perl524-perl-devel rh-perl524-mod_perl rh-perl524-perl-CPAN rh-perl524-perl-App-cpanminus" && \
     yum install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
