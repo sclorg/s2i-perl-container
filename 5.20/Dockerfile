@@ -10,7 +10,7 @@ ENV PERL_VERSION=5.20 \
     NAME=perl
 
 ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
-    DESCRIPTION="Perl $PERL_VERSION available as docker container is a base platform for \
+    DESCRIPTION="Perl $PERL_VERSION available as container is a base platform for \
 building and running various Perl $PERL_VERSION applications and frameworks. \
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
 Perl is good at handling processes and files, and is especially good at handling text. \

@@ -1,4 +1,4 @@
-Perl 5.24 Docker image
+Perl 5.24 container image
 =================
 
 This container image includes Perl 5.24 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.24 applications.
@@ -12,7 +12,7 @@ The resulting image can be run using [Docker](http://docker.io).
 Description
 -----------
 
-Perl 5.24 available as docker container is a base platform for 
+Perl 5.24 available as container is a base platform for 
 building and running various Perl 5.24 applications and frameworks. 
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting. 
 Perl is good at handling processes and files, and is especially good at handling text. 
