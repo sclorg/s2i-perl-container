@@ -1,0 +1,46 @@
+#!/bin/bash
+
+set -e
+
+# CPAN can install scripts. They should be available from mod_perl too.
+export PATH=${PATH}:/opt/app-root/src/extlib/bin
+# And we have to set Perl include path too because mod_perl's PerlSwitches
+# does not apply to them.
+export PERL5LIB=/opt/app-root/src/extlib/lib/perl5
+
+# Warning: Please note that this will pass all environment variables available within the
+# container to mod_perl by means of PerlPassEnv in the env.conf file
+if [ ! -f /opt/app-root/etc/httpd.d/env.conf ]; then
+  env | awk -F'=' '{print "PerlPassEnv "$1}' > /opt/app-root/etc/httpd.d/env.conf
+fi
+
+# Enable automatic reloading. This can be useful for debugging an application.
+PERL_APACHE2_RELOAD=${PERL_APACHE2_RELOAD:-}
+if [[ "${PERL_APACHE2_RELOAD,,}" == "true" ]]; then
+  cat > /opt/app-root/etc/httpd.d/50-autoreload.conf <<EOF
+PerlModule Apache2::Reload
+PerlInitHandler Apache2::Reload
+EOF
+fi
+
+export_vars=$(cgroup-limits) ; export $export_vars
+
+# Validate server limit option
+if [[ ! "${HTTPD_MAX_REQUEST_WORKERS:-1}" =~ ^[1-9][0-9]*$ || "${HTTPD_MAX_REQUEST_WORKERS:-1}" -gt 20000 ]]; then
+  echo "HTTPD_MAX_REQUEST_WORKERS needs be an integer between 1 and 20000"
+  exit 1
+fi
+
+# If there is no server limit specified, try to guess the best value
+if [ -z "${HTTPD_MAX_REQUEST_WORKERS:-}" ]; then
+  MAX_SERVER_LIMIT=$(((MEMORY_LIMIT_IN_BYTES/1024/1024 - 30) / 7))
+  MAX_SERVER_LIMIT=$((MAX_SERVER_LIMIT > 0 ? MAX_SERVER_LIMIT : 1))
+  export HTTPD_MAX_REQUEST_WORKERS=$((MAX_SERVER_LIMIT > 256 ? 256 : MAX_SERVER_LIMIT))
+fi
+
+export HTTPD_START_SERVERS=${HTTPD_START_SERVERS:-8}
+export HTTPD_MAX_SPARE_SERVERS=$((HTTPD_START_SERVERS+10))
+
+envsubst < /opt/app-root/etc/httpd.d/50-mpm.conf.template > /opt/app-root/etc/httpd.d/50-mpm.conf
+
+exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
