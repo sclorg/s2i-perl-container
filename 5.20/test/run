@@ -12,6 +12,8 @@ IMAGE_NAME=${IMAGE_NAME-centos/perl-520-centos-candidate}
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
 
+source "${test_dir}/test-lib.sh"
+
 # TODO: This should be part of the image metadata
 test_port=8080
 
@@ -323,5 +325,9 @@ test_5_function() {
     test_stdout 'Warning on stderr'
 }
 do_test 'warningonstderr' 'test_5_function'
+
+echo "Testing npm availibility"
+ct_npm_works
+check_result $?
 
 info "All tests finished successfully."
