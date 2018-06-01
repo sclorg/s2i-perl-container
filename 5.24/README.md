@@ -20,6 +20,11 @@ Perl's hallmarks are practicality and efficiency. While it is used to do a lot o
 different things, Perl's most common applications are system administration utilities 
 and web programming.
 
+This container image includes an npm utility, so users can use it to install JavaScript
+modules for their web applications. There is no guarantee for any specific npm or nodejs
+version, that is included in the image; those versions can be changed anytime and
+the nodejs itself is included just to make the npm work.
+
 Usage
 ---------------------
 To build a simple [perl-sample-app](https://github.com/sclorg/s2i-perl-container/tree/master/5.24/test/sample-test-app) application,
