@@ -34,8 +34,6 @@ LABEL summary="$SUMMARY" \
       usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${PERL_SHORT_VER}-centos7:latest <APP-NAME>"
 
 RUN yum install -y centos-release-scl && \
-    yum-config-manager --add-repo https://cbs.centos.org/repos/sclo7-rh-perl526-rh-candidate/x86_64/os/ && \
-    echo gpgcheck=0 >> /etc/yum.repos.d/cbs.centos.org_repos_sclo7-rh-perl526-rh-candidate_x86_64_os_.repo && \
     INSTALL_PKGS="rh-perl526 rh-perl526-perl rh-perl526-perl-devel rh-perl526-mod_perl rh-perl526-perl-Apache-Reload rh-perl526-perl-CPAN rh-perl526-perl-App-cpanminus" && \
     yum install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
