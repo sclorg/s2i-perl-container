@@ -22,6 +22,7 @@ Perl versions currently provided:
 * perl-5.16 (deprecated)
 * perl-5.20 (deprecated)
 * [perl-5.24](5.24)
+* [perl-5.26](5.26)
 
 RHEL versions currently supported:
 * RHEL7
