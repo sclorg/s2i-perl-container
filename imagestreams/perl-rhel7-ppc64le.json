@@ -2,9 +2,9 @@
   "kind": "ImageStream",
   "apiVersion": "v1",
   "metadata": {
-    "name": "perl_ppc64le",
+    "name": "perl",
     "annotations": {
-      "openshift.io/display-name": "Perl (ppc64le)"
+      "openshift.io/display-name": "Perl"
     }
   },
   "spec": {
@@ -16,7 +16,7 @@
           "openshift.io/provider-display-name": "Red Hat, Inc.",
           "description": "Build and run Perl applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/5.26/README.md.\n\nWARNING: By selecting this tag, your application will automatically update to use the latest version of Perl available on OpenShift, including major versions updates.",
           "iconClass": "icon-perl",
-          "tags": "builder,perl",
+          "tags": "builder,perl,ppc64le",
           "supports":"perl",
           "sampleRepo": "https://github.com/openshift/dancer-ex.git"
         },
@@ -31,13 +31,12 @@
       {
         "name": "5.26",
         "annotations": {
-          "openshift.io/display-name": "Perl 5.26 (ppc64le)",
+          "openshift.io/display-name": "Perl 5.26",
           "openshift.io/provider-display-name": "Red Hat, Inc.",
           "description": "Build and run Perl 5.26 applications on RHEL 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/5.26/README.md.",
-          "iconClass": "icon-perl",
-          "importer.image.openshift.io/prefer-arch": "ppc64le",
-          "tags": "builder,perl",
-          "supports":"perl_ppc64le:5.26,perl_ppc64le",
+              "iconClass": "icon-perl",
+          "tags": "builder,perl,ppc64le",
+          "supports":"perl:5.26,perl",
           "version": "5.26",
           "sampleRepo": "https://github.com/openshift/dancer-ex.git"
         },
