@@ -18,7 +18,7 @@
           "iconClass": "icon-perl",
           "tags": "builder,perl",
           "supports":"perl",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "ImageStreamTag",
@@ -38,7 +38,7 @@
           "tags": "hidden,builder,perl",
           "supports":"perl:5.16,perl",
           "version": "5.16",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -58,7 +58,7 @@
           "tags": "hidden,builder,perl",
           "supports":"perl:5.20,perl",
           "version": "5.20",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -78,7 +78,7 @@
           "tags": "builder,perl",
           "supports":"perl:5.24,perl",
           "version": "5.24",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "DockerImage",
@@ -98,7 +98,7 @@
           "tags": "builder,perl",
           "supports":"perl:5.26,perl",
           "version": "5.26",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "DockerImage",

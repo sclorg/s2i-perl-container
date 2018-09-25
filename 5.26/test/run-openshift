@@ -22,7 +22,7 @@ ct_os_cluster_up
 # so we can test changes in that example app that are done as part of the PR
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" ${VERSION}/test/sample-test-app "Everything is OK"
 
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/openshift/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
+ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
 
 # TODO: this was not working because the referenced example dir was added as part of this commit
 ct_os_test_template_app ${IMAGE_NAME} \
