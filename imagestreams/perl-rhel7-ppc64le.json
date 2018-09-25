@@ -18,7 +18,7 @@
           "iconClass": "icon-perl",
           "tags": "builder,perl,ppc64le",
           "supports":"perl",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "ImageStreamTag",
@@ -38,7 +38,7 @@
           "tags": "builder,perl,ppc64le",
           "supports":"perl:5.26,perl",
           "version": "5.26",
-          "sampleRepo": "https://github.com/openshift/dancer-ex.git"
+          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
         },
         "from": {
           "kind": "DockerImage",
