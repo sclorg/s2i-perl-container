@@ -34,7 +34,7 @@ container_ip() {
 }
 
 run_s2i_build() {
-  s2i build "$@" file://${test_dir}/${test_name} ${IMAGE_NAME} ${IMAGE_NAME}-testapp
+  ct_s2i_build_as_df file://${test_dir}/${test_name} ${IMAGE_NAME} ${IMAGE_NAME}-testapp "$@"
 }
 
 prepare() {
@@ -99,7 +99,7 @@ wait_for_cid() {
 
 test_s2i_usage() {
   info "Testing 's2i usage'"
-  s2i usage ${s2i_args} ${IMAGE_NAME} &>/dev/null
+  ct_s2i_usage ${IMAGE_NAME} ${s2i_args} &>/dev/null
 }
 
 test_docker_run_usage() {
@@ -214,25 +214,6 @@ do_test() {
     test_function="$2"
     shift 2
 
-    # Old source-to-image 1.0.3 does not support multiple --env options.
-    # TODO: Remove ARGUMENTS conversion after dropping support 1.0.3.
-    local old_sti=0
-    if [[ "$(LC_ALL=C s2i help build 2>&1)" =~ \
-        'Specify an environment var NAME=VALUE,NAME2=VALUE2' ]]; then
-        old_sti=1
-    fi
-    local argument arguments environment
-    for argument in "$@"; do
-        if [ "$old_sti" == '1' -a "${argument:0:6}" == '--env=' ]; then
-            environment="${environment:+${environment},}${argument:6}"
-        else
-            arguments[${#arguments[*]}]="$argument"
-        fi
-    done
-    if [ -n "$environment" ]; then
-            arguments[${#arguments[*]}]="--env=${environment}"
-    fi
-
     info "Starting tests for ${test_name}."
 
     tmp_dir=$(mktemp -d)
@@ -242,7 +223,7 @@ do_test() {
 
     # Build and run the test application
     prepare
-    run_s2i_build $s2i_args "${arguments[@]}"
+    run_s2i_build $s2i_args "$@"
     check_result $?
     run_test_application >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
     wait_for_cid
