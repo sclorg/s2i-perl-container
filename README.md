@@ -26,6 +26,7 @@ Perl versions currently provided:
 
 RHEL versions currently supported:
 * RHEL7
+* RHEL8
 
 CentOS versions currently supported:
 * CentOS7

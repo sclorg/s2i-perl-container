@@ -1,0 +1,21 @@
+# This is a file defining which content sets are needed to update content in 
+# this image. Data provided here helps determine which images are vulnerable to
+# specific CVEs. Generally you should only need to update this file when:
+#    1. You start depending on new product
+#    2. You are preparing new product release and your content sets will change
+---
+x86_64:
+- rhel-8-for-x86_64-baseos-beta-rpms
+- rhel-8-for-x86_64-appstream-beta-rpms
+
+ppc64le:
+- rhel-8-for-ppc64le-baseos-beta-rpms
+- rhel-8-for-ppc64le-appstream-beta-rpms
+
+s390x:
+- rhel-8-for-s390x-baseos-beta-rpms
+- rhel-8-for-s390x-appstream-beta-rpms
+
+aarch64:
+- rhel-8-for-aarch64-baseos-beta-rpms
+- rhel-8-for-aarch64-appstream-beta-rpms
