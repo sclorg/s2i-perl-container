@@ -34,7 +34,7 @@ LABEL summary="$SUMMARY" \
       usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${PERL_SHORT_VER}-centos7:latest <APP-NAME>"
 
 RUN yum install -y centos-release-scl && \
-    INSTALL_PKGS="rh-perl524 rh-perl524-perl-devel rh-perl524-mod_perl rh-perl524-perl-CPAN rh-perl524-perl-App-cpanminus" && \
+    INSTALL_PKGS="rh-perl524 rh-perl524-perl-core rh-perl524-perl-devel rh-perl524-mod_perl rh-perl524-perl-CPAN rh-perl524-perl-App-cpanminus" && \
     yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     yum clean all
