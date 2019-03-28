@@ -5,7 +5,7 @@ This repository contains the source for building various versions of
 the Perl application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
 Users can choose between RHEL and CentOS based builder images.
-The resulting image can be run using [Docker](http://docker.io).
+The resulting image can be run using [podman](https://github.com/containers/libpod).
 
 For more information about using these images with OpenShift, please see the
 official [OpenShift Origin documentation](https://docs.okd.io/latest/using_images/s2i_images/perl.html).
@@ -42,7 +42,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     To download it run:
 
     ```
-    $ docker pull registry.access.redhat.com/rhscl/perl-524-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/perl-524-rhel7
     ```
 
     To build a RHEL based Perl image, you need to run the build on a properly
@@ -59,7 +59,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     This image is available on DockerHub. To download the perl-5.24 image, run:
 
     ```
-    $ docker pull centos/perl-524-centos7
+    $ podman pull centos/perl-524-centos7
     ```
 
     To build the perl-5.24 image from scratch run:
@@ -69,6 +69,8 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     $ cd s2i-perl-container
     $ make build TARGET=centos7 VERSIONS=5.24
     ```
+
+Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
 on all provided versions of Perl.**
@@ -86,6 +88,11 @@ see [usage documentation](5.20/README.md).
 For information about usage of the Dockerfile for Perl 5.24,
 see [usage documentation](5.24/README.md).
 
+For information about usage of the Dockerfile for Perl 5.26,
+see [usage documentation](5.26/README.md).
+
+For information about usage of the Dockerfile for Perl 5.26 - mod_fcgid version,
+see [usage documentation](5.26-mod_fcgid/README.md).
 
 Test
 ---------------------

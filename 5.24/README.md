@@ -2,12 +2,13 @@ Perl 5.24 container image
 =================
 
 This container image includes Perl 5.24 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.24 applications.
-Users can choose between RHEL and CentOS based builder images.
-The RHEL image is available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/perl-524-rhel7)
-as registry.access.redhat.com/rhscl/perl-524-rhel7.
-The CentOS image is then available on [Docker Hub](https://hub.docker.com/r/centos/perl-524-centos7/)
-as centos/perl-524-centos7. 
-The resulting image can be run using [Docker](http://docker.io).
+Users can choose between RHEL, CentOS and Fedora based builder images.
+The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
+The resulting image can be run using [podman](https://github.com/containers/libpod).
+
+Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments
 
 Description
 -----------
@@ -27,20 +28,18 @@ the nodejs itself is included just to make the npm work.
 
 Usage
 ---------------------
-To build a simple [perl-sample-app](https://github.com/sclorg/s2i-perl-container/tree/master/5.24/test/sample-test-app) application,
-using standalone [S2I](https://github.com/openshift/source-to-image) and then run the
-resulting image with [Docker](http://docker.io) execute:
+For this, we will assume that you are using the `rhscl/perl-524-rhel7 image`, available via `perl:5.24` imagestream tag in Openshift.
+Building a simple [perl-sample-app](https://github.com/sclorg/s2i-perl-container/tree/master/5.24/test/sample-test-app) application
+in Openshift can be achieved with the following step:
 
-*  **For RHEL based image**
+    ```
+    oc new-app perl:5.24~https://github.com/sclorg/s2i-perl-container.git --context-dir=5.24/test/sample-test-app/
+    ```
+
+The same application can also be built using the standalone [S2I](https://github.com/openshift/source-to-image) application on systems that have it available:
+
     ```
     $ s2i build https://github.com/sclorg/s2i-perl-container.git --context-dir=5.24/test/sample-test-app/ rhscl/perl-524-rhel7 perl-sample-app
-    $ docker run -p 8080:8080 perl-sample-app
-    ```
-
-*  **For CentOS based image**
-    ```
-    $ s2i build https://github.com/sclorg/s2i-perl-container.git --context-dir=5.24/test/sample-test-app/ centos/perl-524-centos7 perl-sample-app
-    $ docker run -p 8080:8080 perl-sample-app
     ```
 
 **Accessing the application:**
@@ -100,5 +99,6 @@ file inside your source code repository.
 See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
-In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for CentOS is called Dockerfile, Dockerfile for RHEL is called Dockerfile.rhel7.
+In that repository you also can find another versions of Python environment Dockerfiles.
+Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`,
+for RHEL8 it's `Dockerfile.rhel8` and the Fedora Dockerfile is called Dockerfile.fedora.
