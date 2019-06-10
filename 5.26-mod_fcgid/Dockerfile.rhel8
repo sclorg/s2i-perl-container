@@ -1,4 +1,4 @@
-FROM rhel8/s2i-base:1
+FROM ubi8/s2i-base:1
 
 # This image provides a Perl 5.26 environment you can use to run your Perl applications.
 
@@ -26,12 +26,13 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}","${NAME}-${PERL_SHORT_VER}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="rhel8/${NAME}-${PERL_SHORT_VER}" \
+      name="ubi8/${NAME}-${PERL_SHORT_VER}" \
       com.redhat.component="${NAME}-${PERL_SHORT_VER}-container" \
       version="1" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> rhel8/${NAME}-${PERL_SHORT_VER}:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> ubi8/${NAME}-${PERL_SHORT_VER}:latest <APP-NAME>"
 
 # perl-FCGI module is missing a default stream
 RUN yum -y module enable perl-FCGI:0.78

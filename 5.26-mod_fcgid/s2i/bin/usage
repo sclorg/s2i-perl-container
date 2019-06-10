@@ -17,5 +17,5 @@ Sample invocation:
 s2i build https://github.com/sclorg/s2i-perl-container.git --context-dir=5.26/test/sample-test-app/ ${NAMESPACE}/perl-526${SUFFIX} perl-sample-app
 
 You can then run the resulting image via:
-docker run -p 8080:8080 perl-sample-app
+podman run -p 8080:8080 perl-sample-app
 EOF
