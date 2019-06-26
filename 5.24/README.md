@@ -50,7 +50,7 @@ $ curl 127.0.0.1:8080
 Environment variables
 ---------------------
 
-To set environment variables, you can place them as a key value pair into a `.sti/environment`
+To set environment variables, you can place them as a key value pair into a `.s2i/environment`
 file inside your source code repository.
 
 * **ENABLE_CPAN_TEST**
