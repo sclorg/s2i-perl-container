@@ -29,6 +29,7 @@ LABEL summary="$SUMMARY" \
       name="rhscl/${NAME}-${PERL_SHORT_VER}-rhel7" \
       com.redhat.component="rh-${NAME}${PERL_SHORT_VER}-container" \
       version="$PERL_VERSION" \
+      com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#rhel" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build <SOURCE-REPOSITORY> rhscl/${NAME}-${PERL_SHORT_VER}-rhel7:latest <APP-NAME>"
