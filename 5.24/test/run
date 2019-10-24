@@ -34,7 +34,7 @@ container_ip() {
 }
 
 run_s2i_build() {
-  ct_s2i_build_as_df file://${test_dir}/${test_name} ${IMAGE_NAME} ${IMAGE_NAME}-testapp "$@"
+  ct_s2i_build_as_df file://${test_dir}/${test_name} ${IMAGE_NAME} ${IMAGE_NAME}-testapp $(ct_build_s2i_npm_variables) "$@"
 }
 
 prepare() {
