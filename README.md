@@ -19,9 +19,6 @@ For more information about concepts used in these container images, see the
 Versions
 ---------------
 Perl versions currently provided:
-* perl-5.16 (deprecated)
-* perl-5.20 (deprecated)
-* [perl-5.24](5.24)
 * [perl-5.26](5.26)
 
 RHEL versions currently supported:
@@ -38,11 +35,11 @@ To build a Perl image, choose either the CentOS or RHEL based image:
 
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/perl-524-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/perl-526-rhel7).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/perl-524-rhel7
+    $ podman pull registry.access.redhat.com/rhscl/perl-526-rhel7
     ```
 
     To build a RHEL based Perl image, you need to run the build on a properly
@@ -51,23 +48,23 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=rhel7 VERSIONS=5.24
+    $ make build TARGET=rhel7 VERSIONS=5.26
     ```
 
 *  **CentOS based image**
 
-    This image is available on DockerHub. To download the perl-5.24 image, run:
+    This image is available on DockerHub. To download the perl-5.26 image, run:
 
     ```
-    $ podman pull centos/perl-524-centos7
+    $ podman pull centos/perl-526-centos7
     ```
 
-    To build the perl-5.24 image from scratch run:
+    To build the perl-5.26 image from scratch run:
 
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=centos7 VERSIONS=5.24
+    $ make build TARGET=centos7 VERSIONS=5.26
     ```
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -78,15 +75,6 @@ on all provided versions of Perl.**
 
 Usage
 ---------------------------------
-
-For information about usage of the Dockerfile for Perl 5.16,
-see [usage documentation](5.16/README.md)
-
-For information about usage of the Dockerfile for Perl 5.20,
-see [usage documentation](5.20/README.md).
-
-For information about usage of the Dockerfile for Perl 5.24,
-see [usage documentation](5.24/README.md).
 
 For information about usage of the Dockerfile for Perl 5.26,
 see [usage documentation](5.26/README.md).
@@ -108,14 +96,14 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=rhel7 VERSIONS=5.24
+    $ make test TARGET=rhel7 VERSIONS=5.26
     ```
 
 *  **CentOS based image**
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=centos7 VERSIONS=5.24
+    $ make test TARGET=centos7 VERSIONS=5.26
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -146,7 +134,7 @@ Repository organization
             modules, etc.).
             In order to install application dependencies, the application must contain a
             `cpanfile` file, in which the user specifies the modules and their versions.
-            An example of a [cpanfile](https://github.com/sclorg/s2i-perl-container/blob/master/5.24/test/sample-test-app/cpanfile) is available within our test application.
+            An example of a [cpanfile](https://github.com/sclorg/s2i-perl-container/blob/master/5.26/test/sample-test-app/cpanfile) is available within our test application.
 
             All files with `.cgi` and `.pl` extension are handled by mod_perl.
             If exactly one file with `.psgi` extension exists in the top-level
