@@ -29,6 +29,12 @@ if [ -n "$CPAN_MIRROR" ]; then
   MIRROR_ARGS="--mirror $CPAN_MIRROR"
 fi
 
+# Change the npm registry mirror if provided
+if [ -n "$NPM_MIRROR" ]; then
+  npm config set registry $NPM_MIRROR
+fi
+
+
 # Don't test installed Perl modules by default
 if [ "${ENABLE_CPAN_TEST}" = true ]; then
   export ENABLE_CPAN_TEST=""
