@@ -1,15 +1,16 @@
 #!/bin/bash
 #
-# Test the Perl image in OpenShift.
+# Test the Perl image in the OpenShift.
 #
 # IMAGE_NAME specifies a name of the candidate image used for testing.
+# VERSION specifies a version of the Perl in the candidate image.
 # The image has to be available before this script is executed.
-#
 
 THISDIR=$(dirname ${BASH_SOURCE[0]})
 
-source ${THISDIR}/test-lib.sh
-source ${THISDIR}/test-lib-openshift.sh
+source "${THISDIR}/test-lib.sh"
+source "${THISDIR}/test-lib-openshift.sh"
+source "${THISDIR}/test-lib-perl.sh"
 
 set -eo nounset
 
@@ -17,9 +18,14 @@ trap ct_os_cleanup EXIT SIGINT
 
 ct_os_check_compulsory_vars
 
-ct_os_enable_print_logs
+oc status || false "It looks like oc is not properly logged in."
 
-ct_os_cluster_up
+export CT_SKIP_NEW_PROJECT=true
+export CT_SKIP_UPLOAD_IMAGE=true
+export CT_NAMESPACE=openshift
+
+test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
+test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 # TODO: We should ideally use a local directory instead of ${VERSION}/test/sample-test-app,
 # so we can test changes in that example app that are done as part of the PR
@@ -38,8 +44,6 @@ ct_os_test_template_app ${IMAGE_NAME} \
 test_perl_imagestream
 
 OS_TESTSUITE_RESULT=0
-
-ct_os_cluster_down
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
 
