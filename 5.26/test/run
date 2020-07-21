@@ -11,6 +11,16 @@ IMAGE_NAME=${IMAGE_NAME-centos/perl-526-centos-candidate}
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -zf $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -zf ${test_dir}/..)
+test_short_summary=''
+TESTSUITE_RESULT=0
+TEST_LIST="\
+test_sample_test_app
+test_binpath
+test_psgi
+test_psgi_variables
+test_warningonstderr
+test_npm
+"
 
 source "${test_dir}/test-lib.sh"
 
@@ -78,9 +88,7 @@ cleanup() {
 check_result() {
   local result="$1"
   if [[ "$result" != "0" ]]; then
-    info "TEST FAILED (${result})"
-    cleanup
-    exit $result
+    TESTSUITE_RESULT=1
   fi
 }
 
@@ -244,7 +252,7 @@ do_test() {
 
 # This is original test that does more things like s2i API checks. Other tests
 # executed by do_test() will not repeat these checks.
-test_1() {
+test_sample_test_app() {
     test_name='sample-test-app'
     info "Starting tests for ${test_name}"
 
@@ -275,37 +283,48 @@ test_1() {
     info "All tests for the ${test_name} finished successfully."
     cleanup
 }
-test_1
 
 # Check scripts installed from CPAN are available to the application.
-test_2_function() {
+test_2_response() {
     test_response '/' 200 'Usage'
 }
-do_test 'binpath' 'test_2_function'
+
+test_binpath() {
+    do_test 'binpath' 'test_2_response'
+}
 
 # Check a single PSGI application is recognized a mod_perl is autoconfigured.
-test_3_function() {
+test_3_response() {
     test_response '/' 200 '<title>Web::Paste::Simple'
 }
-do_test 'psgi' 'test_3_function'
+
+test_psgi() {
+    do_test 'psgi' 'test_3_response'
+}
 
 # Check variables can select a PSGI application and set URI path.
-test_4_function() {
+test_4_response() {
     test_response '/path' 200 '<title>Web::Paste::Simple' && \
     test_response '/cpanfile' 200 'requires'
 }
-do_test 'psgi-variables' 'test_4_function' \
-    '--env=PSGI_FILE=./application2.psgi' '--env=PSGI_URI_PATH=/path'
+
+test_psgi_variables() {
+    do_test 'psgi-variables' 'test_4_response' \
+        '--env=PSGI_FILE=./application2.psgi' '--env=PSGI_URI_PATH=/path'
+}
 
 # Check httpd access_log flows to stdout, error_log to stdout.
 # TODO: send error_log to stderr after dropping support for broken
 # docker < 1.9.
-test_5_function() {
+test_5_response() {
     test_response '/' 200 'Text in HTTP body' && \
     test_stdout '"GET /[^"]*" 200 ' && \
     test_stdout 'Warning on stderr'
 }
-do_test 'warningonstderr' 'test_5_function'
+
+test_warningonstderr() {
+    do_test 'warningonstderr' 'test_5_response'
+}
 
 test_npm() {
     test_name='sample-test-app'
@@ -323,6 +342,31 @@ test_npm() {
 
     cleanup
 }
-test_npm
 
-info "All tests finished successfully."
+function run_all_tests() {
+  local suite_result=0
+  for test_case in $TEST_LIST; do
+    : "Running test $test_case ...."
+    if $test_case; then
+      printf -v test_short_summary "${test_short_summary}[PASSED] $test_case\n"
+    else
+      printf -v test_short_summary "${test_short_summary}[FAILED] $test_case\n"
+      suite_result=1
+      [ -n "${FAIL_QUICKLY:-}" ] && echo "$sum" && return $suite_result
+    fi
+  done;
+  return $suite_result
+}
+
+# Run the chosen tests
+TEST_LIST=${TESTS:-$TEST_LIST} run_all_tests
+
+echo "$test_short_summary"
+
+if [ $TESTSUITE_RESULT -eq 0 ] ; then
+  echo "Tests for ${IMAGE_NAME} succeeded."
+else
+  echo "Tests for ${IMAGE_NAME} failed."
+fi
+
+exit $TESTSUITE_RESULT
