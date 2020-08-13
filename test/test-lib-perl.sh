@@ -18,7 +18,7 @@ function test_perl_imagestream() {
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
   
-  ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS}.json" \
+  ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS%[0-9]*}.json" \
                                      "${THISDIR}/sample-test-app.json" \
                                      "${IMAGE_NAME}" \
                                      perl \
