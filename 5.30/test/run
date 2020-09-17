@@ -64,7 +64,7 @@ prepare() {
 }
 
 run_test_application() {
-  docker run --user=100001 --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+  docker run -d --user=100001 --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
 }
 
 cleanup_test_app() {
@@ -197,7 +197,7 @@ test_connection() {
 
 test_application() {
   # Verify that the HTTP connection can be established to test application container
-  run_test_application &
+  run_test_application
 
   # Wait for the container to write it's CID file
   wait_for_cid
@@ -380,5 +380,10 @@ if [ $TESTSUITE_RESULT -eq 0 ] ; then
 else
   echo "Tests for ${IMAGE_NAME} failed."
 fi
+
+info "Check building using a Dockerfile"
+ct_test_app_dockerfile ${THISDIR}/../examples/from-dockerfile/Dockerfile 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Perl application on OpenShift' app-src
+ct_test_app_dockerfile ${THISDIR}/../examples/from-dockerfile/Dockerfile.s2i 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Perl application on OpenShift' app-src
+check_result $?
 
 exit $TESTSUITE_RESULT
