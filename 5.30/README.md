@@ -31,7 +31,7 @@ Usage in Openshift
  In this example, we will assume that you are using the `centos/perl-530-centos7` image, available via `perl:5.30` imagestream tag in Openshift.
  To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
     ```
-    oc new-app perl:5.30~https://github.com/sclorg/dancer-ex
+    oc new-app perl:5.30~https://github.com/sclorg/dancer-ex.git
     ```
 
 **To access the application:**

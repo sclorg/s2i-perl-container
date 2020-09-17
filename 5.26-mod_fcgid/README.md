@@ -1,4 +1,4 @@
-Perl 5.30 container image
+Perl 5.26 container image
 =================
 
 This container image includes Perl 5.26 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.26 applications.
@@ -31,7 +31,7 @@ Usage in Openshift
  In this example, we will assume that you are using the `rhscl/perl-530-rhel7` image, available via `perl:5.26` imagestream tag in Openshift.
  To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
     ```
-    oc new-app perl:5.26~https://github.com/sclorg/dancer-ex
+    oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
     ```
 
 **To access the application:**
@@ -171,13 +171,13 @@ file inside your source code repository.
     Override PSGI application detection.
 
     If the PSGI_FILE variable is set to empty value, no PSGI application will
-    be detected and mod_perl not be reconfigured.
+    be detected and mod_fcgid not be reconfigured.
 
     If the PSGI_FILE variable is set and non-empty, it will define path to
     the PSGI application file. No detection will be used.
 
     If the PSGI_FILE variable does not exist, autodetection will be used:
-    If exactly one ./*.psgi file exists, mod_perl will be configured to
+    If exactly one ./*.psgi file exists, mod_fcgid will be configured to
     execute that file.
 
 * **PSGI_URI_PATH**
@@ -190,4 +190,4 @@ See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`, for RHEL8 `Dockerfile.rhel8` and the Fedora Dockerfile is called `Dockerfile.fedora`.

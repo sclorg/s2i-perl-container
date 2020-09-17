@@ -1,7 +1,7 @@
-Perl 5.30 container image
+Perl 5.26 container image
 =================
 
-This container image includes Perl 5.30 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.26 applications.
+This container image includes Perl 5.26 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.26 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
 the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
@@ -13,7 +13,7 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-Perl 5.30 available as container is a base platform for
+Perl 5.26 available as container is a base platform for
 building and running various Perl 5.26 applications and frameworks.
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting.
 Perl is good at handling processes and files, and is especially good at handling text.
@@ -31,7 +31,7 @@ Usage in Openshift
  In this example, we will assume that you are using the `centos/perl-526-centos7` image, available via `perl:5.26` imagestream tag in Openshift.
  To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
     ```
-    oc new-app perl:5.26~https://github.com/sclorg/dancer-ex
+    oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
     ```
 
 **To access the application:**
@@ -190,4 +190,4 @@ See also
 --------
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`, for RHEL8 `Dockerfile.rhel8` and the Fedora Dockerfile is called `Dockerfile.fedora`.
