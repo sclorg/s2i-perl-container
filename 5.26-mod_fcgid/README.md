@@ -28,7 +28,7 @@ the nodejs itself is included just to make the npm work.
 
 Usage in Openshift
 ---------------------
- In this example, we will assume that you are using the `rhscl/perl-530-rhel7` image, available via `perl:5.26` imagestream tag in Openshift.
+ In this example, we will assume that you are using the `rhscl/perl-526-rhel7` image, available via `perl:5.26` imagestream tag in Openshift.
  To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
     ```
     oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
@@ -98,9 +98,7 @@ ADD app-src .
 USER 0
 
 # Install the dependencies
-RUN export PATH=${PATH}:/opt/rh/rh-perl526/root/usr/bin/&& \
-     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/rh/rh-perl526/root/usr/lib64 && \
-     cpanm --notest -l extlib Module::CoreList && \
+RUN  cpanm --notest -l extlib Module::CoreList && \
      cpanm --notest -l extlib --installdeps .
 
 USER 1001
