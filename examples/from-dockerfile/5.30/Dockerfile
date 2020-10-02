@@ -10,6 +10,5 @@ RUN export PATH=${PATH}:/opt/rh/rh-perl530/root/usr/bin/&& \
     cpanm --notest -l extlib Module::CoreList && \
     cpanm --notest -l extlib --installdeps .
 
-
 # Run script uses standard ways to run the application
 CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
