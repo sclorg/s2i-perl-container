@@ -91,6 +91,7 @@ check_result() {
   if [[ "$result" != "0" ]]; then
     TESTSUITE_RESULT=1
   fi
+  return $result
 }
 
 wait_for_cid() {
