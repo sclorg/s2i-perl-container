@@ -21,6 +21,7 @@ test_psgi_variables
 test_warningonstderr
 test_npm
 test_latest_imagestreams
+test_from_dockerfile
 "
 
 source "${test_dir}/test-lib.sh"
@@ -64,7 +65,7 @@ prepare() {
 }
 
 run_test_application() {
-  docker run -d --user=100001 --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+  docker run --user=100001 --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
 }
 
 cleanup_test_app() {
@@ -197,7 +198,7 @@ test_connection() {
 
 test_application() {
   # Verify that the HTTP connection can be established to test application container
-  run_test_application
+  run_test_application &
 
   # Wait for the container to write it's CID file
   wait_for_cid
@@ -369,6 +370,24 @@ function run_all_tests() {
     fi
   done;
 }
+function test_from_dockerfile(){
+	info "Check building using a Dockerfile"
+	ct_test_app_dockerfile $test_dir/examples/from-dockerfile/5.26/Dockerfile 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Dancer application on OpenShift' app-src
+	t1=$?
+	if [ "$t1" == "0" ]; then
+		echo "test 1 from_dockerfile passed";
+	fi;
+
+	info "Check building using a Dockerfile.s2i"
+	ct_test_app_dockerfile $test_dir/examples/from-dockerfile/5.26/Dockerfile.s2i 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Dancer application on OpenShift' app-src
+	t2=$?
+	if [[ "$t2" == "0" ]];then
+		echo "test 2 from_dockerfile passed";
+	fi;
+
+	check_result $t1
+	check_result $t2
+}
 
 # Run the chosen tests
 TEST_LIST=${TESTS:-$TEST_LIST} run_all_tests
@@ -381,10 +400,5 @@ else
   echo "Tests for ${IMAGE_NAME} failed."
 fi
 
-
-info "Check building using a Dockerfile"
-ct_test_app_dockerfile $test_dir/examples/from-dockerfile/5.26/Dockerfile 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Perl application on OpenShift' app-src
-ct_test_app_dockerfile $test_dir/examples/from-dockerfile/5.26/Dockerfile.s2i 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Perl application on OpenShift' app-src
-check_result $?
 
 exit $TESTSUITE_RESULT

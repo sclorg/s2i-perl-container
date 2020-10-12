@@ -3,6 +3,11 @@ FROM centos/perl-26-centos7
 # Add application sources
 ADD app-src \.
 
+CMD sed -i '1i<Location/>' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '2iSetHandler perl-script' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '3iPerlResponseHandler Plack::Handler::Apache2' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '4iPerlSetVar psgi_app app.psgi' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '5i</Location>' /opt/app-root/etc/httpd.d/40-psgi.conf
 
 # Install dependencies  cpanfile required
 RUN export PATH=${PATH}:/opt/rh/rh-perl526/root/usr/bin/&& \
