@@ -29,7 +29,7 @@ the nodejs itself is included just to make the npm work.
 Usage in Openshift
 ---------------------
  In this example, we will assume that you are using the `ubi8/perl-526` image, available via `perl:5.26` imagestream tag in Openshift.
- To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
+ To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
     ```
     oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
     ```
