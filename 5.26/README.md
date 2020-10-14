@@ -1,14 +1,14 @@
 Perl 5.26 container image
-=================
+==========================
 
-This container image includes Perl 5.26 as a [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.26 applications.
+This container image includes Perl 5.26 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.26 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
 the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
-Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments
+Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
 Description
 -----------
@@ -27,25 +27,29 @@ version, that is included in the image; those versions can be changed anytime an
 the nodejs itself is included just to make the npm work.
 
 Usage in Openshift
----------------------
- In this example, we will assume that you are using the `rhscl/perl-526-rhel7` image, available via `perl:5.26` imagestream tag in Openshift.
- To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
-    ```
-    oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
-    ```
+------------------
+
+In this example, we will assume that you are using the `rhscl/perl-526-rhel7` image, available via `perl:5.26` imagestream tag in Openshift.
+To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
+
+```
+oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
+```
 
 **To access the application:**
+
 ```
-$ oc get pods
-$ oc exec <pod> -- curl 127.0.0.1:8080
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
 ```
 
 Source-to-Image framework and scripts
 -------------------------------------
+
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
-an input, use a builder image like this Node.js container image, and produce
+an input, use a builder image like this Perl container image, and produce
 a new image that runs the assembled application as an output.
 
 To support the Source-to-Image framework, important scripts are included in the builder image:
@@ -54,9 +58,10 @@ To support the Source-to-Image framework, important scripts are included in the 
 * The `/usr/libexec/s2i/run` script is set as the default command in the resulting container image (the new image with the application artifacts). It runs `httpd` for production.
 
 Building an application using a Dockerfile
----------------------
+------------------------------------------
+
 Compared to the Source-to-Image strategy, using a Dockerfile is a more
-flexible way to build a Node.js container image with an application.
+flexible way to build a Perl container image with an application.
 Use a Dockerfile when Source-to-Image is not sufficiently flexible for you or
 when you build the image outside of the OpenShift environment.
 
@@ -72,7 +77,7 @@ An RHEL7 image `rhscl/perl-526-rhel7` is used in this example.
 
 #### 2. Pull and application code
 
- An example application available at https://github.com/sclorg/dancer-ex.git is used here. Feel free to clone the repository for further experiments.
+An example application available at https://github.com/sclorg/dancer-ex.git is used here. Feel free to clone the repository for further experiments.
 
 ```
 git clone https://github.com/sclorg/dancer-ex.git app-src
@@ -89,12 +94,12 @@ This step usually consists of at least these parts:
 For all these three parts, users can either setup all manually and use commands `perl` and `cpanm` explicitly in the Dockerfile ([3.1.](#31-to-use-your-own-setup-create-a-dockerfile-with-this-content)), or users can use the Source-to-Image scripts inside the image ([3.2.](#32-to-use-the-source-to-image-scripts-and-build-an-image-using-a-dockerfile-create-a-dockerfile-with-this-content); see more about these scripts in the section "Source-to-Image framework and scripts" above), that already know how to set-up and run some common Perl applications.
 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
+
 ```
 FROM rhscl/perl-526-rhel7
 
 # Add application sources
 ADD app-src .
-
 
 # Install the dependencies
 RUN export PATH=${PATH}:/opt/rh/rh-perl526/root/usr/bin/&& \
@@ -114,6 +119,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ```
 
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
+
 ```
 FROM rhscl/perl-526-rhel7
 
@@ -130,6 +136,7 @@ RUN /usr/libexec/s2i/assemble
 # Set the default command for the resulting image
 CMD /usr/libexec/s2i/run
 ```
+
 #### 4. Build a new image from a Dockerfile prepared in the previous step
 
 ```
@@ -137,12 +144,13 @@ podman build -t perl-app .
 ```
 
 #### 5. Run the resulting image with final application
+
 ```
 podman run -d perl-app
 ```
 
 Environment variables for Source-to-Image
----------------------
+-----------------------------------------
 
 To set environment variables, you can place them as a key value pair into a `.s2i/environment`
 file inside your source code repository.
@@ -189,9 +197,9 @@ file inside your source code repository.
     This variable overrides location URI path that is handled path the PSGI
     application. Default value is "/".
 
-
 See also
 --------
+
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
 Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`, for RHEL8 `Dockerfile.rhel8` and the Fedora Dockerfile is called `Dockerfile.fedora`.
