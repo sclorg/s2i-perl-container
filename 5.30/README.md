@@ -40,7 +40,7 @@ $ oc get pods
 $ oc exec <pod> -- curl 127.0.0.1:8080
 ```
 
-Source-to-Inage framework and scripts
+Source-to-Image framework and scripts
 -------------------------------------
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
