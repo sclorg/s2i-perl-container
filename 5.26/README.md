@@ -29,7 +29,7 @@ the nodejs itself is included just to make the npm work.
 Usage in Openshift
 ---------------------
  In this example, we will assume that you are using the `rhscl/perl-526-rhel7` image, available via `perl:5.26` imagestream tag in Openshift.
- To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
+ To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
     ```
     oc new-app perl:5.26~https://github.com/sclorg/dancer-ex.git
     ```
@@ -60,7 +60,7 @@ flexible way to build a Node.js container image with an application.
 Use a Dockerfile when Source-to-Image is not sufficiently flexible for you or
 when you build the image outside of the OpenShift environment.
 
-To use the Node.js image in a Dockerfile, follow these steps:
+To use the Perl image in a Dockerfile, follow these steps:
 
 #### 1. Pull a base builder image to build on
 
@@ -95,7 +95,6 @@ FROM rhscl/perl-526-rhel7
 # Add application sources
 ADD app-src .
 
-USER 0
 
 # Install the dependencies
 RUN export PATH=${PATH}:/opt/rh/rh-perl526/root/usr/bin/&& \
@@ -103,7 +102,12 @@ RUN export PATH=${PATH}:/opt/rh/rh-perl526/root/usr/bin/&& \
      cpanm --notest -l extlib Module::CoreList && \
      cpanm --notest -l extlib --installdeps .
 
-USER 1001
+# Set up web application
+CMD sed -i '1i<Location/>' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '2iSetHandler perl-script' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '3iPerlResponseHandler Plack::Handler::Apache2' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '4iPerlSetVar psgi_app app.psgi' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '5i</Location>' /opt/app-root/etc/httpd.d/40-psgi.conf
 
 # Run scripts uses standard ways to run the application
 CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND

@@ -68,7 +68,7 @@ To use the Node.js image in a Dockerfile, follow these steps:
 podman pull ubi8/perl-526
 ```
 
-An CentOs image `ubi8/perl-526` is used in this example.
+An ubi8 image `ubi8/perl-526` is used in this example.
 
 #### 2. Pull and application code
 
@@ -95,13 +95,16 @@ FROM ubi8/perl-526
 # Add application sources
 ADD app-src .
 
-USER 0
 
 # Install the dependencies
 RUN  cpanm --notest -l extlib Module::CoreList && \
      cpanm --notest -l extlib --installdeps .
 
-USER 1001
+CMD sed -i '1i<Location/>' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '2iSetHandler perl-script' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '3iPerlResponseHandler Plack::Handler::Apache2' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '4iPerlSetVar psgi_app app.psgi' /opt/app-root/etc/httpd.d/40-psgi.conf
+CMD sed -i '5i</Location>' /opt/app-root/etc/httpd.d/40-psgi.conf
 
 # Run scripts uses standard ways to run the application
 CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
