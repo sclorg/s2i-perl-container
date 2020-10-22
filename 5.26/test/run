@@ -20,7 +20,6 @@ test_psgi
 test_psgi_variables
 test_warningonstderr
 test_npm
-test_latest_imagestreams
 test_from_dockerfile
 "
 
@@ -343,17 +342,6 @@ test_npm() {
     check_result $?
 
     cleanup
-}
-
-test_latest_imagestreams() {
-  local result=1
-  info "Testing the latest version in imagestreams"
-  # Switch to root directory of a container
-  pushd "${test_dir}/../.." >/dev/null || return 1
-  ct_check_latest_imagestreams
-  result=$?
-  popd >/dev/null || return 1
-  check_result $result
 }
 
 function run_all_tests() {
