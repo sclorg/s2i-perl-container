@@ -21,6 +21,7 @@ test_psgi_variables
 test_warningonstderr
 test_npm
 test_from_dockerfile
+test_scl_variables_in_dockerfile
 "
 
 source "${test_dir}/test-lib.sh"
@@ -344,6 +345,22 @@ test_npm() {
     cleanup
 }
 
+function test_scl_variables_in_dockerfile() {
+  if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
+    # autocleanup only enabled here as only the following tests so far use it
+    CID_FILE_DIR=$(mktemp -d)
+    ct_enable_cleanup
+
+    info "Testing variable presence during \`docker exec\`"
+    ct_check_exec_env_vars
+    check_result $?
+
+    info "Checking if all scl variables are defined in Dockerfile"
+    ct_check_scl_enable_vars
+    check_result $?
+  fi
+}
+
 function run_all_tests() {
   for test_case in $TEST_LIST; do
     : "Running test $test_case ...."
@@ -361,6 +378,7 @@ function run_all_tests() {
     [ -n "${FAIL_QUICKLY:-}" ] && return 1
   done;
 }
+
 function test_from_dockerfile(){
   info "Check building using a Dockerfile"
   ct_test_app_dockerfile $test_dir/examples/from-dockerfile/${VERSION}/Dockerfile 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Dancer application on OpenShift' app-src
