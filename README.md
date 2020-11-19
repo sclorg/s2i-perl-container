@@ -80,8 +80,8 @@ Usage
 For information about usage of the Dockerfile for Perl 5.30,
 see [usage documentation](5.30/README.md).
 
-For information about usage of the Dockerfile for Perl 5.26 - mod_fcgid version,
-see [usage documentation](5.26-mod_fcgid/README.md).
+For information about usage of the Dockerfile for Perl 5.30 - mod_fcgid version,
+see [usage documentation](5.30-mod_fcgid/README.md).
 
 Test
 ---------------------

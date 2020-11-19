@@ -1,0 +1,49 @@
+From d65d28410b91dfb3d9d12b6b8e49a79c7da54e1c Mon Sep 17 00:00:00 2001
+From: =?UTF-8?q?Petr=20P=C3=ADsa=C5=99?= <ppisar@redhat.com>
+Date: Wed, 9 Jan 2019 12:33:59 +0100
+Subject: [PATCH] Work around mod_fcgid bogus SCRIPT_NAME/PATH_INFO
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+
+mod_fcgid sends wrong PATH_INFO to virtual FcgidWrapper and that
+prevents Plack from passing an application path to PSGI.
+
+This adds a side channel for passing application URI location to
+Plack's FCGI handler.
+
+https://bugzilla.redhat.com/show_bug.cgi?id=1651746
+<https://github.com/plack/Plack/issues/308>
+<https://github.com/plack/Plack/issues/147>
+<https://github.com/plack/Plack/issues/281>
+
+Signed-off-by: Petr Písař <ppisar@redhat.com>
+---
+ lib/Plack/Handler/FCGI.pm | 11 +++++++++++
+ 1 file changed, 11 insertions(+)
+
+diff --git a/lib/Plack/Handler/FCGI.pm b/lib/Plack/Handler/FCGI.pm
+index 029051c..0c491b2 100644
+--- a/lib/Plack/Handler/FCGI.pm
++++ b/lib/Plack/Handler/FCGI.pm
+@@ -124,6 +124,17 @@ sub run {
+         delete $env->{HTTP_CONTENT_TYPE};
+         delete $env->{HTTP_CONTENT_LENGTH};
+ 
++        # mod_fcgid provides wrong SCRIPT_NAME and PATH_INFO for virtual FCGI script handlers
++        # <https://github.com/plack/Plack/issues/308>
++        # <https://github.com/plack/Plack/issues/147>
++        # <https://github.com/plack/Plack/issues/281>
++        if (exists $ENV{MODFCGID_VIRTUAL_LOCATION}) {
++            if ($ENV{MODFCGID_VIRTUAL_LOCATION} eq '/') {
++                $ENV{MODFCGID_VIRTUAL_LOCATION} = '';
++            }
++            $env->{SCRIPT_NAME} = $ENV{MODFCGID_VIRTUAL_LOCATION};
++        }
++
+         # lighttpd munges multiple slashes in PATH_INFO into one. Try recovering it
+         my $uri = URI->new("http://localhost" .  $env->{REQUEST_URI});
+         $env->{PATH_INFO} = uri_unescape($uri->path);
+-- 
+2.17.2
+
