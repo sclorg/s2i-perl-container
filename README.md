@@ -1,5 +1,8 @@
 Perl container images
-==================
+=====================
+
+s2i-perl-container 5.26: [![Docker Repository on Quay](https://quay.io/repository/centos7/perl-526-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/perl-526-centos7),
+s2i-perl-container 5.30: [![Docker Repository on Quay](https://quay.io/repository/centos7/perl-530-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/perl-530-centos7)
 
 This repository contains the source for building various versions of
 the Perl application as a reproducible container image using
@@ -17,7 +20,7 @@ For more information about concepts used in these container images, see the
 
 
 Versions
----------------
+--------
 Perl versions currently provided:
 * [perl-5.30](5.30)
 * [perl-5.26](5.26)
@@ -31,7 +34,7 @@ CentOS versions currently supported:
 
 
 Installation
----------------
+------------
 To build a Perl image, choose either the CentOS or RHEL based image:
 
 *  **RHEL based image**
@@ -57,7 +60,7 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     This image is available on DockerHub. To download the perl-5.30 image, run:
 
     ```
-    $ podman pull centos/perl-530-centos7
+    $ podman pull docker.io/centos7/perl-530-centos7
     ```
 
     To build the perl-5.30 image from scratch run:
@@ -75,7 +78,7 @@ on all provided versions of Perl.**
 
 
 Usage
----------------------------------
+-----
 
 For information about usage of the Dockerfile for Perl 5.30,
 see [usage documentation](5.30/README.md).
@@ -84,7 +87,7 @@ For information about usage of the Dockerfile for Perl 5.30 - mod_fcgid version,
 see [usage documentation](5.30-mod_fcgid/README.md).
 
 Test
----------------------
+----
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
 which launches tests to check functionality of a simple Perl application built on top of the s2i-perl image.
 
@@ -112,7 +115,7 @@ on all of the provided versions of Perl.**
 
 
 Repository organization
-------------------------
+-----------------------
 * **`<perl-version>`**
 
     * **Dockerfile**
@@ -167,4 +170,3 @@ Repository organization
         * **run**
 
             This script runs the [S2I](https://github.com/openshift/source-to-image) test framework.
-

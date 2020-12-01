@@ -4,7 +4,7 @@ Perl 5.30 container image
 This container image includes Perl 5.30 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.30 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -70,10 +70,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull centos/perl-530-centos7
+podman pull quay.io/centos7/perl-530-centos7
 ```
 
-An CentOs image `centos/perl-530-centos7` is used in this example.
+An CentOs image `quay.io/centos7/perl-530-centos7` is used in this example.
 
 #### 2. Pull and application code
 
@@ -96,7 +96,7 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM centos/perl-530-centos7
+FROM quay.io/centos7/perl-530-centos7
 
 # Add application sources
 ADD app-src .
@@ -120,7 +120,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM centos/perl-530-centos7
+FROM quay.io/centos7/perl-530-centos7
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access

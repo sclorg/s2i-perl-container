@@ -1,10 +1,10 @@
 Perl 5.26 container image
-==========================
+=========================
 
 This container image includes Perl 5.26 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.26 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
