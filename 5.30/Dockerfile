@@ -1,4 +1,4 @@
-FROM centos/s2i-base-centos7
+FROM quay.io/centos7/s2i-base-centos7
 
 # This image provides a Perl 5.30 environment you can use to run your Perl applications.
 
@@ -26,12 +26,12 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="centos/${NAME}-${PERL_SHORT_VER}-centos7" \
+      name="centos7/${NAME}-${PERL_SHORT_VER}-centos7" \
       com.redhat.component="rh-${NAME}${PERL_SHORT_VER}-container" \
       version="$PERL_VERSION" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> centos/${NAME}-${PERL_SHORT_VER}-centos7:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> quay.io/centos7/${NAME}-${PERL_SHORT_VER}-centos7:latest <APP-NAME>"
 
 RUN yum install -y centos-release-scl && \
     INSTALL_PKGS="rh-perl530 rh-perl530-perl rh-perl530-perl-devel rh-perl530-mod_perl rh-perl530-perl-Apache-Reload rh-perl530-perl-CPAN rh-perl530-perl-App-cpanminus" && \
