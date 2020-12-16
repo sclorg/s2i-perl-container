@@ -10,12 +10,14 @@ fi
 
 cat <<EOF
 This is a S2I ${IMAGE_DESCRIPTION} ${DISTRO} base image:
-To use it, install S2I: https://github.com/openshift/source-to-image
+There are multiple ways how to run the image, see documentation at:
+https://github.com/sclorg/s2i-perl-container/blob/master/${PERL_VERSION}-mod_fcgid/README.md
 
 Sample invocation:
 
-s2i build https://github.com/sclorg/s2i-perl-container.git --context-dir=5.30/test/sample-test-app/ ${NAMESPACE}/perl-530${SUFFIX} perl-sample-app
+oc new-app perl:${PERL_VERSION}~https://github.com/sclorg/s2i-perl-container.git --context-dir=${PERL_VERSION}-mod_fcgid/test/sample-test-app/
 
 You can then run the resulting image via:
-podman run -p 8080:8080 perl-sample-app
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
 EOF
