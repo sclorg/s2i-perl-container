@@ -197,12 +197,18 @@ test_connection() {
 
 test_application() {
   # Verify that the HTTP connection can be established to test application container
+  local version
+
+  version="5.26"
   run_test_application &
 
   # Wait for the container to write it's CID file
   wait_for_cid
 
-  test_scl_usage "perl --version" "v5.30."
+  if [ x"$VERSION" == "x5.30-mod_fcgid" ]; then
+    version="5.30"
+  fi
+  test_scl_usage "perl --version" "v${version}."
   check_result $?
 
   test_connection
