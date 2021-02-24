@@ -102,10 +102,8 @@ FROM rhscl/perl-526-rhel7
 ADD app-src .
 
 # Install the dependencies
-RUN export PATH=${PATH}:/opt/rh/rh-perl526/root/usr/bin/&& \
-     export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/rh/rh-perl526/root/usr/lib64 && \
-     cpanm --notest -l extlib Module::CoreList && \
-     cpanm --notest -l extlib --installdeps .
+RUN cpanm --notest -l extlib Module::CoreList && \
+    cpanm --notest -l extlib --installdeps .
 
 # Set up web application
 CMD sed -i '1i<Location/>' /opt/app-root/etc/httpd.d/40-psgi.conf
