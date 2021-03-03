@@ -1,13 +1,11 @@
-FROM centos/perl-530-centos7
+FROM quay.io/centos7/perl-530-centos7
 
 # Add application sources
 ADD app-src \.
 
 
 # Install dependencies  cpanfile required
-RUN export PATH=${PATH}:/opt/rh/rh-perl530/root/usr/bin/&& \
-    export LD_LIBRARY_PATH=${LD_LIBRARY_PATH}:/opt/rh/rh-perl530/root/usr/lib64 && \
-    cpanm --notest -l extlib Module::CoreList && \
+RUN cpanm --notest -l extlib Module::CoreList && \
     cpanm --notest -l extlib --installdeps .
 
 CMD sed -i '1i<Location/>' /opt/app-root/etc/httpd.d/40-psgi.conf

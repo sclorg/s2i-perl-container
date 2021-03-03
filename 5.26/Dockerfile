@@ -7,7 +7,8 @@ EXPOSE 8080
 # Image metadata
 ENV PERL_VERSION=5.26 \
     PERL_SHORT_VER=526 \
-    NAME=perl
+    NAME=perl \
+    HTTPD_24=httpd24
 
 ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
     DESCRIPTION="Perl $PERL_VERSION available as container is a base platform for \
@@ -16,7 +17,15 @@ Perl is a high-level programming language with roots in C, sed, awk and shell sc
 Perl is good at handling processes and files, and is especially good at handling text. \
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
 different things, Perl's most common applications are system administration utilities \
-and web programming."
+and web programming." \
+     PKGG_CONFIG_PATH=/opt/rh/$HTTPD_24/root/usr/lib64/pkgconfig \
+     PYTHONPATH=/opt/rh/$NODEJS_SCL/root/usr/lib/python2.7/site-packages \
+     PATH=/opt/rh/$NODEJS_SCL/root/usr/bin:/opt/app-root/src/bin:/opt/app-root/bin:/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/opt/rh/rh-perl$PERL_SHORT_VER/root/usr/local/bin:/opt/rh/rh-perl$PERL_SHORT_VER/root/usr/bin:/opt/rh/$HTTPD_24/root/usr/bin:/opt/rh/$HTTPD_24/root/usr/sbin:/opt/app-root/src/extlib/bin \
+     LD_LIBRARY_PATH=/opt/rh/$NODEJS_SCL/root/usr/lib64:/opt/rh/rh-perl$PERL_SHORT_VER/root/usr/lib64:/opt/rh/$HTTPD_24/root/usr/lib64 \
+     X_SCLS="rh-perl$PERL_SHORT_VER $NODEJS_SCL $HTTPD_24" \
+     LIBRARY_PATH=/opt/rh/$HTTPD_24/root/usr/lib64 \
+     MANPATH=/opt/rh/$NODEJS_SCL/root/usr/share/man:/opt/rh/$HTTPD_24/root/usr/share/man:/opt/rh/rh-perl$PERL_SHORT_VER/root/usr/share/man \
+     PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
@@ -49,16 +58,15 @@ COPY ./root/ /
 # writeable as OpenShift default security model is to run the container under
 # random UID.
 RUN mkdir -p ${APP_ROOT}/etc/httpd.d && \
-    sed -i -f ${APP_ROOT}/etc/httpdconf.sed /opt/rh/httpd24/root/etc/httpd/conf/httpd.conf  && \
-    chmod -R og+rwx /opt/rh/httpd24/root/var/run/httpd ${APP_ROOT}/etc/httpd.d && \
+    sed -i -f ${APP_ROOT}/etc/httpdconf.sed /opt/rh/$HTTPD_24/root/etc/httpd/conf/httpd.conf  && \
+    chmod -R og+rwx /opt/rh/$HTTPD_24/root/var/run/httpd ${APP_ROOT}/etc/httpd.d && \
     chown -R 1001:0 ${APP_ROOT} && chmod -R ug+rwx ${APP_ROOT} && \
     rpm-file-permissions
 
 USER 1001
 
 # Enable the SCL for all bash scripts.
-ENV BASH_ENV=${APP_ROOT}/etc/scl_enable \
-    ENV=${APP_ROOT}/etc/scl_enable \
+ENV ENV=${APP_ROOT}/etc/scl_enable \
     PROMPT_COMMAND=". ${APP_ROOT}/etc/scl_enable"
 
 # Set the default CMD to print the usage of the language image
