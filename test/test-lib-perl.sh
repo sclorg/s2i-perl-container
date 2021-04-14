@@ -17,7 +17,8 @@ function test_perl_imagestream() {
     rhel7|centos7) ;;
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
-  
+
+  echo "Testing perl imagestream application"
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS%[0-9]*}.json" \
                                      "${THISDIR}/sample-test-app.json" \
                                      "${IMAGE_NAME}" \

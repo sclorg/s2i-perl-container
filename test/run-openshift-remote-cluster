@@ -11,34 +11,38 @@ THISDIR=$(dirname ${BASH_SOURCE[0]})
 source "${THISDIR}/test-lib.sh"
 source "${THISDIR}/test-lib-openshift.sh"
 source "${THISDIR}/test-lib-perl.sh"
+source "${THISDIR}/test-lib-remote-openshift.sh"
 
 set -eo nounset
 
 trap ct_os_cleanup EXIT SIGINT
 
+ct_os_set_ocp4
+
 ct_os_check_compulsory_vars
 
 oc status || false "It looks like oc is not properly logged in."
 
-export CT_SKIP_NEW_PROJECT=true
-export CT_SKIP_UPLOAD_IMAGE=true
-export CT_NAMESPACE=openshift
+# For testing on OpenShift 4 we use internal registry
+export CT_EXTERNAL_REGISTRY=true
 
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
 # TODO: We should ideally use a local directory instead of ${VERSION}/test/sample-test-app,
 # so we can test changes in that example app that are done as part of the PR
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" "${THISDIR}/sample-test-app" "Everything is OK"
-
+echo "Testing sample-test-app from s2i-perl-container git repository"
+ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" "${VERSION}/test/sample-test-app" "Everything is OK"
+echo "Testing Dancer application"
 ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
-
 # TODO: this was not working because the referenced example dir was added as part of this commit
+echo "Testing template application"
 ct_os_test_template_app "${IMAGE_NAME}" \
-                        "${THISDIR}/sample-test-app.json" \
+                        "https://raw.githubusercontent.com/sclorg/s2i-perl-container/master/examples/templates/sample-test-app.json" \
                         perl \
                         "Everything is OK" \
-                        8080 http 200 "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION} -p NAME=perl-testing"
+                        8080 http 200 \
+                        "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION} -p NAME=perl-testing"
 
 # Check the imagestream
 test_perl_imagestream
