@@ -21,16 +21,15 @@ Perl's hallmarks are practicality and efficiency. While it is used to do a lot o
 different things, Perl's most common applications are system administration utilities
 and web programming.
 
-This container image includes an npm utility, so users can use it to install JavaScript
-modules for their web applications. There is no guarantee for any specific npm or nodejs
-version, that is included in the image; those versions can be changed anytime and
-the nodejs itself is included just to make the npm work.
+This container image includes an cpanm utility, so users can use it to install Perl
+modules for their web applications. There is no guarantee for any specific CPAN module
+version, that is included in the image; those versions can be changed anytime.
 
 Usage in Openshift
 ------------------
 
 In this example, we will assume that you are using the `centos/perl-530-centos7` image, available via `perl:5.30` imagestream tag in Openshift.
-To build a simple [nodejs-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
+To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
 
 ```
 oc new-app perl:5.30~https://github.com/sclorg/dancer-ex.git
