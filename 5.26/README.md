@@ -104,12 +104,12 @@ ADD app-src .
 RUN cpanm --notest -l extlib Module::CoreList && \
     cpanm --notest -l extlib --installdeps .
 
-# Set up web application
-CMD sed -i '1i<Location/>' /opt/app-root/etc/httpd.d/40-psgi.conf
-CMD sed -i '2iSetHandler perl-script' /opt/app-root/etc/httpd.d/40-psgi.conf
-CMD sed -i '3iPerlResponseHandler Plack::Handler::Apache2' /opt/app-root/etc/httpd.d/40-psgi.conf
-CMD sed -i '4iPerlSetVar psgi_app app.psgi' /opt/app-root/etc/httpd.d/40-psgi.conf
-CMD sed -i '5i</Location>' /opt/app-root/etc/httpd.d/40-psgi.conf
+RUN printf '\
+<Location />\n\
+SetHandler perl-script\n\
+PerlResponseHandler Plack::Handler::Apache2\n\
+PerlSetVar psgi_app app.psgi\n\
+</Location>\n' > /opt/app-root/etc/httpd.d/40-psgi.conf
 
 # Run scripts uses standard ways to run the application
 CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
