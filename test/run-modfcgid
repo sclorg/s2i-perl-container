@@ -21,6 +21,7 @@ test_psgi_variables
 test_warningonstderr
 test_fcgi
 test_npm
+test_fcgi_hotplug
 "
 
 source "${test_dir}/test-lib.sh"
@@ -216,6 +217,28 @@ test_application() {
   cleanup_test_app
 }
 
+test_hot_plug_application() {
+  # Verify that the HTTP connection can be established to test application container
+  local version
+
+  version="5.26"
+  run_test_application &
+
+  # Wait for the container to write it's CID file
+  wait_for_cid
+
+  test_response '/' 200 'Everything is fine'
+  check_result $?
+  out=$(docker exec $(cat ${cid_file}) /bin/sh -ic "sed -ie s/Everything is fine/Everything in hot plug is fine/  " 2>&1)
+  echo "OUTPUT ${out}"
+  if ! echo "${out}" | grep -q "${expected}"; then
+    echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
+    return 1
+  fi
+  test_response '/' 200 'Everything in hot plug is fine'
+  cleanup_test_app
+}
+
 # Build application, run it, perform test function, clean up.
 # First argument is directory name.
 # Second argument is function that expects running application. The function
@@ -342,6 +365,39 @@ test_6_function() {
 
 test_fcgi() {
     do_test 'fcgi' 'test_6_function'
+}
+
+test_fcgi_hot_plug() {
+    if [[ "${OS}" != "rhel8" ]]; then
+      echo "This test is valid only for RHEL8 containers."
+      return 0
+    fi
+    test_name='fcgi_hot_plug'
+    info "Starting tests for ${test_name}"
+
+    cid_file=$(mktemp -u --suffix=.cid)
+
+    # Since we built the candidate image locally, we don't want S2I attempt to pull
+    # it from Docker hub
+    s2i_args="--pull-policy=never PERL_APACHE2_RELOAD=true"
+
+    prepare
+    run_s2i_build $s2i_args
+    check_result $?
+
+    # Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
+    test_s2i_usage
+    check_result $?
+
+    # Verify the 'usage' script is working properly when running the base image with 'docker run ...'
+    test_docker_run_usage
+    check_result $?
+
+    # get response from application
+    test_hot_plug_application
+
+    info "All tests for the ${test_name} finished successfully."
+    cleanup
 }
 
 test_npm() {
