@@ -3,7 +3,7 @@
 set -e
 
 # cpanm can install scripts. They should be available too.
-export PATH=${PATH}:/opt/app-root/src/extlib/bin
+export PATH=/opt/app-root/src/extlib/bin:${PATH}
 # And we have to set Perl include path too because cpanm can install modules.
 export PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 

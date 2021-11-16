@@ -42,6 +42,11 @@ else
   export ENABLE_CPAN_TEST="--notest"
 fi
 
+PLACKUP_ARGS=""
+if [ -n "$PSGI_RELOAD" ]; then
+  PLACKUP_ARGS="-r -R ${APP_ROOT}/src/ "
+fi
+
 # Configure mod_fcgid for PSGI.
 # If PSGI_FILE variable is set but empty, skip it.
 # If PSGI_FILE is set and non-empty, use it.
@@ -69,7 +74,7 @@ FcgidInitialEnv MODFCGID_VIRTUAL_LOCATION ${PSGI_URI_PATH}
 <Location ${PSGI_URI_PATH}>
     SetHandler fcgid-script
     Options +ExecCGI
-    FcgidWrapper "/opt/app-root/psgiwrapper /usr/bin/env plackup -s FCGI $PSGI_FILE" virtual
+    FcgidWrapper "/opt/app-root/psgiwrapper /usr/bin/env plackup $PLACKUP_ARGS-s FCGI $PSGI_FILE" virtual
 </Location>
 EOF
 elif [ "$PSGI_FILE_NUMBER" -gt 0 ]; then
