@@ -17,6 +17,8 @@ TEST_LIST="\
 test_sample_test_app
 test_binpath
 test_psgi
+test_psgi_hot_deploy_without_reload
+test_psgi_hot_deploy_with_reload
 test_psgi_variables
 test_warningonstderr
 test_fcgi
@@ -346,6 +348,52 @@ test_6_function() {
 
 test_fcgi() {
     do_test 'fcgi' 'test_6_function'
+}
+
+test_7_response() {
+    test_response '/' 200 'old initial value: 0'
+    check_result $?
+
+    test_response '/' 200 'old initial value: 1'
+    check_result $?
+
+    # If we don't set PSGI_RELOAD, this change don't affects application.
+    sleep 2
+    info "Changing source code of application"
+    docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
+    check_result $?
+    sleep 2
+
+    test_response '/' 200 'old initial value: 2'
+    check_result $?
+}
+
+test_psgi_hot_deploy_without_reload() {
+    do_test 'psgi-hot_deploy' 'test_7_response' \
+	'--env=PSGI_FILE=./index.psgi'
+}
+
+test_8_response() {
+    test_response '/' 200 'old initial value: 0'
+    check_result $?
+
+    test_response '/' 200 'old initial value: 1'
+    check_result $?
+
+    # If we set PSGI_RELOAD, this change affects application.
+    sleep 2
+    info "Changing source code of application"
+    docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
+    check_result $?
+    sleep 2
+
+    test_response '/' 200 'new initial value: 0'
+    check_result $?
+}
+
+test_psgi_hot_deploy_with_reload() {
+    do_test 'psgi-hot_deploy' 'test_8_response' \
+	'--env=PSGI_FILE=./index.psgi' '--env=PSGI_RELOAD=1'
 }
 
 test_npm() {
