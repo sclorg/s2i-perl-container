@@ -9,12 +9,13 @@ jobs:
     runs-on: ubuntu-latest
     strategy:
       matrix:
-        version: ["5.30", "5.32"]
         include:
-          - dockerfile: "Dockerfile"
+          - version: "5.30"
+            dockerfile: "Dockerfile"
             registry_namespace: "centos7"
             tag: "centos7"
-          - dockerfile: "Dockerfile.c9s"
+          - version: "5.32"
+            dockerfile: "Dockerfile.c9s"
             registry_namespace: "sclorg"
             tag: "c9s"
 
