@@ -13,11 +13,9 @@ jobs:
         include:
           - dockerfile: "Dockerfile"
             registry_namespace: "centos7"
-            registry_suffix: "-centos7"
             tag: "centos7"
           - dockerfile: "Dockerfile.c9s"
             registry_namespace: "sclorg"
-            registry_suffix: ""
             tag: "c9s"
 
     steps:
@@ -60,7 +58,7 @@ jobs:
         uses: redhat-actions/buildah-build@v2
         with:
           dockerfiles: ${{ matrix.version }}/${{ matrix.dockerfile }}
-          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}${{ matrix.registry_suffix }}
+          image: ${{ steps.base-image-name.outputs.image_name}}-${{ steps.short_version.outputs.SHORT_VER }}-${{ matrix.tag }}
           context: ${{ matrix.version }}
           tags: latest ${{ matrix.tag }} ${{ github.sha }}
 
