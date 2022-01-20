@@ -2,19 +2,17 @@
 
 set -e
 
-# Warning: Please note that this will pass all environment variables available within the
-# container to mod_perl by means of PerlPassEnv in the env.conf file
-if [ ! -f /opt/app-root/etc/httpd.d/env.conf ]; then
-  env | awk -F'=' '{print "PerlPassEnv "$1}' > /opt/app-root/etc/httpd.d/env.conf
-fi
+# cpanm can install scripts. They should be available too.
+export PATH=${PATH}:/opt/app-root/src/extlib/bin
+# And we have to set Perl include path too because cpanm can install modules.
+export PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
-# Enable automatic reloading. This can be useful for debugging an application.
-PERL_APACHE2_RELOAD=${PERL_APACHE2_RELOAD:-}
-if [[ "${PERL_APACHE2_RELOAD,,}" == "true" ]]; then
-  cat > /opt/app-root/etc/httpd.d/50-autoreload.conf <<EOF
-PerlModule Apache2::Reload
-PerlInitHandler Apache2::Reload
-EOF
+# Warning: Please note that this will pass all environment variables available
+# within the container to mod_cgid by means of PassEnv and to mod_fcgid by
+# means of FcgidInitialEnv in the env.conf file.
+if [ ! -f /opt/app-root/etc/httpd.d/env.conf ]; then
+  env | awk -F'=' '{print "PassEnv "$1"\nFcgidInitialEnv "$1" \""$2"\""}' \
+      > /opt/app-root/etc/httpd.d/env.conf
 fi
 
 export_vars=$(cgroup-limits) ; export $export_vars

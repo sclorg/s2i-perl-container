@@ -31,8 +31,9 @@ fi
 
 # Change the npm registry mirror if provided
 if [ -n "$NPM_MIRROR" ]; then
-	npm config set registry $NPM_MIRROR
+  npm config set registry $NPM_MIRROR
 fi
+
 
 # Don't test installed Perl modules by default
 if [ "${ENABLE_CPAN_TEST}" = true ]; then
@@ -41,28 +42,34 @@ else
   export ENABLE_CPAN_TEST="--notest"
 fi
 
-# Configure mod_perl for PSGI.
+# Configure mod_fcgid for PSGI.
 # If PSGI_FILE variable is set but empty, skip it.
 # If PSGI_FILE is set and non-empty, use it.
 # If PSGI_FILE does not exist, check if exactly one ./*.psgi file exists and
 # use that file.
 # If PSGI_URI_PATH variable has a value, use it as a location. Default is "/".
+PSGI_URI_PATH="${PSGI_URI_PATH:=/}"
 if [ ! -v PSGI_FILE ]; then
     PSGI_FILE=$(find -maxdepth 1 -name '*.psgi' -type f)
 fi
 PSGI_FILE_NUMBER=$(printf '%s' "$PSGI_FILE" | wc -l)
 if [ -n "$PSGI_FILE" -a "$PSGI_FILE_NUMBER" -eq 0 ]; then
+    CONFIGURE_PSGI=1;
+fi
+if [ -n "$CONFIGURE_PSGI" ]; then
     echo "---> PSGI application found in $PSGI_FILE"
     cat >> cpanfile <<"EOF"
-requires 'Plack::Handler::Apache2';
+requires 'Plack::Handler::FCGI';
+requires 'FCGI::ProcManager';
 EOF
     # XXX: Escape PSGI_FILE value against httpd control characters
     PSGI_FILE=$(printf '%s' "$PSGI_FILE" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
     cat > /opt/app-root/etc/httpd.d/40-psgi.conf <<EOF
-<Location ${PSGI_URI_PATH:=/}>
-    SetHandler perl-script
-    PerlResponseHandler Plack::Handler::Apache2
-    PerlSetVar psgi_app "$PSGI_FILE"
+FcgidInitialEnv MODFCGID_VIRTUAL_LOCATION ${PSGI_URI_PATH}
+<Location ${PSGI_URI_PATH}>
+    SetHandler fcgid-script
+    Options +ExecCGI
+    FcgidWrapper "/opt/app-root/psgiwrapper /usr/bin/env plackup -s FCGI $PSGI_FILE" virtual
 </Location>
 EOF
 elif [ "$PSGI_FILE_NUMBER" -gt 0 ]; then
@@ -74,10 +81,25 @@ fi
 # Installing dependencies with cpanfile
 if [ -f "cpanfile" ]; then
   echo "---> Installing modules from cpanfile ..."
-  cpanm $MIRROR_ARGS $ENABLE_CPAN_TEST -l extlib Module::CoreList
-  cpanm $MIRROR_ARGS $ENABLE_CPAN_TEST -l extlib --installdeps .
+  set +e
+  cpanm --no-interactive $MIRROR_ARGS $ENABLE_CPAN_TEST -l extlib --installdeps .
+  if [ $? != 0 ]; then
+    echo "---> Module installation failed, build.log content is:"
+    cat .cpanm/build.log
+    echo "---> Module installation failed!"
+    exit 1;
+  fi
+  set -e
 else
   echo "---> No cpanfile found, nothing to install"
+fi
+
+# Make Plack compatible with broken mod_fcgi (bug #1651746)
+if [ -n "$CONFIGURE_PSGI" ]; then
+    echo "---> Patching Plack::Handler::FCGI to work with mod_fcgi ..."
+    pushd ./extlib/lib/perl5
+    patch --read-only=ignore -p2 < /opt/app-root/Plack-1.0047-Work-around-mod_fcgid-bogus-SCRIPT_NAME-PATH_INFO.patch
+    popd
 fi
 
 # Fix source directory permissions

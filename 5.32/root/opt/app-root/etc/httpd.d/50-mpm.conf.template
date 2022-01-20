@@ -1,7 +1,9 @@
 # This value should mirror what is set in MinSpareServers.
 StartServers            ${HTTPD_START_SERVERS}
-MinSpareServers         ${HTTPD_START_SERVERS}
-MaxSpareServers         ${HTTPD_MAX_SPARE_SERVERS}
+<IfModule mpm_prefork_module>
+    MinSpareServers         ${HTTPD_START_SERVERS}
+    MaxSpareServers         ${HTTPD_MAX_SPARE_SERVERS}
+</IfModule>
 # The MaxRequestWorkers directive sets the limit on the number of
 # simultaneous requests that will be served.
 # The default value, when no cgroup limits are set is 256.

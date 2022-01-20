@@ -1,10 +1,10 @@
-Perl 5.30 container image
+Perl 5.32 container image
 =========================
 
-This container image includes Perl 5.30 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.30 applications.
+This container image includes Perl 5.32 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.32 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
+the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
 and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -13,8 +13,8 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-Perl 5.30 available as container is a base platform for
-building and running various Perl 5.30 applications and frameworks.
+Perl 5.32 available as container is a base platform for
+building and running various Perl 5.32 applications and frameworks.
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting.
 Perl is good at handling processes and files, and is especially good at handling text.
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of
@@ -25,30 +25,13 @@ This container image includes an cpanm utility, so users can use it to install P
 modules for their web applications. There is no guarantee for any specific CPAN module
 version, that is included in the image; those versions can be changed anytime.
 
-Usage in Openshift
-------------------
-
-In this example, we will assume that you are using the `centos/perl-530-centos7` image, available via `perl:5.30` imagestream tag in Openshift.
-To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
-
-```
-oc new-app perl:5.30~https://github.com/sclorg/dancer-ex.git
-```
-
-**To access the application:**
-
-```
-oc get pods
-oc exec <pod> -- curl 127.0.0.1:8080
-```
-
 Source-to-Image framework and scripts
 -------------------------------------
 
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
-an input, use a builder image like this Perl container image, and produce
+an input, use a builder image like this Node.js container image, and produce
 a new image that runs the assembled application as an output.
 
 To support the Source-to-Image framework, important scripts are included in the builder image:
@@ -69,10 +52,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull quay.io/centos7/perl-530-centos7
+podman pull quay.io/sclorg/perl-532-c9s
 ```
 
-An CentOs image `quay.io/centos7/perl-530-centos7` is used in this example.
+An ubi8 image `quay.io/sclorg/perl-532-c9s` is used in this example.
 
 #### 2. Pull and application code
 
@@ -95,21 +78,35 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM quay.io/centos7/perl-530-centos7
+FROM quay.io/sclorg/perl-532-c9s
 
 # Add application sources
 ADD app-src .
 
-# Install the dependencies
-RUN cpanm --notest -l extlib Module::CoreList && \
-    cpanm --notest -l extlib --installdeps .
+# Set the paths to local Perl modules
+ENV PATH=${PATH}:/opt/app-root/src/extlib/bin
+ENV PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
+# Install the dependencies
+RUN  cpanm --notest -l extlib Module::CoreList && \
+     cpanm --notest -l extlib --installdeps .
+
+# Install Plack as an FCGI server
+RUN cpanm --notest -l extlib Plack::Handler::FCGI FCGI::ProcManager
+RUN patch --read-only=ignore -d ./extlib/lib/perl5 -p2 < /opt/app-root/Plack-1.0047-Work-around-mod_fcgid-bogus-SCRIPT_NAME-PATH_INFO.patch
 RUN printf '\
+FcgidInitialEnv MODFCGID_VIRTUAL_LOCATION /\n\
+PassEnv HOME\n\
+FcgidInitialEnv "HOME" "%s"\n\
+PassEnv PATH\n\
+FcgidInitialEnv "PATH" "%s"\n\
+PassEnv PERL5LIB\n\
+FcgidInitialEnv "PERL5LIB" "%s"\n\
 <Location />\n\
-SetHandler perl-script\n\
-PerlResponseHandler Plack::Handler::Apache2\n\
-PerlSetVar psgi_app app.psgi\n\
-</Location>\n' > /opt/app-root/etc/httpd.d/40-psgi.conf
+SetHandler fcgid-script\n\
+Options +ExecCGI\n\
+FcgidWrapper "/opt/app-root/psgiwrapper /usr/bin/env plackup -s FCGI ./app.psgi" virtual\n\
+</Location>\n' "$HOME" "$PATH" "$PERL5LIB"> /opt/app-root/etc/httpd.d/40-psgi.conf
 
 # Run scripts uses standard ways to run the application
 CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
@@ -118,7 +115,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM quay.io/centos7/perl-530-centos7
+FROM quay.io/sclorg/perl-532-c9s
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access
@@ -161,10 +158,6 @@ file inside your source code repository.
     This variable specifies a mirror URL which will used by cpanminus to install dependencies.
     By default the URL is not specified.
 
-* **PERL_APACHE2_RELOAD**
-
-    Set this to "true" to enable automatic reloading of modified Perl modules.
-
 * **HTTPD_START_SERVERS**
 
     The [StartServers](https://httpd.apache.org/docs/2.4/mod/mpm_common.html#startservers)
@@ -172,7 +165,7 @@ file inside your source code repository.
 
 * **HTTPD_MAX_REQUEST_WORKERS**
 
-    Number of simultaneous requests that will be handled by Apache. The default
+    Number of simultaneous requests that will be handled by Apache httpd. The default
     is 256, but it will be automatically lowered if memory is limited.
 
 * **PSGI_FILE**
@@ -180,13 +173,13 @@ file inside your source code repository.
     Override PSGI application detection.
 
     If the PSGI_FILE variable is set to empty value, no PSGI application will
-    be detected and mod_perl not be reconfigured.
+    be detected and mod_fcgid not be reconfigured.
 
     If the PSGI_FILE variable is set and non-empty, it will define path to
     the PSGI application file. No detection will be used.
 
     If the PSGI_FILE variable does not exist, autodetection will be used:
-    If exactly one ./*.psgi file exists, mod_perl will be configured to
+    If exactly one ./*.psgi file exists, mod_fcgid will be configured to
     execute that file.
 
 * **PSGI_URI_PATH**
@@ -199,4 +192,5 @@ See also
 
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`, for RHEL8 `Dockerfile.rhel8`,
+for CentOS Stream 9 `Dockerfile.c9s` and the Fedora Dockerfile is called `Dockerfile.fedora`.
