@@ -25,13 +25,30 @@ This container image includes an cpanm utility, so users can use it to install P
 modules for their web applications. There is no guarantee for any specific CPAN module
 version, that is included in the image; those versions can be changed anytime.
 
+Usage in Openshift
+------------------
+
+In this example, we will assume that you are using the `ubi8/perl-532` image, available via `perl:5.32` imagestream tag in Openshift.
+To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
+
+```
+oc new-app perl:5.32~https://github.com/sclorg/dancer-ex.git
+```
+
+**To access the application:**
+
+```
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
+```
+
 Source-to-Image framework and scripts
 -------------------------------------
 
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/3.11/creating_images/s2i.html)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
-an input, use a builder image like this Node.js container image, and produce
+an input, use a builder image like this PHP container image, and produce
 a new image that runs the assembled application as an output.
 
 To support the Source-to-Image framework, important scripts are included in the builder image:
@@ -52,10 +69,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull quay.io/sclorg/perl-532-c9s
+podman pull ubi8/perl-532
 ```
 
-An ubi8 image `quay.io/sclorg/perl-532-c9s` is used in this example.
+An ubi8 image `ubi8/perl-532` is used in this example.
 
 #### 2. Pull and application code
 
@@ -78,7 +95,7 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM quay.io/sclorg/perl-532-c9s
+FROM ubi8/perl-532
 
 # Add application sources
 ADD app-src .
@@ -115,7 +132,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM quay.io/sclorg/perl-532-c9s
+FROM ubi8/perl-532
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access
