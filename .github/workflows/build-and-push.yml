@@ -62,7 +62,7 @@ jobs:
           context: ${{ matrix.version }}
           tags: latest ${{ matrix.tag }} ${{ github.sha }}
 
-      - name: Push CentOS7 image to Quay.io
+      - name: Push image to Quay.io/${{ matrix.registry_namespace }} namespace
         if: steps.check_exclude_file.outputs.files_exists == 'false'
         id: push-to-quay
         uses: redhat-actions/push-to-registry@v2.2
