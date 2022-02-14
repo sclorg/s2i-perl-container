@@ -386,6 +386,7 @@ function test_from_dockerfile(){
   if [ "$t1" == "0" ]; then
     echo "test 1 from_dockerfile passed";
   fi;
+  check_result $t1
 
   info "Check building using a Dockerfile.s2i"
   ct_test_app_dockerfile $test_dir/examples/from-dockerfile/${VERSION}/Dockerfile.s2i 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Dancer application on OpenShift' app-src
@@ -393,8 +394,7 @@ function test_from_dockerfile(){
   if [[ "$t2" == "0" ]];then
     echo "test 2 from_dockerfile passed";
   fi;
-
-  check_result $t1
+  check_result $t2
 }
 
 # Run the chosen tests
