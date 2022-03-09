@@ -1,0 +1,19 @@
+#!/bin/sh
+
+DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
+NAMESPACE=centos
+[[ $DISTRO =~ rhel* ]] && NAMESPACE=rhscl
+
+cat <<EOF
+This is a S2I ${IMAGE_DESCRIPTION} ${DISTRO} base image:
+There are multiple ways how to run the image, see documentation at:
+https://github.com/sclorg/s2i-perl-container/blob/master/${PERL_VERSION}/README.md
+
+To use it in Openshift, run:
+
+oc new-app perl:${PERL_VERSION}~https://github.com/sclorg/s2i-perl-container.git --context-dir=${PERL_VERSION}/test/sample-test-app/
+
+You can then run the resulting image via:
+oc get pods
+oc exec <pod> -- curl 127.0.0.1:8080
+EOF

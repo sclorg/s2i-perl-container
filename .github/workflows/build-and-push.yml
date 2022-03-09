@@ -39,7 +39,7 @@ jobs:
           echo "::set-output name=SHORT_VER::${ver//./}"
 
       - name: Login to Quay.io private registry
-        if: ${{ matrix.registry_namespace != 'centos7' }}
+        if: ${{ matrix.registry_namespace == 'sclorg' }}
         uses: redhat-actions/podman-login@v1
         with:
           registry: quay.io
@@ -64,9 +64,9 @@ jobs:
           context: ${{ matrix.version }}
           tags: latest ${{ matrix.tag }} ${{ github.sha }}
 
-      - name: Push image to Quay.io/${{ matrix.registry_namespace }} namespace
-        if: steps.check_exclude_file.outputs.files_exists == 'false'
-        id: push-to-quay
+      - name: Push image to quay.io/centos7 namespace
+        if: ${{ steps.check_exclude_file.outputs.files_exists == 'false' && matrix.registry_namespace == 'centos7' }}
+        id: push-to-quay-centos7
         uses: redhat-actions/push-to-registry@v2.2
         with:
           image: ${{ steps.build-image.outputs.image }}
@@ -75,5 +75,21 @@ jobs:
           username: ${{ secrets.QUAY_IMAGE_BUILDER_USERNAME }}
           password: ${{ secrets.QUAY_IMAGE_BUILDER_TOKEN }}
 
+      - name: Push image to quay.io/sclorg namespace
+        if: ${{ steps.check_exclude_file.outputs.files_exists == 'false' && matrix.registry_namespace == 'sclorg' }}
+        id: push-to-quay-sclorg
+        uses: redhat-actions/push-to-registry@v2.2
+        with:
+          image: ${{ steps.build-image.outputs.image }}
+          tags: ${{ steps.build-image.outputs.tags }}
+          registry: quay.io/${{ matrix.registry_namespace }}
+          username: ${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_USERNAME }}
+          password: ${{ secrets.QUAY_IMAGE_SCLORG_BUILDER_TOKEN  }}
+
       - name: Print image url
-        run: echo "Image pushed to ${{ steps.push-to-quay.outputs.registry-paths }}"
+        if: ${{ matrix.registry_namespace == 'centos7' }}
+        run: echo "Image pushed to ${{ steps.push-to-quay-centos7.outputs.registry-paths }}"
+
+      - name: Print image url
+        if: ${{ matrix.registry_namespace == 'sclorg' }}
+        run: echo "Image pushed to ${{ steps.push-to-quay-sclorg.outputs.registry-paths }}"

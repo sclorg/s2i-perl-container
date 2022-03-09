@@ -23,6 +23,7 @@ test_fcgi
 test_npm
 "
 
+
 source "${test_dir}/test-lib.sh"
 
 # TODO: This should be part of the image metadata
@@ -88,6 +89,7 @@ cleanup() {
 
 check_result() {
   local result="$1"
+  echo "RESULT: $result"
   if [[ "$result" != "0" ]]; then
     TESTCASE_RESULT=1
   fi
@@ -207,6 +209,8 @@ test_application() {
 
   if [ x"$VERSION" == "x5.30-mod_fcgid" ]; then
     version="5.30"
+  elif [ x"$VERSION" == "x5.32" ]; then
+    version="5.32"
   fi
   test_scl_usage "perl --version" "v${version}."
   check_result $?
