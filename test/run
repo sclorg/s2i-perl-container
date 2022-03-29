@@ -35,8 +35,10 @@ image_exists() {
   docker inspect $1 &>/dev/null
 }
 
-container_exists() {
-  image_exists $(cat $cid_file)
+kill_container_if_exists() {
+  local name=$1
+  local cid="$(ct_get_cid "$name")"
+  image_exists "$cid" && docker stop "$cid" && rm -f "$CID_FILE_DIR/$name"
 }
 
 run_s2i_build() {
@@ -145,6 +147,8 @@ test_application() {
 
   test_connection "$name"
   ct_check_testcase_result $?
+
+  kill_container_if_exists "$name"
 }
 
 # Build application, run it, perform test function, clean up.
@@ -162,6 +166,7 @@ do_test() {
 
     info "Starting tests for ${test_name}."
 
+    tmp_dir=$(mktemp -d)
     ct_check_testcase_result $?
     cid_file="$CID_FILE_DIR/$test_name"
     s2i_args="--pull-policy=never"
