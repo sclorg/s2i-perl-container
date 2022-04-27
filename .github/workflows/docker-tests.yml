@@ -16,7 +16,7 @@ jobs:
           - tmt_plan: "fedora"
             os_test: "fedora"
             context: "Fedora"
-            compose: "CentOS-7"
+            compose: "Fedora-latest"
             tmt_url: "http://artifacts.dev.testing-farm.io"
             tmt_repo: "https://github.com/sclorg/sclorg-testing-farm"
           - tmt_plan: "centos7"
