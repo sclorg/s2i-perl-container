@@ -17,7 +17,7 @@ Perl is good at handling processes and files, and is especially good at handling
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
 different things, Perl's most common applications are system administration utilities \
 and web programming." \
-     PATH=$PATH:/opt/app-root/src/extlib/bin \
+     PATH=/opt/app-root/src/extlib/bin:$PATH \
      PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
 LABEL summary="$SUMMARY" \
