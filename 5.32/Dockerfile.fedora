@@ -8,7 +8,7 @@ ENV PERL_VERSION=5.32 \
     PERL_SHORT_VER=532 \
     VERSION=0 \
     NAME=perl \
-    PATH=$PATH:/opt/app-root/src/extlib/bin \
+    PATH=/opt/app-root/src/extlib/bin:$PATH \
     PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
 ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
