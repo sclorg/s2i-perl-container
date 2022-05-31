@@ -35,4 +35,15 @@ export HTTPD_MAX_SPARE_SERVERS=$((HTTPD_START_SERVERS+10))
 
 envsubst < /opt/app-root/etc/httpd.d/50-mpm.conf.template > /opt/app-root/etc/httpd.d/50-mpm.conf
 
+if [ -f ${APP_ROOT}/etc/httpd.d/40-psgi.conf.template ]; then
+  PLACKUP_ARGS=""
+  if [ -n "$PSGI_RELOAD" ]; then
+    PLACKUP_ARGS="-r -R ${APP_ROOT}/src/ "
+  fi
+
+  export PLACKUP_ARGS=${PLACKUP_ARGS}
+
+  envsubst < ${APP_ROOT}/etc/httpd.d/40-psgi.conf.template > ${APP_ROOT}/etc/httpd.d/40-psgi.conf
+fi
+
 exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
