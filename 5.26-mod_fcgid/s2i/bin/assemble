@@ -69,7 +69,7 @@ FcgidInitialEnv MODFCGID_VIRTUAL_LOCATION ${PSGI_URI_PATH}
 <Location ${PSGI_URI_PATH}>
     SetHandler fcgid-script
     Options +ExecCGI
-    FcgidWrapper "${APP_ROOT}/psgiwrapper /usr/bin/env plackup \${PLACKUP_ARGS}-s FCGI $PSGI_FILE" virtual
+    FcgidWrapper "${APP_ROOT}/psgiwrapper /usr/bin/env plackup \${PLACKUP_ARGS} -s FCGI $PSGI_FILE" virtual
 </Location>
 EOF
 elif [ "$PSGI_FILE_NUMBER" -gt 0 ]; then
