@@ -38,7 +38,7 @@ envsubst < /opt/app-root/etc/httpd.d/50-mpm.conf.template > /opt/app-root/etc/ht
 if [ -f ${APP_ROOT}/etc/httpd.d/40-psgi.conf.template ]; then
   PLACKUP_ARGS=""
   if [ -n "$PSGI_RELOAD" ]; then
-    PLACKUP_ARGS="-r -R ${APP_ROOT}/src/ "
+    PLACKUP_ARGS="-r -R ${APP_ROOT}/src/"
   fi
 
   export PLACKUP_ARGS=${PLACKUP_ARGS}
