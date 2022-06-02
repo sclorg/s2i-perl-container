@@ -199,6 +199,15 @@ file inside your source code repository.
     If exactly one ./*.psgi file exists, mod_fcgid will be configured to
     execute that file.
 
+* **PSGI_RELOAD**
+
+    Reload PSGI application when source code in application directory will be changed.
+
+    If the PSGI_RELOAD variable is set to empty value, no reload will be used.
+
+    If the PSGI_RELOAD variable is set and non-empty, it will cause reload defined by
+    code change in application directory.
+
 * **PSGI_URI_PATH**
 
     This variable overrides location URI path that is handled path the PSGI

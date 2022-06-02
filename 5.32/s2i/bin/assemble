@@ -64,12 +64,12 @@ requires 'FCGI::ProcManager';
 EOF
     # XXX: Escape PSGI_FILE value against httpd control characters
     PSGI_FILE=$(printf '%s' "$PSGI_FILE" | sed -e 's/\\/\\\\/g' -e 's/"/\\"/g')
-    cat > /opt/app-root/etc/httpd.d/40-psgi.conf <<EOF
+    cat > ${APP_ROOT}/etc/httpd.d/40-psgi.conf.template <<EOF
 FcgidInitialEnv MODFCGID_VIRTUAL_LOCATION ${PSGI_URI_PATH}
 <Location ${PSGI_URI_PATH}>
     SetHandler fcgid-script
     Options +ExecCGI
-    FcgidWrapper "/opt/app-root/psgiwrapper /usr/bin/env plackup -s FCGI $PSGI_FILE" virtual
+    FcgidWrapper "${APP_ROOT}/psgiwrapper /usr/bin/env plackup \${PLACKUP_ARGS} -s FCGI $PSGI_FILE" virtual
 </Location>
 EOF
 elif [ "$PSGI_FILE_NUMBER" -gt 0 ]; then
