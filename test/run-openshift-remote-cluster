@@ -13,7 +13,14 @@ source "${THISDIR}/test-lib-openshift.sh"
 source "${THISDIR}/test-lib-perl.sh"
 source "${THISDIR}/test-lib-remote-openshift.sh"
 
-set -eo nounset
+set -u
+
+TEST_LIST="\
+test_perl_s2i_sample_app
+test_perl_s2i_dancer_app
+test_perl_s2i_templates
+test_perl_imagestream
+"
 
 trap ct_os_cleanup EXIT SIGINT
 
@@ -29,25 +36,8 @@ export CT_OCP4_TEST=true
 test -n "${IMAGE_NAME-}" || false 'make sure $IMAGE_NAME is defined'
 test -n "${VERSION-}" || false 'make sure $VERSION is defined'
 
-# TODO: We should ideally use a local directory instead of ${VERSION}/test/sample-test-app,
-# so we can test changes in that example app that are done as part of the PR
-echo "Testing sample-test-app from s2i-perl-container git repository"
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/s2i-perl-container.git" "${VERSION}/test/sample-test-app" "Everything is OK"
-echo "Testing Dancer application"
-ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
-# TODO: this was not working because the referenced example dir was added as part of this commit
-echo "Testing template application"
-ct_os_test_template_app "${IMAGE_NAME}" \
-                        "https://raw.githubusercontent.com/sclorg/s2i-perl-container/master/examples/templates/sample-test-app.json" \
-                        perl \
-                        "Everything is OK" \
-                        8080 http 200 \
-                        "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION} -p NAME=perl-testing"
-
-# Check the imagestream
-test_perl_imagestream
-
-OS_TESTSUITE_RESULT=0
+TEST_SUMMARY=''
+TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset "openshift-remote-cluster"
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
 
