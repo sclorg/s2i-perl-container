@@ -1,11 +1,11 @@
-FROM quay.io/fedora/s2i-base:34
+FROM quay.io/fedora/s2i-base:35
 
-# This image provides a Perl 5.32 environment you can use to run your Perl applications.
+# This image provides a Perl 5.34 environment you can use to run your Perl applications.
 EXPOSE 8080
 
 # Image metadata
-ENV PERL_VERSION=5.32 \
-    PERL_SHORT_VER=532 \
+ENV PERL_VERSION=5.34 \
+    PERL_SHORT_VER=534 \
     VERSION=0 \
     NAME=perl \
     PATH=/opt/app-root/src/extlib/bin:$PATH \
@@ -23,7 +23,7 @@ and web programming."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with mod_perl/$PERL_VERSION" \
+      io.k8s.display-name="Apache 2.4 with mod_fcgid/$PERL_VERSION" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \

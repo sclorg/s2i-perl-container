@@ -1,11 +1,9 @@
-Perl 5.32 container image
+Perl 5.34 container image
 =========================
 
-This container image includes Perl 5.32 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.32 applications.
-Users can choose between RHEL, CentOS and Fedora based builder images.
-The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
-and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
+This container image includes Perl 5.34 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.34 applications.
+Users can choose Fedora based builder image.
+The Fedora images are available in [Quay.io](https://quay.io/fedora/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
 Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -13,8 +11,8 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-Perl 5.32 available as container is a base platform for
-building and running various Perl 5.32 applications and frameworks.
+Perl 5.34 available as container is a base platform for
+building and running various Perl 5.34 applications and frameworks.
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting.
 Perl is good at handling processes and files, and is especially good at handling text.
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of
@@ -28,11 +26,11 @@ version, that is included in the image; those versions can be changed anytime.
 Usage in Openshift
 ------------------
 
-In this example, we will assume that you are using the `ubi8/perl-532` image, available via `perl:5.32` imagestream tag in Openshift.
+In this example, we will assume that you are using the `ubi8/perl-534` image, available via `perl:5.34` imagestream tag in Openshift.
 To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
 
 ```
-oc new-app perl:5.32~https://github.com/sclorg/dancer-ex.git
+oc new-app perl:5.34~https://github.com/sclorg/dancer-ex.git
 ```
 
 **To access the application:**
@@ -69,10 +67,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull ubi8/perl-532
+podman pull ubi8/perl-534
 ```
 
-An ubi8 image `ubi8/perl-532` is used in this example.
+An ubi8 image `ubi8/perl-534` is used in this example.
 
 #### 2. Pull and application code
 
@@ -95,13 +93,13 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM ubi8/perl-532
+FROM ubi8/perl-534
 
 # Add application sources
 ADD app-src .
 
 # Set the paths to local Perl modules
-ENV PATH=${PATH}:/opt/app-root/src/extlib/bin
+ENV PATH=/opt/app-root/src/extlib/bin:${PATH}
 ENV PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
 # Install the dependencies
@@ -132,7 +130,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM ubi8/perl-532
+FROM ubi8/perl-534
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access
