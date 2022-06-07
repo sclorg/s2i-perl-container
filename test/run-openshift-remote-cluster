@@ -13,7 +13,6 @@ source "${THISDIR}/test-lib-openshift.sh"
 source "${THISDIR}/test-lib-perl.sh"
 source "${THISDIR}/test-lib-remote-openshift.sh"
 
-set -u
 
 TEST_LIST="\
 test_perl_s2i_sample_app
@@ -28,7 +27,9 @@ ct_os_set_ocp4
 
 ct_os_check_compulsory_vars
 
-oc status || false "It looks like oc is not properly logged in."
+ct_os_check_login || exit 1
+
+set -u
 
 # For testing on OpenShift 4 we use internal registry
 export CT_OCP4_TEST=true
