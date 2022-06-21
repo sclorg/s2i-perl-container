@@ -1,8 +1,14 @@
 Perl container images
 =====================
 
-s2i-perl-container 5.26: [![Docker Repository on Quay](https://quay.io/repository/centos7/perl-526-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/perl-526-centos7),
-s2i-perl-container 5.30: [![Docker Repository on Quay](https://quay.io/repository/centos7/perl-530-centos7/status "Docker Repository on Quay")](https://quay.io/repository/centos7/perl-530-centos7)
+[![Build and push images to Quay.io registry](https://github.com/sclorg/s2i-perl-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-perl-container/actions/workflows/build-and-push.yml)
+
+Images available on Quay are:
+* CentOS 7 [perl-5.26](https://quay.io/repository/centos7/perl-526-centos7)
+* CentOS 7 [perl-5.30](https://quay.io/repository/centos7/perl-530-centos7)
+* CentOS Stream 9 [perl-5.32](https://quay.io/repository/sclorg/perl-532-c9s)
+* Fedora [perl-5.32](https://quay.io/repository/fedora/perl-532)
+* Fedora [perl-5.34](https://quay.io/repository/fedora/perl-534)
 
 This repository contains the source for building various versions of
 the Perl application as a reproducible container image using
@@ -22,15 +28,19 @@ For more information about concepts used in these container images, see the
 Versions
 --------
 Perl versions currently provided:
-* [perl-5.30](5.30)
 * [perl-5.26](5.26)
+* [perl-5.30](5.30)
+* [perl-5.32](5.32)
+* [perl-5.34](5.34)
 
 RHEL versions currently supported:
 * RHEL7
 * RHEL8
+* RHEL9
 
 CentOS versions currently supported:
 * CentOS7
+* CentOS Stream 9
 
 
 Installation
@@ -85,6 +95,12 @@ see [usage documentation](5.30/README.md).
 
 For information about usage of the Dockerfile for Perl 5.30 - mod_fcgid version,
 see [usage documentation](5.30-mod_fcgid/README.md).
+
+For information about usage of the Dockerfile for Perl 5.32 - mod_fcgid version,
+see [usage documentation](5.32/README.md).
+
+For information about usage of the Dockerfile for Perl 5.34 - mod_fcgid version,
+see [usage documentation](5.34/README.md).
 
 Test
 ----
