@@ -23,7 +23,7 @@ and web programming."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with mod_fcgid/$PERL_VERSION" \
+      io.k8s.display-name="Apache 2.4 with mod_fcgid and Perl $PERL_VERSION" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
