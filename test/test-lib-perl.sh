@@ -14,7 +14,7 @@ source "${THISDIR}/test-lib-openshift.sh"
 # Check the imagestream
 function test_perl_imagestream() {
   case ${OS} in
-    rhel7|centos7) ;;
+    rhel7|centos7|rhel8) ;;
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
 
