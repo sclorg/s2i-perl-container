@@ -20,9 +20,17 @@ function test_perl_imagestream() {
 
   local tag="-el7"
   if [ "${OS}" == "rhel8" ]; then
-    tag="-el8"
+    tag="-ubi8"
   elif [ "${OS}" == "rhel9" ]; then
-    tag="-el9"
+    tag="-ubi9"
+  fi
+  # perl version in ./imagestreams/perl-rhel.json is either 5.26 or 5.30
+  # There is not version like `{5.26,5.30}-mod_fcgid`
+  if [ "${VERSION}" == "5.26-mod_fcgid" ]; then
+    VERSION="5.26"
+  fi
+  if [ "${VERSION}" == "5.30-mod_fcgid" ]; then
+    VERSION="5.30"
   fi
   echo "Testing perl imagestream application"
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS%[0-9]*}.json" \
