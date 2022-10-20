@@ -14,17 +14,31 @@ source "${THISDIR}/test-lib-openshift.sh"
 # Check the imagestream
 function test_perl_imagestream() {
   case ${OS} in
-    rhel7|centos7|rhel8) ;;
+    rhel7|centos7|rhel8|rhel9) ;;
     *) echo "Imagestream testing not supported for $OS environment." ; return 0 ;;
   esac
 
+  local tag="-el7"
+  if [ "${OS}" == "rhel8" ]; then
+    tag="-ubi8"
+  elif [ "${OS}" == "rhel9" ]; then
+    tag="-ubi9"
+  fi
+  # perl version in ./imagestreams/perl-rhel.json is either 5.26 or 5.30
+  # There is not version like `{5.26,5.30}-mod_fcgid`
+  if [ "${VERSION}" == "5.26-mod_fcgid" ]; then
+    VERSION="5.26"
+  fi
+  if [ "${VERSION}" == "5.30-mod_fcgid" ]; then
+    VERSION="5.30"
+  fi
   echo "Testing perl imagestream application"
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS%[0-9]*}.json" \
                                      "${THISDIR}/sample-test-app.json" \
                                      "${IMAGE_NAME}" \
                                      perl \
                                      "Everything is OK" \
-                                     8080 http 200 "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION} -p NAME=perl-testing"
+                                     8080 http 200 "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION}${tag} -p NAME=perl-testing"
 }
 
 function test_perl_s2i_sample_app() {
