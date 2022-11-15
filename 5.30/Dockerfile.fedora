@@ -38,6 +38,7 @@ LABEL summary="$SUMMARY" \
 RUN INSTALL_PKGS="perl perl-devel mod_perl perl-CPAN perl-App-cpanminus httpd python2" && \
     dnf install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
+    perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION $PERL_VERSION" && \
     dnf clean all
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
