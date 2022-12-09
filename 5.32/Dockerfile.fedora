@@ -1,4 +1,4 @@
-FROM quay.io/fedora/s2i-base:34
+FROM quay.io/fedora/s2i-base:36
 
 # This image provides a Perl 5.32 environment you can use to run your Perl applications.
 EXPOSE 8080
@@ -37,7 +37,10 @@ LABEL summary="$SUMMARY" \
 
 RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     dnf -y module enable perl:$PERL_VERSION && \
-    dnf install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
+    dnf -y module switch-to perl:$PERL_VERSION --allowerasing && \
+    dnf -y module enable perl-App-cpanminus:1.7044 && \
+    dnf -y module enable perl-FCGI:0.79 && \
+    dnf -y install --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     dnf -y clean all --enablerepo='*'
 
