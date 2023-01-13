@@ -318,10 +318,8 @@ function test_from_dockerfile(){
   ct_check_testcase_result $t2
 }
 
-CID_FILE_DIR=$(mktemp --suffix=perl_test_cidfiles -d)
-ct_enable_cleanup
+ct_init
 
-# Run the chosen tests
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
