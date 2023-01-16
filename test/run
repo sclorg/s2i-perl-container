@@ -81,7 +81,8 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   info "Testing 'docker run' usage"
-  docker run ${IMAGE_NAME} &>/dev/null
+  local cidfile="$(mktemp -u --suffix=.cid --tmpdir=$CID_FILE_DIR)"
+  docker run --cidfile "$cidfile" ${IMAGE_NAME} &>/dev/null
 }
 
 test_scl_usage() {
