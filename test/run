@@ -81,7 +81,8 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   info "Testing 'docker run' usage"
-  docker run ${IMAGE_NAME} &>/dev/null
+  local cidfile="$(mktemp -u --suffix=.cid --tmpdir=$CID_FILE_DIR)"
+  docker run --cidfile "$cidfile" ${IMAGE_NAME} &>/dev/null
 }
 
 test_scl_usage() {
@@ -318,10 +319,8 @@ function test_from_dockerfile(){
   ct_check_testcase_result $t2
 }
 
-CID_FILE_DIR=$(mktemp --suffix=perl_test_cidfiles -d)
-ct_enable_cleanup
+ct_init
 
-# Run the chosen tests
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset
 
 # vim: set tabstop=2:shiftwidth=2:expandtab:
