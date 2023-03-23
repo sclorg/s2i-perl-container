@@ -24,10 +24,9 @@ test_fcgi
 test_npm
 test_from_dockerfile
 "
-
-
 source "${test_dir}/test-lib.sh"
-ct_enable_cleanup
+
+ct_init
 
 # TODO: This should be part of the image metadata
 test_port=8080
@@ -435,5 +434,4 @@ function test_from_dockerfile(){
 }
 
 # Run the chosen tests
-TEST_SUMARRY=''
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset
