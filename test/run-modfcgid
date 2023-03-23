@@ -89,14 +89,6 @@ cleanup() {
   rm -rf ${test_dir}/${test_name}/.git
 }
 
-check_result() {
-  local result="$1"
-  echo "RESULT: $result"
-  if [[ "$result" != "0" ]]; then
-    TESTCASE_RESULT=1
-  fi
-}
-
 wait_for_cid() {
   local max_attempts=10
   local sleep_time=1
@@ -217,10 +209,10 @@ test_application() {
     version="5.34"
   fi
   test_scl_usage "perl --version" "v${version}."
-  check_result $?
+  ct_check_testcase_result $?
 
   test_connection
-  check_result $?
+  ct_check_testcase_result $?
   cleanup_test_app
 }
 
@@ -240,20 +232,20 @@ do_test() {
     info "Starting tests for ${test_name}."
 
     tmp_dir=$(mktemp -d)
-    check_result $?
+    ct_check_testcase_result $?
     cid_file="${tmp_dir}/cid"
     s2i_args="--pull-policy=never"
 
     # Build and run the test application
     prepare
     run_s2i_build $s2i_args "$@"
-    check_result $?
+    ct_check_testcase_result $?
     run_test_application >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
     wait_for_cid
 
     # Perform user-supplied test function
     $test_function;
-    check_result $?
+    ct_check_testcase_result $?
 
     # Terminate the test application and clean up
     cleanup_test_app
@@ -279,15 +271,15 @@ test_sample_test_app() {
 
     prepare
     run_s2i_build $s2i_args
-    check_result $?
+    ct_check_testcase_result $?
 
     # Verify the 'usage' script is working properly when running the base image with 's2i usage ...'
     test_s2i_usage
-    check_result $?
+    ct_check_testcase_result $?
 
     # Verify the 'usage' script is working properly when running the base image with 'docker run ...'
     test_docker_run_usage
-    check_result $?
+    ct_check_testcase_result $?
 
     # Test application with default UID
     test_application
@@ -354,20 +346,20 @@ test_fcgi() {
 
 test_7_response() {
     test_response '/' 200 'old initial value: 0'
-    check_result $?
+    ct_check_testcase_result $?
 
     test_response '/' 200 'old initial value: 1'
-    check_result $?
+    ct_check_testcase_result $?
 
     # If we don't set PSGI_RELOAD, this change don't affects application.
     sleep 2
     info "Changing source code of application"
     docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
-    check_result $?
+    ct_check_testcase_result $?
     sleep 2
 
     test_response '/' 200 'old initial value: 2'
-    check_result $?
+    ct_check_testcase_result $?
 }
 
 test_psgi_hot_deploy_without_reload() {
@@ -377,20 +369,20 @@ test_psgi_hot_deploy_without_reload() {
 
 test_8_response() {
     test_response '/' 200 'old initial value: 0'
-    check_result $?
+    ct_check_testcase_result $?
 
     test_response '/' 200 'old initial value: 1'
-    check_result $?
+    ct_check_testcase_result $?
 
     # If we set PSGI_RELOAD, this change affects application.
     sleep 2
     info "Changing source code of application"
     docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
-    check_result $?
+    ct_check_testcase_result $?
     sleep 2
 
     test_response '/' 200 'new initial value: 0'
-    check_result $?
+    ct_check_testcase_result $?
 }
 
 test_psgi_hot_deploy_with_reload() {
@@ -407,10 +399,10 @@ test_npm() {
 
     prepare
     run_s2i_build $s2i_args
-    check_result $?
+    ct_check_testcase_result $?
 
     ct_npm_works
-    check_result $?
+    ct_check_testcase_result $?
 
     cleanup
 }
@@ -422,7 +414,7 @@ function test_from_dockerfile(){
   if [ "$t1" == "0" ]; then
     echo "test 1 from_dockerfile passed";
   fi;
-  check_result $t1
+  ct_check_testcase_result $t1
 
   info "Check building using a Dockerfile.s2i"
   ct_test_app_dockerfile $test_dir/examples/from-dockerfile/${VERSION}/Dockerfile.s2i 'https://github.com/sclorg/dancer-ex.git' 'Welcome to your Dancer application on OpenShift' app-src
@@ -430,7 +422,7 @@ function test_from_dockerfile(){
   if [[ "$t2" == "0" ]];then
     echo "test 2 from_dockerfile passed";
   fi;
-  check_result $t2
+  ct_check_testcase_result $t2
 }
 
 # Run the chosen tests
