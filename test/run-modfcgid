@@ -89,19 +89,6 @@ cleanup() {
   rm -rf ${test_dir}/${test_name}/.git
 }
 
-wait_for_cid() {
-  local max_attempts=10
-  local sleep_time=1
-  local attempt=1
-  local result=1
-  info "Waiting for application container to start"
-  while [ $attempt -le $max_attempts ]; do
-    [ -f $cid_file ] && [ -s $cid_file ] && break
-    attempt=$(( $attempt + 1 ))
-    sleep $sleep_time
-  done
-}
-
 test_s2i_usage() {
   info "Testing 's2i usage'"
   ct_s2i_usage ${IMAGE_NAME} ${s2i_args} &>/dev/null
@@ -199,7 +186,7 @@ test_application() {
   run_test_application &
 
   # Wait for the container to write it's CID file
-  wait_for_cid
+  ct_wait_for_cid $cid_file
 
   if [ x"$VERSION" == "x5.30-mod_fcgid" ]; then
     version="5.30"
@@ -241,7 +228,7 @@ do_test() {
     run_s2i_build $s2i_args "$@"
     ct_check_testcase_result $?
     run_test_application >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
-    wait_for_cid
+    ct_wait_for_cid $cid_file
 
     # Perform user-supplied test function
     $test_function;
