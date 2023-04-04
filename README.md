@@ -9,6 +9,7 @@ Images available on Quay are:
 * CentOS Stream 9 [perl-5.32](https://quay.io/repository/sclorg/perl-532-c9s)
 * Fedora [perl-5.32](https://quay.io/repository/fedora/perl-532)
 * Fedora [perl-5.34](https://quay.io/repository/fedora/perl-534)
+* Fedora [perl-5.36](https://quay.io/repository/fedora/perl-536)
 
 This repository contains the source for building various versions of
 the Perl application as a reproducible container image using
@@ -32,6 +33,7 @@ Perl versions currently provided:
 * [perl-5.30](5.30)
 * [perl-5.32](5.32)
 * [perl-5.34](5.34)
+* [perl-5.36](5.36)
 
 RHEL versions currently supported:
 * RHEL7
@@ -101,6 +103,9 @@ see [usage documentation](5.32/README.md).
 
 For information about usage of the Dockerfile for Perl 5.34 - mod_fcgid version,
 see [usage documentation](5.34/README.md).
+
+For information about usage of the Dockerfile for Perl 5.36 - mod_fcgid version,
+see [usage documentation](5.36/README.md).
 
 Test
 ----
