@@ -26,7 +26,7 @@ version, that is included in the image; those versions can be changed anytime.
 Usage in Openshift
 ------------------
 
-In this example, we will assume that you are using the `ubi8/perl-536` image, available via `perl:5.36` imagestream tag in Openshift.
+In this example, we will assume that you are using the `ubi9/perl-536` image, available via `perl:5.36` imagestream tag in Openshift.
 To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
 
 ```
@@ -67,10 +67,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull ubi8/perl-536
+podman pull ubi9/perl-536
 ```
 
-An ubi8 image `ubi8/perl-536` is used in this example.
+An ubi9 image `ubi9/perl-536` is used in this example.
 
 #### 2. Pull and application code
 
@@ -93,7 +93,7 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM ubi8/perl-536
+FROM ubi9/perl-536
 
 # Add application sources
 ADD app-src .
@@ -130,7 +130,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM ubi8/perl-536
+FROM ubi9/perl-536
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access
