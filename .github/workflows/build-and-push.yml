@@ -14,49 +14,55 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile_path: "5.30"
-            dockerfile: "Dockerfile"
+          - dockerfile: "5.30/Dockerfile"
+            docker_context: "5.30"
             registry_namespace: "centos7"
             tag: "centos7"
-            suffix: "centos7"
+            image_name: "perl-530-centos7"
             quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
-          - dockerfile_path: "5.32"
-            dockerfile: "Dockerfile.c9s"
+
+          - dockerfile: "5.32/Dockerfile.c9s"
+            docker_context: "5.32"
             registry_namespace: "sclorg"
             tag: "c9s"
-            suffix: "c9s"
+            image_name: "perl-532-c9s"
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
-          - dockerfile_path: "5.32"
-            dockerfile: "Dockerfile.fedora"
+
+          - dockerfile: "5.32/Dockerfile.fedora"
+            docker_context: "5.32"
             registry_namespace: "fedora"
             tag: "5.32"
+            image_name: "perl-532"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-          - dockerfile_path: "5.34"
-            dockerfile: "Dockerfile.fedora"
+
+          - dockerfile: "5.34/Dockerfile.fedora"
+            docker_context: "5.34"
             registry_namespace: "fedora"
             tag: "5.34"
+            image_name: "perl-534"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
-          - dockerfile_path: "5.36"
-            dockerfile: "Dockerfile.fedora"
+
+          - dockerfile: "5.36/Dockerfile.fedora"
+            docker_context: "5.36"
             registry_namespace: "fedora"
             tag: "5.36"
+            image_name: "perl-536"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
 
     steps:
       - name: Build and push to quay.io registry
-        uses: sclorg/build-and-push-action@v2
+        uses: sclorg/build-and-push-action@v4
         with:
           registry: "quay.io"
           registry_namespace: ${{ matrix.registry_namespace }}
           registry_username: ${{ secrets[matrix.quayio_username] }}
           registry_token: ${{ secrets[matrix.quayio_token] }}
           dockerfile: ${{ matrix.dockerfile }}
-          docker_context: ${{ matrix.dockerfile_path }}
-          dockerfile_path: ${{ matrix.dockerfile_path }}
+          docker_context: ${{ matrix.docker_context }}
           tag: ${{ matrix.tag }}
-          suffix: ${{ matrix.suffix }}
+          image_name: ${{ matrix.image_name }}
