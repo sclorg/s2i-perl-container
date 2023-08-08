@@ -10,7 +10,7 @@ jobs:
       fail-fast: false
       matrix:
         version: [ "5.26", "5.26-mod_fcgid", "5.30", "5.30-mod_fcgid", "5.32", "5.34", "5.36" ]
-        os_test: [ "fedora", "centos7", "rhel7", "rhel8", "rhel9", "c9s" ]
+        os_test: [ "fedora", "rhel7", "rhel8", "rhel9", "c9s" ]
         test_case: [ "container" ]
 
     if: |

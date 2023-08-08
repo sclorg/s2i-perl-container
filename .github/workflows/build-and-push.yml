@@ -14,14 +14,6 @@ jobs:
       fail-fast: false
       matrix:
         include:
-          - dockerfile: "5.30/Dockerfile"
-            docker_context: "5.30"
-            registry_namespace: "centos7"
-            tag: "centos7"
-            image_name: "perl-530-centos7"
-            quayio_username: "QUAY_IMAGE_BUILDER_USERNAME"
-            quayio_token: "QUAY_IMAGE_BUILDER_TOKEN"
-
           - dockerfile: "5.32/Dockerfile.c9s"
             docker_context: "5.32"
             registry_namespace: "sclorg"
