@@ -75,7 +75,6 @@ cleanup_test_app() {
   if [ -f $cid_file ]; then
     if container_exists; then
       docker stop $(cat $cid_file)
-      docker rm $(cat $cid_file)
     fi
     rm $cid_file
   fi
