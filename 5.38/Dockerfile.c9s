@@ -1,12 +1,12 @@
 FROM quay.io/sclorg/s2i-base-c9s:c9s
 
-# This image provides a Perl 5.36 environment you can use to run your Perl applications.
+# This image provides a Perl 5.38 environment you can use to run your Perl applications.
 
 EXPOSE 8080
 
 # Image metadata
-ENV PERL_VERSION=5.36 \
-    PERL_SHORT_VER=536 \
+ENV PERL_VERSION=5.38 \
+    PERL_SHORT_VER=538 \
     NAME=perl
 
 ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
@@ -37,7 +37,7 @@ LABEL summary="$SUMMARY" \
 # Deselect a default stream
 RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     yum -y --allowerasing distrosync && \
-    yum install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
+    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION $PERL_VERSION" && \
     yum -y clean all --enablerepo='*'

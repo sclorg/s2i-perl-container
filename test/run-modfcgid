@@ -196,6 +196,8 @@ test_application() {
     version="5.34"
   elif [ x"$VERSION" == "x5.36" ]; then
     version="5.36"
+  elif [ x"$VERSION" == "x5.38" ]; then
+    version="5.38"
   fi
   test_scl_usage "perl --version" "v${version}."
   ct_check_testcase_result $?
