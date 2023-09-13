@@ -30,6 +30,14 @@ jobs:
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
 
+          - dockerfile: "5.38/Dockerfile.fedora"
+            docker_context: "5.38"
+            registry_namespace: "fedora"
+            tag: "5.38"
+            image_name: "perl-538"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+
     steps:
       - name: Build and push to quay.io registry
         uses: sclorg/build-and-push-action@v4
