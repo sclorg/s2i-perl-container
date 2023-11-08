@@ -60,5 +60,14 @@ function test_perl_s2i_templates() {
                         8080 http 200 \
                         "-p SOURCE_REPOSITORY_REF=staging -p VERSION=${VERSION} -p NAME=perl-testing"
 }
+
+function test_latest_imagestreams() {
+  info "Testing the latest version in imagestreams"
+  # Switch to root directory of a container
+  pushd "${THISDIR}/../.." >/dev/null
+  ct_check_latest_imagestreams
+  popd >/dev/null
+}
+
 # vim: set tabstop=2:shiftwidth=2:expandtab:
 

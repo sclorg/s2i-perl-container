@@ -19,6 +19,7 @@ test_perl_s2i_sample_app
 test_perl_s2i_dancer_app
 test_perl_s2i_templates
 test_perl_imagestream
+test_latest_imagestreams
 "
 
 trap ct_os_cleanup EXIT SIGINT
