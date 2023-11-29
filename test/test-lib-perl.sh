@@ -38,7 +38,7 @@ function test_perl_s2i_sample_app() {
 }
 
 function test_perl_s2i_dancer_app() {
-  ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/phracek/dancer-ex#migrate_deployment" . 'Welcome to your Dancer application on OpenShift'
+  ct_os_test_s2i_app ${IMAGE_NAME} "https://github.com/sclorg/dancer-ex.git" . 'Welcome to your Dancer application on OpenShift'
 }
 
 function test_perl_s2i_templates() {
