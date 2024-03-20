@@ -12,12 +12,7 @@ jobs:
       matrix:
         version: [ "5.26", "5.26-mod_fcgid", "5.30", "5.32", "5.34", "5.36", "5.38" ]
         os_test: [ "rhel7", "rhel8", "rhel9"]
-        test_case: [ "openshift-3", "openshift-4" ]
-        exclude:
-          - test_case: "openshift-3"
-            os_test: "rhel8"
-          - test_case: "openshift-3"
-            os_test: "rhel9"
+        test_case: [ "openshift-4" ]
 
     if: |
       github.event.issue.pull_request
