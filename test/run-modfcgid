@@ -365,11 +365,15 @@ test_8_response() {
     ct_check_testcase_result $?
 
     # If we set PSGI_RELOAD, this change affects application.
-    sleep 2
+    sleep 3
     info "Changing source code of application"
     docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
     ct_check_testcase_result $?
-    sleep 2
+
+    info "Check if new value is present"
+    docker exec $(cat ${cid_file}) /bin/sh -c "grep 'new initial' lib/My/Test.pm"
+    ct_check_testcase_result $?
+    sleep 3
 
     test_response '/' 200 'new initial value: 0'
     ct_check_testcase_result $?
