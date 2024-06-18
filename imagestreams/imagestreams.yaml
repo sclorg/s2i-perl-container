@@ -55,3 +55,4 @@
       - name: "5.30"
         distro: UBI 7
         app_version: ["5.30"]
+...
