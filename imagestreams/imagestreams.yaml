@@ -43,16 +43,9 @@
   - filename: perl-rhel-aarch64.json
     latest: "5.32-ubi8"
     distros:
-      - name: UBI 7
-        app_versions: ["5.30"]
-
       - name: UBI 8
         app_versions: ["5.26", "5.32"]
 
       - name: UBI 9
         app_versions: ["5.32"]
-    custom_tags:
-      - name: "5.30"
-        distro: UBI 7
-        app_version: ["5.30"]
 ...

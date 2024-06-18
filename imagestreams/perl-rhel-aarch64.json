@@ -10,25 +10,6 @@
   "spec": {
     "tags": [
       {
-        "name": "5.30-ubi7",
-        "annotations": {
-          "openshift.io/display-name": "Perl 5.30 (UBI 7)",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Perl 5.30 applications on UBI 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/5.30/README.md.",
-          "iconClass": "icon-perl",
-          "tags": "builder,perl",
-          "version": "5.30",
-          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.redhat.io/ubi7/perl-530:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
         "name": "5.26-ubi8",
         "annotations": {
           "openshift.io/display-name": "Perl 5.26 (UBI 8)",
@@ -80,25 +61,6 @@
         "from": {
           "kind": "DockerImage",
           "name": "registry.redhat.io/ubi9/perl-532:latest"
-        },
-        "referencePolicy": {
-          "type": "Local"
-        }
-      },
-      {
-        "name": "5.30",
-        "annotations": {
-          "openshift.io/display-name": "Perl ['5.30'] (UBI 7)",
-          "openshift.io/provider-display-name": "Red Hat, Inc.",
-          "description": "Build and run Perl ['5.30'] applications on UBI 7. For more information about using this builder image, including OpenShift considerations, see https://github.com/sclorg/s2i-perl-container/blob/master/['5.30']/README.md.",
-          "iconClass": "icon-perl",
-          "tags": "builder,perl",
-          "version": "['5.30']",
-          "sampleRepo": "https://github.com/sclorg/dancer-ex.git"
-        },
-        "from": {
-          "kind": "DockerImage",
-          "name": "registry.redhat.io/ubi7/perl-['530']:latest"
         },
         "referencePolicy": {
           "type": "Local"
