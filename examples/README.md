@@ -8,7 +8,7 @@ The application serves a single static html page via perl, while also installing
 To build and run the application:
 
 ```
-$ s2i build --context-dir=examples/sample-test-app https://github.com/sclorg/s2i-perl-container centos/perl-524-centos7 myperlimage
+$ s2i build --context-dir=examples/sample-test-app https://github.com/sclorg/s2i-perl-container sclorg/perl-532-c9s myperlimage
 $ docker run -p 8080:8080 myperlimage
 $ # browse to http://localhost:8080
 ```
@@ -16,7 +16,7 @@ $ # browse to http://localhost:8080
 You can also build and deploy the application on OpenShift, assuming you have a
 working `oc` command line environment connected to your cluster already:
 
-`$ oc new-app --context-dir=examples/sample-test-app centos/perl-524-centos7~https://github.com/sclorg/s2i-perl-container`
+`$ oc new-app --context-dir=examples/sample-test-app sclorg/perl-532-c9s~https://github.com/sclorg/s2i-perl-container`
 
 You can also deploy the sample template for the application:
 
