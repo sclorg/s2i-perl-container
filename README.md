@@ -4,8 +4,6 @@ Perl container images
 [![Build and push images to Quay.io registry](https://github.com/sclorg/s2i-perl-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-perl-container/actions/workflows/build-and-push.yml)
 
 Images available on Quay are:
-* CentOS 7 [perl-5.26](https://quay.io/repository/centos7/perl-526-centos7)
-* CentOS 7 [perl-5.30](https://quay.io/repository/centos7/perl-530-centos7)
 * CentOS Stream 9 [perl-5.32](https://quay.io/repository/sclorg/perl-532-c9s)
 * Fedora [perl-5.32](https://quay.io/repository/fedora/perl-532)
 * Fedora [perl-5.34](https://quay.io/repository/fedora/perl-534)
@@ -38,26 +36,24 @@ Perl versions currently provided:
 * [perl-5.38](5.38)
 
 RHEL versions currently supported:
-* RHEL7
 * RHEL8
 * RHEL9
 
 CentOS versions currently supported:
-* CentOS7
 * CentOS Stream 9
 
 
 Installation
 ------------
-To build a Perl image, choose either the CentOS or RHEL based image:
+To build a Perl image, choose either the CentOS Stream or RHEL based image:
 
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhscl/perl-530-rhel7).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/perl-532).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhscl/perl-530-rhel7
+    $ podman pull registry.access.redhat.com/rhel8/perl-532
     ```
 
     To build a RHEL based Perl image, you need to run the build on a properly
@@ -66,23 +62,23 @@ To build a Perl image, choose either the CentOS or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=rhel7 VERSIONS=5.30
+    $ make build TARGET=rhel8 VERSIONS=5.32
     ```
 
-*  **CentOS based image**
+*  **CentOS Stream based image**
 
-    This image is available on DockerHub. To download the perl-5.30 image, run:
+    This image is available on DockerHub. To download the perl-5.32 image, run:
 
     ```
-    $ podman pull docker.io/centos7/perl-530-centos7
+    $ podman pull quay.io/sclorg/perl-532
     ```
 
-    To build the perl-5.30 image from scratch run:
+    To build the perl-5.32 image from scratch run:
 
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=centos7 VERSIONS=5.30
+    $ make build TARGET=c9s VERSIONS=5.32
     ```
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -123,14 +119,14 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=rhel7 VERSIONS=5.30
+    $ make test TARGET=rhel8 VERSIONS=5.32
     ```
 
-*  **CentOS based image**
+*  **CentOS Stream based image**
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=centos7 VERSIONS=5.30
+    $ make test TARGET=c9s VERSIONS=5.32
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
@@ -141,11 +137,11 @@ Repository organization
 -----------------------
 * **`<perl-version>`**
 
-    * **Dockerfile**
+    * **Dockerfile.c9s**
 
-        CentOS based Dockerfile.
+        CentOS Stream based Dockerfile.
 
-    * **Dockerfile.rhel7**
+    * **Dockerfile.rhel8**
 
         RHEL based Dockerfile. In order to perform build or test actions on this
         Dockerfile you need to run the action on a properly subscribed RHEL machine.
