@@ -6,7 +6,7 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-IMAGE_NAME=${IMAGE_NAME-centos/perl-530-centos7-candidate}
+IMAGE_NAME=${IMAGE_NAME-sclorg/perl-532-c9s}
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
@@ -19,7 +19,6 @@ test_psgi_variables
 test_warningonstderr
 test_npm
 test_from_dockerfile
-test_scl_variables_in_dockerfile
 "
 
 source "${test_dir}/test-lib.sh"
@@ -287,18 +286,6 @@ test_npm() {
     ct_check_testcase_result $?
 
     cleanup
-}
-
-function test_scl_variables_in_dockerfile() {
-  if [ "$OS" == "rhel7" ] || [ "$OS" == "centos7" ]; then
-    info "Testing variable presence during \`docker exec\`"
-    ct_check_exec_env_vars
-    ct_check_testcase_result $?
-
-    info "Checking if all scl variables are defined in Dockerfile"
-    ct_check_scl_enable_vars
-    ct_check_testcase_result $?
-  fi
 }
 
 function test_from_dockerfile(){
