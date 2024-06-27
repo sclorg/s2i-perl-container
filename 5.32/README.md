@@ -4,7 +4,7 @@ Perl 5.32 container image
 This container image includes Perl 5.32 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.32 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Quay.io](https://quay.io/organization/centos7),
+the CentOS Stream images are available on [Quay.io](https://quay.io/organization/sclorg),
 and the Fedora images are available in [Quay.io](https://quay.io/organization/fedora).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
@@ -218,5 +218,5 @@ See also
 
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for CentOS is called `Dockerfile`, Dockerfile for RHEL7 is called `Dockerfile.rhel7`, for RHEL8 `Dockerfile.rhel8`,
-for CentOS Stream 9 `Dockerfile.c9s`, for RHEL9 `Dockerfile.rhel9`, and the Fedora Dockerfile is called `Dockerfile.fedora`.
+Dockerfile for RHEL8 is called `Dockerfile.rhel8`, Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`,
+Dockerfile for RHEL9 is called `Dockerfile.rhel9`, and the Fedora Dockerfile is called `Dockerfile.fedora`.
