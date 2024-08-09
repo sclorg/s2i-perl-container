@@ -1,7 +1,7 @@
-Perl 5.38 container image
+Perl 5.40 container image
 =========================
 
-This container image includes Perl 5.38 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.38 applications.
+This container image includes Perl 5.40 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.40 applications.
 Users can choose Fedora based builder image.
 The Fedora images are available in [Quay.io](https://quay.io/fedora/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
@@ -11,8 +11,8 @@ Note: while the examples in this README are calling `podman`, you can replace an
 Description
 -----------
 
-Perl 5.38 available as container is a base platform for
-building and running various Perl 5.38 applications and frameworks.
+Perl 5.40 available as container is a base platform for
+building and running various Perl 5.40 applications and frameworks.
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting.
 Perl is good at handling processes and files, and is especially good at handling text.
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of
@@ -26,11 +26,11 @@ version, that is included in the image; those versions can be changed anytime.
 Usage in Openshift
 ------------------
 
-In this example, we will assume that you are using the `ubi9/perl-538` image, available via `perl:5.38` imagestream tag in Openshift.
+In this example, we will assume that you are using the `ubi9/perl-540` image, available via `perl:5.40` imagestream tag in Openshift.
 To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
 
 ```
-oc new-app perl:5.38~https://github.com/sclorg/dancer-ex.git
+oc new-app perl:5.40~https://github.com/sclorg/dancer-ex.git
 ```
 
 **To access the application:**
@@ -67,10 +67,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull ubi9/perl-538
+podman pull ubi9/perl-540
 ```
 
-An ubi9 image `ubi9/perl-538` is used in this example.
+An ubi9 image `ubi9/perl-540` is used in this example.
 
 #### 2. Pull and application code
 
@@ -93,7 +93,7 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM ubi9/perl-538
+FROM ubi9/perl-540
 
 # Add application sources
 ADD app-src .
@@ -130,7 +130,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM ubi9/perl-538
+FROM ubi9/perl-540
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access
@@ -216,5 +216,6 @@ See also
 
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for RHEL8 is called `Dockerfile.rhel8`, Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`
+Dockerfile for RHEL8 is called `Dockerfile.rhel8`, Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`,
+Dockerfile for CentOS Stream 10 is called `Dockerfile.c10s`
 and the Fedora Dockerfile is called `Dockerfile.fedora`.

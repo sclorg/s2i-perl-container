@@ -5,10 +5,12 @@ Perl container images
 
 Images available on Quay are:
 * CentOS Stream 9 [perl-5.32](https://quay.io/repository/sclorg/perl-532-c9s)
+* CentOS Stream 10 [perl-5.40](https://quay.io/repository/sclorg/perl-540-c10s)
 * Fedora [perl-5.32](https://quay.io/repository/fedora/perl-532)
 * Fedora [perl-5.34](https://quay.io/repository/fedora/perl-534)
 * Fedora [perl-5.36](https://quay.io/repository/fedora/perl-536)
 * Fedora [perl-5.38](https://quay.io/repository/fedora/perl-538)
+* Fedora [perl-5.40](https://quay.io/repository/fedora/perl-540)
 
 This repository contains the source for building various versions of
 the Perl application as a reproducible container image using
@@ -34,6 +36,7 @@ Perl versions currently provided:
 * [perl-5.34](5.34)
 * [perl-5.36](5.36)
 * [perl-5.38](5.38)
+* [perl-5.40](5.40)
 
 RHEL versions currently supported:
 * RHEL8
@@ -41,6 +44,7 @@ RHEL versions currently supported:
 
 CentOS versions currently supported:
 * CentOS Stream 9
+* CentOS Stream 10
 
 
 Installation
@@ -105,6 +109,9 @@ see [usage documentation](5.36/README.md).
 For information about usage of the Dockerfile for Perl 5.38 - mod_fcgid version,
 see [usage documentation](5.38/README.md).
 
+For information about usage of the Dockerfile for Perl 5.40 - mod_fcgid version,
+see [usage documentation](5.40/README.md).
+
 Test
 ----
 This repository also provides a [S2I](https://github.com/openshift/source-to-image) test framework,
@@ -114,7 +121,7 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
 *  **RHEL based image**
 
-    To test a RHEL7-based image, you need to run the test on a properly
+    To test a RHEL8-based image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
@@ -138,6 +145,10 @@ Repository organization
 * **`<perl-version>`**
 
     * **Dockerfile.c9s**
+
+        CentOS Stream based Dockerfile.
+
+    * **Dockerfile.c10s**
 
         CentOS Stream based Dockerfile.
 
