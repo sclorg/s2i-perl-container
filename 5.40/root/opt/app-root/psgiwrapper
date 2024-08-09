@@ -1,0 +1,4 @@
+#!/usr/bin/perl
+# mod_fcgid chdirs to wrapper's path, restore CWD to $HOME
+chdir $ENV{'HOME'} if exists $ENV{'HOME'};
+exec(@ARGV) or die "Could not execute PSGI script: @ARGV: $!";

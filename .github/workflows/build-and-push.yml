@@ -22,6 +22,14 @@ jobs:
             quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
 
+          - dockerfile: "5.40/Dockerfile.c10s"
+            docker_context: "5.40"
+            registry_namespace: "sclorg"
+            tag: "c10s"
+            image_name: "perl-540-c10s"
+            quayio_username: "QUAY_IMAGE_SCLORG_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_SCLORG_BUILDER_TOKEN"
+
           - dockerfile: "5.36/Dockerfile.fedora"
             docker_context: "5.36"
             registry_namespace: "fedora"
@@ -35,6 +43,14 @@ jobs:
             registry_namespace: "fedora"
             tag: "5.38"
             image_name: "perl-538"
+            quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
+            quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
+
+          - dockerfile: "5.40/Dockerfile.fedora"
+            docker_context: "5.40"
+            registry_namespace: "fedora"
+            tag: "5.40"
+            image_name: "perl-540"
             quayio_username: "QUAY_IMAGE_FEDORA_BUILDER_USERNAME"
             quayio_token: "QUAY_IMAGE_FEDORA_BUILDER_TOKEN"
 
