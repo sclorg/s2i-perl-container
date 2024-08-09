@@ -1,12 +1,12 @@
-FROM quay.io/sclorg/s2i-base-c9s:c9s
+FROM quay.io/sclorg/s2i-base-c10s:c10s
 
-# This image provides a Perl 5.38 environment you can use to run your Perl applications.
+# This image provides a Perl 5.40 environment you can use to run your Perl applications.
 
 EXPOSE 8080
 
 # Image metadata
-ENV PERL_VERSION=5.38 \
-    PERL_SHORT_VER=538 \
+ENV PERL_VERSION=5.40 \
+    PERL_SHORT_VER=540 \
     NAME=perl
 
 ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
@@ -26,21 +26,21 @@ LABEL summary="$SUMMARY" \
       io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}","${NAME}-${PERL_SHORT_VER}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="sclorg/${NAME}-${PERL_SHORT_VER}-c9s" \
+      name="sclorg/${NAME}-${PERL_SHORT_VER}-c10s" \
       com.redhat.component="${NAME}-${PERL_SHORT_VER}-container" \
       version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${PERL_SHORT_VER}:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${PERL_SHORT_VER}-c10s:latest <APP-NAME>"
 
 # Deselect a default stream
 RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
-    yum -y --allowerasing distrosync && \
-    yum install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
+    dnf -y --allowerasing distrosync && \
+    dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION $PERL_VERSION" && \
-    yum -y clean all --enablerepo='*'
+    dnf -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
 COPY ./s2i/bin/ $STI_SCRIPTS_PATH
