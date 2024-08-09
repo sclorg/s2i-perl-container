@@ -1,11 +1,11 @@
-FROM quay.io/fedora/s2i-base:39
+FROM quay.io/fedora/s2i-base:40
 
-# This image provides a Perl 5.38 environment you can use to run your Perl applications.
+# This image provides a Perl 5.40 environment you can use to run your Perl applications.
 EXPOSE 8080
 
 # Image metadata
-ENV PERL_VERSION=5.38 \
-    PERL_SHORT_VER=538 \
+ENV PERL_VERSION=5.40 \
+    PERL_SHORT_VER=540 \
     VERSION=0 \
     NAME=perl \
     PATH=/opt/app-root/src/extlib/bin:$PATH \
@@ -33,7 +33,7 @@ LABEL summary="$SUMMARY" \
       version="$VERSION" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/fedora/fedora/$NAME-$PERL_SHORT_VER <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> quay.io/fedora/$NAME-$PERL_SHORT_VER <APP-NAME>"
 
 RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     dnf install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
