@@ -35,8 +35,8 @@ LABEL summary="$SUMMARY" \
       usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${PERL_SHORT_VER}-c10s:latest <APP-NAME>"
 
 # Deselect a default stream
-RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
-    dnf -y --allowerasing distrosync && \
+RUN dnf update -y && \
+    INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
     perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION $PERL_VERSION" && \
