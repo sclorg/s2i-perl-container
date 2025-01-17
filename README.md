@@ -41,6 +41,7 @@ Perl versions currently provided:
 RHEL versions currently supported:
 * RHEL8
 * RHEL9
+* RHEL10
 
 CentOS versions currently supported:
 * CentOS Stream 9
