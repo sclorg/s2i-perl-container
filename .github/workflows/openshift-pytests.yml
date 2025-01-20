@@ -27,7 +27,7 @@ jobs:
     strategy:
       fail-fast: false
       matrix:
-        version: [ "5.26", "5.26-mod_fcgid", "5.30-mod_fcgid", "5.32" ]
+        version: [ "5.26", "5.26-mod_fcgid", "5.30-mod_fcgid", "5.32", "5.40" ]
         os_test: [ "rhel8", "rhel9", "rhel10" ]
         test_case: [ "openshift-pytest" ]
 
