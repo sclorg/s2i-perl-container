@@ -28,7 +28,7 @@ class TestPerlDancerExTemplate:
     def test_dancer_ex_template_inside_cluster(self):
         service_name = "perl-testing"
         assert self.oc_api.deploy_s2i_app(
-            image_name=IMAGE_NAME, app=f"https://github.com/sclorg/dancer-ex.git",
+            image_name=IMAGE_NAME, app="https://github.com/sclorg/dancer-ex.git",
             context=".",
             service_name=service_name
         )

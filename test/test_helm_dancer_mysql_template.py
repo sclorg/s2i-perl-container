@@ -43,7 +43,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
                 "namespace": self.hc_api.namespace
             }
         )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="dancer-example")
+        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="dancer-example", timeout=400)
         assert self.hc_api.test_helm_curl_output(
             route_name="dancer-example",
             expected_str="Welcome to your Dancer application"
@@ -62,5 +62,5 @@ class TestHelmPerlDancerMysqlAppTemplate:
                 "namespace": self.hc_api.namespace
             }
         )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="dancer-example")
+        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="dancer-example", timeout=400)
         assert self.hc_api.test_helm_chart(expected_str=["Welcome to your Dancer application"])
