@@ -44,7 +44,6 @@ class TestDeployDancerExTemplateWithoutMySQL:
             template=template_url,
             name_in_template="perl",
             openshift_args=[
-                f"SOURCE_REPOSITORY_REF=master",
                 f"PERL_VERSION={VERSION}",
                 f"NAME={service_name}",
                 "SOURCE_REPOSITORY_REF=master"
