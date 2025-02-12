@@ -14,13 +14,28 @@ if not check_variables():
 
 test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
 
+VERSION = os.getenv("VERSION")
+IMAGE_NAME = os.getenv("IMAGE_NAME")
+OS = os.getenv("TARGET")
+
+if VERSION == "5.30-mod_fcgid":
+    VERSION = "5.30"
+
+if VERSION == "5.26-mod_fcgid":
+    VERSION = "5.26"
+
+TAGS = {
+    "rhel8": "-ubi8",
+    "rhel9": "-ubi9"
+}
+TAG = TAGS.get(OS, None)
 
 class TestHelmPerlDancerMysqlAppTemplate:
 
     def setup_method(self):
         package_name = "redhat-perl-dancer-application"
         path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, remote=True)
+        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -39,7 +54,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "perl_version": "5.32-ubi8",
+                "perl_version": f"{VERSION}{TAG}",
                 "namespace": self.hc_api.namespace
             }
         )
@@ -58,7 +73,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "perl_version": "5.32-ubi8",
+                "perl_version": f"{VERSION}{TAG}",
                 "namespace": self.hc_api.namespace
             }
         )
