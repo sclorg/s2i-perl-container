@@ -24,20 +24,23 @@ TAGS = {
 
 TAG = TAGS.get(OS, None)
 
+if VERSION == "5.30-mod_fcgid":
+    VERSION = "5.30"
+
+if VERSION == "5.26-mod_fcgid":
+    VERSION = "5.26"
+
 
 # Replacement with 'test_python_s2i_templates'
 class TestImagestreamsQuickstart:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
-        new_version = VERSION
-        if VERSION == "5.26-mod_fcgid":
-            new_version = "5.26"
         service_name = "perl-testing"
         assert self.oc_api.imagestream_quickstart(
             imagestream_file="imagestreams/perl-rhel.json",
@@ -46,11 +49,11 @@ class TestImagestreamsQuickstart:
             name_in_template="perl",
             openshift_args=[
                 f"SOURCE_REPOSITORY_REF=master",
-                f"VERSION={new_version}{TAG}",
+                f"VERSION={VERSION}{TAG}",
                 f"NAME={service_name}"
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name)
+        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Everything is OK"
         )
