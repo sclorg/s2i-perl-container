@@ -26,7 +26,8 @@ if VERSION == "5.26-mod_fcgid":
 
 TAGS = {
     "rhel8": "-ubi8",
-    "rhel9": "-ubi9"
+    "rhel9": "-ubi9",
+    "rhel10": "-ubi10",
 }
 TAG = TAGS.get(OS, None)
 
