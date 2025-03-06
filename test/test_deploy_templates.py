@@ -13,6 +13,12 @@ VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("TARGET")
 
+if VERSION == "5.30-mod_fcgid":
+    VERSION = "5.30"
+
+if VERSION == "5.26-mod_fcgid":
+    VERSION = "5.26"
+
 
 class TestDeployTemplate:
 
@@ -35,7 +41,7 @@ class TestDeployTemplate:
                 f"NAME={service_name}"
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name)
+        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Everything is OK"
         )

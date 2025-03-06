@@ -20,7 +20,7 @@ OS = os.getenv("TARGET")
 class TestPerlDancerExTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -32,7 +32,7 @@ class TestPerlDancerExTemplate:
             context=".",
             service_name=service_name
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name)
+        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Welcome to your Dancer application on OpenShift"
         )
