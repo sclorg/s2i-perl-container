@@ -17,9 +17,9 @@ IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("OS")
 
 TAGS = {
-    "rhel7": "-ubi7",
     "rhel8": "-ubi8",
-    "rhel9": "-ubi9"
+    "rhel9": "-ubi9",
+    "rhel10": "-ubi10"
 }
 
 TAG = TAGS.get(OS, None)

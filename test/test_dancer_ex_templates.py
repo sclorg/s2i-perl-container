@@ -24,7 +24,8 @@ DEPLOYED_MYSQL_IMAGE = "quay.io/sclorg/mysql-80-c9s:c9s"
 
 MYSQL_TAGS = {
     "rhel8": "-el8",
-    "rhel9": "-el9"
+    "rhel9": "-el9",
+    "rhel10": "-el10",
 }
 MYSQL_TAG = MYSQL_TAGS.get(OS, None)
 IMAGE_TAG = f"mysql:8.0{MYSQL_TAG}"
