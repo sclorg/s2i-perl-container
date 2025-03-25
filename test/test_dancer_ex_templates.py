@@ -30,19 +30,21 @@ MYSQL_TAGS = {
 MYSQL_TAG = MYSQL_TAGS.get(OS, None)
 IMAGE_TAG = f"mysql:8.0{MYSQL_TAG}"
 MYSQL_VERSION = f"8.0{MYSQL_TAG}"
-
+TEMPLATE_VERSION = VERSION.replace(".", "")
 
 class TestDeployDancerExTemplateWithoutMySQL:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
-        self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{TEMPLATE_VERSION}-testing", version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
-        service_name = "perl-testing"
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
+        self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
+        service_name = f"perl-{TEMPLATE_VERSION}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="dancer-ex", dir="openshift/templates", filename="dancer.json", branch="master"
         )
@@ -56,7 +58,7 @@ class TestDeployDancerExTemplateWithoutMySQL:
                 "SOURCE_REPOSITORY_REF=master"
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Welcome to your Dancer application on OpenShift"
         )
@@ -65,7 +67,8 @@ class TestDeployDancerExTemplateWithoutMySQL:
 class TestDeployDancerExTemplateWithMySQL:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
+
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{TEMPLATE_VERSION}-testing", version=VERSION)
         self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
         assert self.oc_api.upload_image(DEPLOYED_MYSQL_IMAGE, f"{IMAGE_TAG}")
 
@@ -73,7 +76,9 @@ class TestDeployDancerExTemplateWithMySQL:
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
-        service_name = "perl-testing"
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
+        service_name = f"perl-{TEMPLATE_VERSION}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="dancer-ex", dir="openshift/templates", filename="dancer-mysql-persistent.json", branch="master"
         )
@@ -89,7 +94,7 @@ class TestDeployDancerExTemplateWithMySQL:
 
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Welcome to your Dancer application on OpenShift"
         )

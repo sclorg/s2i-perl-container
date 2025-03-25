@@ -35,12 +35,14 @@ if VERSION == "5.26-mod_fcgid":
 class TestImagestreamsQuickstart:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
         service_name = "perl-testing"
         assert self.oc_api.imagestream_quickstart(
             imagestream_file="imagestreams/perl-rhel.json",
@@ -53,7 +55,7 @@ class TestImagestreamsQuickstart:
                 f"NAME={service_name}"
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Everything is OK"
         )

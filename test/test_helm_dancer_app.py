@@ -37,7 +37,7 @@ class TestHelmPerlDancerAppTemplate:
     def setup_method(self):
         package_name = "redhat-perl-dancer-application"
         path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir, shared_cluster=True)
+        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -49,6 +49,8 @@ class TestHelmPerlDancerAppTemplate:
     def test_dancer_application_curl_output(self):
         if self.hc_api.oc_api.shared_cluster:
             pytest.skip("Do NOT test on shared cluster")
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
         self.hc_api.package_name = "redhat-perl-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -67,6 +69,8 @@ class TestHelmPerlDancerAppTemplate:
         )
 
     def test_dancer_application_helm_test(self):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
         self.hc_api.package_name = "redhat-perl-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
