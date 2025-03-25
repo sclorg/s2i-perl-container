@@ -1,6 +1,8 @@
 import os
 import sys
 
+import pytest
+
 from container_ci_suite.openshift import OpenShiftAPI
 from container_ci_suite.utils import check_variables
 
@@ -30,6 +32,8 @@ class TestDeployTemplate:
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
+        if OS == "rhel10":
+            pytest.skip("Do NOT test on RHEL10 yet.")
         service_name = "perl-testing"
         assert self.oc_api.deploy_template_with_image(
             image_name=IMAGE_NAME,
@@ -41,7 +45,7 @@ class TestDeployTemplate:
                 f"NAME={service_name}"
             ]
         )
-        assert self.oc_api.template_deployed(name_in_template=service_name, timeout=480)
+        assert self.oc_api.is_template_deployed(name_in_template=service_name, timeout=480)
         assert self.oc_api.check_response_inside_cluster(
             name_in_template=service_name, expected_output="Everything is OK"
         )
