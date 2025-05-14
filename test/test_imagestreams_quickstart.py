@@ -6,6 +6,7 @@ import pytest
 from container_ci_suite.openshift import OpenShiftAPI
 from container_ci_suite.utils import check_variables
 
+from constants import TAGS
 
 if not check_variables():
     print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
@@ -16,13 +17,7 @@ VERSION = os.getenv("VERSION")
 IMAGE_NAME = os.getenv("IMAGE_NAME")
 OS = os.getenv("OS")
 
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10"
-}
-
-TAG = TAGS.get(OS, None)
+TAG = TAGS.get(OS)
 
 if VERSION == "5.30-mod_fcgid":
     VERSION = "5.30"
@@ -30,20 +25,19 @@ if VERSION == "5.30-mod_fcgid":
 if VERSION == "5.26-mod_fcgid":
     VERSION = "5.26"
 
+new_version = VERSION.replace(".", "")
 
 # Replacement with 'test_python_s2i_templates'
 class TestImagestreamsQuickstart:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{new_version}-testing", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on RHEL10 yet.")
-        service_name = "perl-testing"
+        service_name = f"perl-{new_version}-testing"
         assert self.oc_api.imagestream_quickstart(
             imagestream_file="imagestreams/perl-rhel.json",
             template_file="examples/templates/sample-test-app.json",

@@ -21,17 +21,18 @@ if VERSION == "5.30-mod_fcgid":
 if VERSION == "5.26-mod_fcgid":
     VERSION = "5.26"
 
+new_version = VERSION.replace(".", "")
+
 # Replacement with 'test_python_s2i_app_ex'
 class TestPerlDancerExTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{new_version}-testing", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_dancer_ex_template_inside_cluster(self):
-        new_version = VERSION.replace(".", "")
         service_name = f"perl-{new_version}-testing"
         assert self.oc_api.deploy_s2i_app(
             image_name=IMAGE_NAME, app="https://github.com/sclorg/dancer-ex.git",

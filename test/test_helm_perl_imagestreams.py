@@ -32,6 +32,7 @@ class TestHelmRHELPerlImageStreams:
     @pytest.mark.parametrize(
         "version,registry",
         [
+            ("5.40-ubi10", "registry.redhat.io/ubi10/perl-540:latest"),
             ("5.32-ubi9", "registry.redhat.io/ubi9/perl-532:latest"),
             ("5.32-ubi8", "registry.redhat.io/ubi8/perl-532:latest"),
             ("5.26-ubi8", "registry.redhat.io/ubi8/perl-526:latest"),

@@ -21,20 +21,19 @@ if VERSION == "5.30-mod_fcgid":
 if VERSION == "5.26-mod_fcgid":
     VERSION = "5.26"
 
+new_version = VERSION.replace(".", "")
 
 class TestDeployTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix="perl-testing", version=VERSION)
-        self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
+        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{new_version}-testing", version=VERSION, shared_cluster=True)
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on RHEL10 yet.")
-        service_name = "perl-testing"
+        self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
+        service_name = f"perl-{new_version}-testing"
         assert self.oc_api.deploy_template_with_image(
             image_name=IMAGE_NAME,
             template=f"examples/templates/sample-test-app.json",
