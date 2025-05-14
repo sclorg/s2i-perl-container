@@ -19,10 +19,6 @@ function test_perl_imagestream() {
   if [ "${VERSION}" == "5.26-mod_fcgid" ]; then
     VERSION="5.26"
   fi
-  if [ "${OS}" == "rhel10" ]; then
-    echo "Skip testing imagestreams on RHEL10 till they are not available."
-    return
-  fi
   echo "Testing perl imagestream application"
   ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS%[0-9]*}.json" \
                                      "${THISDIR}/sample-test-app.json" \

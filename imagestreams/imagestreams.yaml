@@ -17,6 +17,9 @@
       - name: UBI 9
         app_versions: ["5.32"]
 
+      - name: UBI 10
+        app_versions: ["5.40"]
+
   - filename: perl-rhel.json
     latest: "5.32-ubi8"
     distros:
@@ -26,6 +29,9 @@
       - name: UBI 9
         app_versions: ["5.32"]
 
+      - name: UBI 10
+        app_versions: ["5.40"]
+
   - filename: perl-rhel-aarch64.json
     latest: "5.32-ubi8"
     distros:
@@ -34,4 +40,7 @@
 
       - name: UBI 9
         app_versions: ["5.32"]
+
+      - name: UBI 10
+        app_versions: ["5.40"]
 ...

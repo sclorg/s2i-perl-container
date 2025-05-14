@@ -45,32 +45,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
     def teardown_method(self):
         self.hc_api.delete_project()
 
-    def test_dancer_application(self):
-        if self.hc_api.oc_api.shared_cluster:
-            pytest.skip("Do NOT test on shared cluster")
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on RHEL10 yet.")
-        self.hc_api.package_name = "redhat-perl-imagestreams"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation()
-        self.hc_api.package_name = "redhat-perl-dancer-application"
-        assert self.hc_api.helm_package()
-        assert self.hc_api.helm_installation(
-            values={
-                "perl_version": f"{VERSION}{TAG}",
-                "namespace": self.hc_api.namespace
-            }
-        )
-        assert self.hc_api.is_s2i_pod_running(pod_name_prefix="dancer-example", timeout=480)
-        assert self.hc_api.oc_api.check_response_inside_cluster(
-            name_in_template="dancer-example",
-            expected_output="Welcome to your Dancer application"
-        )
-
-
     def test_dancer_application_helm_test(self):
-        if OS == "rhel10":
-            pytest.skip("Do NOT test on RHEL10 yet.")
         self.hc_api.package_name = "redhat-perl-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
