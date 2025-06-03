@@ -20,7 +20,7 @@ function test_perl_imagestream() {
     VERSION="5.26"
   fi
   echo "Testing perl imagestream application"
-  ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS%[0-9]*}.json" \
+  ct_os_test_image_stream_quickstart "${THISDIR}/imagestreams/perl-${OS//[0-9]/}.json" \
                                      "${THISDIR}/sample-test-app.json" \
                                      "${IMAGE_NAME}" \
                                      perl \
