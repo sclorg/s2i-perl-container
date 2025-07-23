@@ -12,7 +12,7 @@
     latest: "5.32-ubi9"
     distros:
       - name: UBI 8
-        app_versions: ["5.26", "5.32"]
+        app_versions: ["5.26"]
 
       - name: UBI 9
         app_versions: ["5.32"]
@@ -24,7 +24,7 @@
     latest: "5.32-ubi9"
     distros:
       - name: UBI 8
-        app_versions: ["5.26", "5.32"]
+        app_versions: ["5.26"]
 
       - name: UBI 9
         app_versions: ["5.32"]
@@ -36,7 +36,7 @@
     latest: "5.32-ubi9"
     distros:
       - name: UBI 8
-        app_versions: ["5.26", "5.32"]
+        app_versions: ["5.26"]
 
       - name: UBI 9
         app_versions: ["5.32"]
