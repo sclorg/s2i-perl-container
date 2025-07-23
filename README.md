@@ -54,11 +54,11 @@ To build a Perl image, choose either the CentOS Stream or RHEL based image:
 
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel8/perl-532).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel9/perl-532).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhel8/perl-532
+    $ podman pull registry.access.redhat.com/rhel9/perl-532
     ```
 
     To build a RHEL based Perl image, you need to run the build on a properly
@@ -67,7 +67,7 @@ To build a Perl image, choose either the CentOS Stream or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=rhel8 VERSIONS=5.32
+    $ make build TARGET=rhel9 VERSIONS=5.32
     ```
 
 *  **CentOS Stream based image**
@@ -122,12 +122,12 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
 *  **RHEL based image**
 
-    To test a RHEL8-based image, you need to run the test on a properly
+    To test a RHEL9-based image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=rhel8 VERSIONS=5.32
+    $ make test TARGET=rhel9 VERSIONS=5.32
     ```
 
 *  **CentOS Stream based image**
