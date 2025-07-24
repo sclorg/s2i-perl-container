@@ -31,6 +31,9 @@ TAGS = {
 }
 TAG = TAGS.get(OS, None)
 
+if VERSION == "5.32" and OS == "rhel8":
+    pytest.skip("This version is not being tested as it is deprecated")
+
 class TestHelmPerlDancerMysqlAppTemplate:
 
     def setup_method(self):

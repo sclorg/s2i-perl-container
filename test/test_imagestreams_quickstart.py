@@ -25,6 +25,9 @@ if VERSION == "5.30-mod_fcgid":
 if VERSION == "5.26-mod_fcgid":
     VERSION = "5.26"
 
+if VERSION == "5.32" and OS == "rhel8":
+    pytest.skip("This version is not being tested as it is deprecated")
+
 new_version = VERSION.replace(".", "")
 
 # Replacement with 'test_python_s2i_templates'
