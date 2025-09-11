@@ -28,7 +28,6 @@ LABEL summary="$SUMMARY" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
       name="ubi10/${NAME}-${PERL_SHORT_VER}" \
       com.redhat.component="${NAME}-${PERL_SHORT_VER}-container" \
-      version="1" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
