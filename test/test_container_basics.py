@@ -42,7 +42,12 @@ class TestPerlContainer:
 
 
     def test_scl_usage(self):
-        assert f"v{VERSION}" in PodmanCLIWrapper.podman_run_command(
+        new_version = VERSION
+        if VERSION == "5.30-mod_fcgid":
+            new_version = "5.30"
+        if VERSION == "5.26-mod_fcgid":
+            new_version = "5.26"
+        assert f"v{new_version}" in PodmanCLIWrapper.podman_run_command(
             f"--rm {IMAGE_NAME} /bin/bash -c 'perl --version'"
         )
 
