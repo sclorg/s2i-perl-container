@@ -1,4 +1,4 @@
-FROM ubi8/perl-532
+FROM ubi9/perl-532
 
 # Add application sources
 ADD app-src .

@@ -1,4 +1,4 @@
-FROM quay.io/centos7/perl-530-centos7
+FROM quay.io/centos8/perl-530-centos8
 
 # Add application sources
 ADD app-src \.
