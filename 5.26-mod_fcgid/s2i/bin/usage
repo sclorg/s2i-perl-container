@@ -1,11 +1,12 @@
 #!/bin/sh
 
 DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
-NAMESPACE=centos
-SUFFIX='-centos8'
+NAMESPACE=sclorg
 if [[ $DISTRO =~ rhel* ]]; then
-    NAMESPACE=rhel8
-    SUFFIX=''
+  NAMESPACE=rhel8
+  DISTRO=""
+else
+  DISTRO="-c8s"
 fi
 
 cat <<EOF
