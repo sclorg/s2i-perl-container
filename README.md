@@ -54,11 +54,11 @@ To build a Perl image, choose either the CentOS Stream or RHEL based image:
 
 *  **RHEL based image**
 
-    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel9/perl-532).
+    These images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/#/registry.access.redhat.com/rhel10/perl-540).
     To download it run:
 
     ```
-    $ podman pull registry.access.redhat.com/rhel9/perl-532
+    $ podman pull registry.access.redhat.com/rhel10/perl-540
     ```
 
     To build a RHEL based Perl image, you need to run the build on a properly
@@ -67,23 +67,23 @@ To build a Perl image, choose either the CentOS Stream or RHEL based image:
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=rhel9 VERSIONS=5.32
+    $ make build TARGET=rhel10 VERSIONS=5.40
     ```
 
 *  **CentOS Stream based image**
 
-    This image is available on DockerHub. To download the perl-5.32 image, run:
+    This image is available on DockerHub. To download the perl-5.40 image, run:
 
     ```
-    $ podman pull quay.io/sclorg/perl-532
+    $ podman pull quay.io/sclorg/perl-540
     ```
 
-    To build the perl-5.32 image from scratch run:
+    To build the perl-5.40 image from scratch run:
 
     ```
     $ git clone --recursive https://github.com/sclorg/s2i-perl-container.git
     $ cd s2i-perl-container
-    $ make build TARGET=c9s VERSIONS=5.32
+    $ make build TARGET=c10s VERSIONS=5.40
     ```
 
 Note: while the installation steps are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -122,19 +122,19 @@ Users can choose between testing a Perl test application based on a RHEL or Cent
 
 *  **RHEL based image**
 
-    To test a RHEL9-based image, you need to run the test on a properly
+    To test a RHEL10-based image, you need to run the test on a properly
     subscribed RHEL machine.
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=rhel9 VERSIONS=5.32
+    $ make test TARGET=rhel10 VERSIONS=5.40
     ```
 
 *  **CentOS Stream based image**
 
     ```
     $ cd s2i-perl-container
-    $ make test TARGET=c9s VERSIONS=5.32
+    $ make test TARGET=c10s VERSIONS=5.40
     ```
 
 **Notice: By omitting the `VERSIONS` parameter, the build/test action will be performed
