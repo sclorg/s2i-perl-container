@@ -44,5 +44,5 @@ MYSQL_VERSION = f"8.0{MYSQL_TAGS.get(VARS.OS)}"
 
 
 def skip_helm_charts_tests():
-    if VARS.VERSION == "" and VARS.OS == "rhel8":
+    if VARS.VERSION == "5.32" and VARS.OS == "rhel8":
         skip(f"Skipping Helm Charts tests for {VARS.VERSION} on {VARS.OS}.")

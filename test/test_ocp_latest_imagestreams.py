@@ -7,7 +7,7 @@ from conftest import VARS
 class TestLatestImagestreams:
 
     def setup_method(self):
-        self.isc = ImageStreamChecker(working_dir=VARS.TEST_DIR / ".." / "..")
+        self.isc = ImageStreamChecker(working_dir=VARS.TEST_DIR.parent.parent)
 
     def test_latest_imagestream(self):
         self.latest_version = self.isc.get_latest_version()
