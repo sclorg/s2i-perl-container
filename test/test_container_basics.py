@@ -27,7 +27,7 @@ class TestPerlContainer:
         ) == 0
 
     def test_scl_usage(self):
-        assert f"v{VARS.VERSION}" in PodmanCLIWrapper.podman_run_command(
+        assert f"v{VARS.VERSION_NO_FCGID}" in PodmanCLIWrapper.podman_run_command(
             f"--rm {VARS.IMAGE_NAME} /bin/bash -c 'perl --version'"
         )
 
