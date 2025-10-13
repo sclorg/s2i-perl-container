@@ -1,53 +1,32 @@
-import os
-import sys
-
-import pytest
 from container_ci_suite.openshift import OpenShiftAPI
-from container_ci_suite.utils import check_variables
 
-from constants import MYSQL_TAGS
-if not check_variables():
-    print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
-    sys.exit(1)
-
-
-VERSION = os.getenv("VERSION")
-IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET")
-
-if VERSION == "5.30-mod_fcgid":
-    VERSION = "5.30"
-
-if VERSION == "5.26-mod_fcgid":
-    VERSION = "5.26"
+from conftest import VARS, MYSQL_VERSION, IMAGE_TAG
 
 DEPLOYED_MYSQL_IMAGE = "quay.io/sclorg/mysql-80-c9s:c9s"
 
-MYSQL_TAG = MYSQL_TAGS.get(OS)
-IMAGE_TAG = f"mysql:8.0{MYSQL_TAG}"
-MYSQL_VERSION = f"8.0{MYSQL_TAG}"
-TEMPLATE_VERSION = VERSION.replace(".", "")
 
 class TestDeployDancerExTemplateWithoutMySQL:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{TEMPLATE_VERSION}-testing", version=VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(
+            pod_name_prefix=f"perl-{VARS.SHORT_VERSION}-testing", version=VARS.SHORT_VERSION, shared_cluster=True
+        )
 
     def teardown_method(self):
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
         self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
-        service_name = f"perl-{TEMPLATE_VERSION}-testing"
+        service_name = f"perl-{VARS.SHORT_VERSION}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
             container="dancer-ex", dir="openshift/templates", filename="dancer.json", branch="master"
         )
         assert self.oc_api.deploy_template_with_image(
-            image_name=IMAGE_NAME,
+            image_name=VARS.IMAGE_NAME,
             template=template_url,
             name_in_template="perl",
             openshift_args=[
-                f"PERL_VERSION={VERSION}",
+                f"PERL_VERSION={VARS.SHORT_VERSION}",
                 f"NAME={service_name}",
                 "SOURCE_REPOSITORY_REF=master"
             ]
@@ -62,7 +41,9 @@ class TestDeployDancerExTemplateWithMySQL:
 
     def setup_method(self):
 
-        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{TEMPLATE_VERSION}-testing", version=VERSION)
+        self.oc_api = OpenShiftAPI(
+            pod_name_prefix=f"perl-{VARS.SHORT_VERSION}-testing", version=VARS.SHORT_VERSION
+        )
 
     def teardown_method(self):
         self.oc_api.delete_project()
@@ -70,17 +51,20 @@ class TestDeployDancerExTemplateWithMySQL:
     def test_perl_template_inside_cluster(self):
         self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
         assert self.oc_api.upload_image(DEPLOYED_MYSQL_IMAGE, f"{IMAGE_TAG}")
-        service_name = f"perl-{TEMPLATE_VERSION}-testing"
+        service_name = f"perl-{VARS.SHORT_VERSION}-testing"
         template_url = self.oc_api.get_raw_url_for_json(
-            container="dancer-ex", dir="openshift/templates", filename="dancer-mysql-persistent.json", branch="master"
+            container="dancer-ex",
+            dir="openshift/templates",
+            filename="dancer-mysql-persistent.json",
+            branch="master"
         )
         assert self.oc_api.deploy_template_with_image(
-            image_name=IMAGE_NAME,
+            image_name=VARS.IMAGE_NAME,
             template=template_url,
             name_in_template="perl",
             openshift_args=[
-                f"SOURCE_REPOSITORY_REF=master",
-                f"PERL_VERSION={VERSION}",
+                "SOURCE_REPOSITORY_REF=master",
+                f"PERL_VERSION={VARS.SHORT_VERSION}",
                 f"NAME={service_name}",
                 f"MYSQL_VERSION={MYSQL_VERSION}"
 

@@ -120,7 +120,6 @@ class TestPerlExampleAppContainer:
             )
 
 
-
 class TestPerlNPMtestContainer:
     def setup_method(self):
         self.s2i_app = build_npm_app(sample_test_app)
@@ -130,6 +129,7 @@ class TestPerlNPMtestContainer:
 
     def test_npm_works(self):
         assert self.s2i_app.npm_works(image_name=VARS.IMAGE_NAME)
+
 
 @pytest.mark.parametrize(
     "application_path,container_args,hot_deploy",
@@ -151,10 +151,10 @@ class TestPerlHotDeployAppContainer:
         cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
         assert cip
         assert self.s2i_app.test_response(
-            url=f"http://{cip}", expected_output="old initial value: 0",debug=True
+            url=f"http://{cip}", expected_output="old initial value: 0"
         )
         assert self.s2i_app.test_response(
-            url=f"http://{cip}", expected_output="old initial value: 1",debug=True
+            url=f"http://{cip}", expected_output="old initial value: 1"
         )
         sleep(2)
         PodmanCLIWrapper.podman_exec_shell_command(
@@ -170,10 +170,10 @@ class TestPerlHotDeployAppContainer:
                 used_shell="/bin/sh"
             )
             assert self.s2i_app.test_response(
-                url=f"http://{cip}", expected_output="new initial value: 0",debug=True
+                url=f"http://{cip}", expected_output="new initial value: 0"
             )
         else:
             sleep(2)
             assert self.s2i_app.test_response(
-                url=f"http://{cip}", expected_output="old initial value: 2",debug=True
+                url=f"http://{cip}", expected_output="old initial value: 2"
             )
