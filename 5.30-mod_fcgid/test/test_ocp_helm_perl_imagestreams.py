@@ -1,0 +1,1 @@
+../../test/test_ocp_helm_perl_imagestreams.py
