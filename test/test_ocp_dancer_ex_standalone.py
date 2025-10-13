@@ -2,11 +2,16 @@ from container_ci_suite.openshift import OpenShiftAPI
 
 from conftest import VARS
 
+
 # Replacement with 'test_python_s2i_app_ex'
 class TestPerlDancerExTemplate:
 
     def setup_method(self):
-        self.oc_api = OpenShiftAPI(pod_name_prefix=f"perl-{VARS.SHORT_VERSION}-testing", version=VARS.VERSION, shared_cluster=True)
+        self.oc_api = OpenShiftAPI(
+            pod_name_prefix=f"perl-{VARS.SHORT_VERSION}-testing",
+            version=VARS.VERSION,
+            shared_cluster=True
+        )
 
     def teardown_method(self):
         self.oc_api.delete_project()

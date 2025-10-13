@@ -26,7 +26,6 @@ class TestPerlContainer:
             return_output=False
         ) == 0
 
-
     def test_scl_usage(self):
         assert f"v{VARS.VERSION}" in PodmanCLIWrapper.podman_run_command(
             f"--rm {VARS.IMAGE_NAME} /bin/bash -c 'perl --version'"
@@ -41,7 +40,8 @@ class TestPerlContainer:
     )
     def test_dockerfiles(self, dockerfile):
         assert self.app.build_test_container(
-            dockerfile=VARS.TEST_DIR / "examples/from-dockerfile" / VARS.VERSION / dockerfile, app_url="https://github.com/sclorg/dancer-ex.git",
+            dockerfile=VARS.TEST_DIR / "examples/from-dockerfile" / VARS.VERSION / dockerfile,
+            app_url="https://github.com/sclorg/dancer-ex.git",
             app_dir="app-src"
         )
         assert self.app.test_app_dockerfile()

@@ -1,45 +1,13 @@
-import os
-import sys
-
-import pytest
-
-from pathlib import Path
-
 from container_ci_suite.helm import HelmChartsAPI
-from container_ci_suite.utils import check_variables
 
-if not check_variables():
-    print("At least one variable from IMAGE_NAME, OS, VERSION is missing.")
-    sys.exit(1)
+from conftest import VARS, TAGS, skip_helm_charts_tests
 
-test_dir = Path(os.path.abspath(os.path.dirname(__file__)))
-
-VERSION = os.getenv("VERSION")
-IMAGE_NAME = os.getenv("IMAGE_NAME")
-OS = os.getenv("TARGET")
-
-if VERSION == "5.30-mod_fcgid":
-    VERSION = "5.30"
-
-if VERSION == "5.26-mod_fcgid":
-    VERSION = "5.26"
-
-TAGS = {
-    "rhel8": "-ubi8",
-    "rhel9": "-ubi9",
-    "rhel10": "-ubi10",
-}
-TAG = TAGS.get(OS, None)
-
-if VERSION == "5.32" and OS == "rhel8":
-    pytest.skip("This version is not being tested as it is deprecated")
 
 class TestHelmPerlDancerMysqlAppTemplate:
 
     def setup_method(self):
         package_name = "redhat-perl-dancer-application"
-        path = test_dir
-        self.hc_api = HelmChartsAPI(path=path, package_name=package_name, tarball_dir=test_dir)
+        self.hc_api = HelmChartsAPI(path=VARS.TEST_DIR, package_name=package_name, tarball_dir=VARS.TEST_DIR)
         self.hc_api.clone_helm_chart_repo(
             repo_url="https://github.com/sclorg/helm-charts", repo_name="helm-charts",
             subdir="charts/redhat"
@@ -49,6 +17,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
         self.hc_api.delete_project()
 
     def test_dancer_application_helm_test(self):
+        skip_helm_charts_tests()
         self.hc_api.package_name = "redhat-perl-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
@@ -56,7 +25,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "perl_version": f"{VERSION}{TAG}",
+                "perl_version": f"{VARS.VERSION_NO_FCGID}{TAGS.get(VARS.OS)}",
                 "namespace": self.hc_api.namespace
             }
         )
