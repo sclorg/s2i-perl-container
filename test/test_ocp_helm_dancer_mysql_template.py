@@ -17,6 +17,10 @@ class TestHelmPerlDancerMysqlAppTemplate:
         self.hc_api.delete_project()
 
     def test_dancer_application_helm_test(self):
+        """
+        Test checks if Helm imagestream and Helm perl dancer application
+        works properly and response is as expected.
+        """
         skip_helm_charts_tests()
         self.hc_api.package_name = "redhat-perl-imagestreams"
         assert self.hc_api.helm_package()

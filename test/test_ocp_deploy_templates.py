@@ -16,6 +16,12 @@ class TestDeployTemplate:
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
+        """
+        Test checks if local imagestream and local sample app
+        works properly and response is as expected.
+        The response is taken from POD `command-app`
+        executed inside the same project.
+        """
         self.oc_api.import_is("imagestreams/perl-rhel.json", "", skip_check=True)
         service_name = f"perl-{VARS.SHORT_VERSION}-testing"
         assert self.oc_api.deploy_template_with_image(
