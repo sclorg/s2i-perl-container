@@ -10,6 +10,9 @@ class TestLatestImagestreams:
         self.isc = ImageStreamChecker(working_dir=VARS.TEST_DIR.parent.parent)
 
     def test_latest_imagestream(self):
+        """
+        Test checks if local imagestream is the latest one
+        """
         self.latest_version = self.isc.get_latest_version()
         assert self.latest_version != ""
         self.isc.check_imagestreams(self.latest_version)

@@ -4,7 +4,7 @@ from container_ci_suite.openshift import OpenShiftAPI
 from conftest import VARS, TAGS, skip_helm_charts_tests
 
 
-# Replacement with 'test_python_s2i_templates'
+# Replacement with 'test_perl_s2i_templates'
 class TestImagestreamsQuickstart:
 
     def setup_method(self):
@@ -18,6 +18,12 @@ class TestImagestreamsQuickstart:
         self.oc_api.delete_project()
 
     def test_perl_template_inside_cluster(self):
+        """
+        Test checks if local imagestream and local sample app
+        works properly and response is as expected.
+        The response is taken from POD `command-app`
+        executed inside the same project.
+        """
         skip_helm_charts_tests()
         service_name = f"perl-{VARS.SHORT_VERSION}-testing"
         assert self.oc_api.imagestream_quickstart(

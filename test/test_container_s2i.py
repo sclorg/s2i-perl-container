@@ -51,11 +51,17 @@ class TestPerlSampleTestAppContainer:
         self.s2i_app.cleanup()
 
     def test_run_s2i_usage(self):
+        """
+        Test checks if `usage` script works properly
+        """
         output = self.s2i_app.s2i_usage()
         assert output
 
     # test_docker_run_usage
     def test_docker_run_usage(self):
+        """
+        Test checks if `docker run` script works properly and do not fail
+        """
         assert PodmanCLIWrapper.call_podman_command(
             cmd=f"run --rm {VARS.IMAGE_NAME} &>/dev/null",
             return_output=False
@@ -69,6 +75,10 @@ class TestPerlSampleTestAppContainer:
         ]
     )
     def test_run_app_test(self, container_arg):
+        """
+        Test checks if we are able to run a container as deamon
+        and response works as expected
+        """
         cid_file_name = self.s2i_app.app_name
         assert self.s2i_app.create_container(cid_file_name=cid_file_name, container_args=container_arg)
         assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
@@ -97,6 +107,11 @@ class TestPerlSampleTestAppContainer:
 )
 class TestPerlExampleAppContainer:
     def test_run_app_test(self, application_path, container_args, page, expected_output):
+        """
+        Test class checks specific applications
+        and response works as expected. See parametrized parameters for more
+        details
+        """
         self.s2i_app = build_s2i_app(application_path, container_args=container_args)
         cid_file_name = self.s2i_app.app_name
         assert self.s2i_app.create_container(
@@ -128,6 +143,9 @@ class TestPerlNPMtestContainer:
         self.s2i_app.cleanup()
 
     def test_npm_works(self):
+        """
+        Test checks if NPM works in container.
+        """
         assert self.s2i_app.npm_works(image_name=VARS.IMAGE_NAME)
 
 
@@ -140,6 +158,10 @@ class TestPerlNPMtestContainer:
 )
 class TestPerlHotDeployAppContainer:
     def test_run_app_test(self, application_path, container_args, hot_deploy):
+        """
+        Test checks hot deploy application
+        It checks what is present in HTTP response
+        """
         self.s2i_app = build_s2i_app(application_path, container_args=container_args)
         cid_file_name = self.s2i_app.app_name
         assert self.s2i_app.create_container(
@@ -156,13 +178,19 @@ class TestPerlHotDeployAppContainer:
         assert self.s2i_app.test_response(
             url=f"http://{cip}", expected_output="old initial value: 1"
         )
-        sleep(2)
+        # We need to wait couple seconds till container
+        # before changing 'string' in 'Test.pm' file
+        # If we don't set PSGI_RELOAD, this change don't affects application.
+        # If we set PSGI_RELOAD, this change affects application.
+        sleep(3)
         PodmanCLIWrapper.podman_exec_shell_command(
             cid_file_name=cid,
             cmd="sed -ie 's/old initial value/new initial value/' lib/My/Test.pm",
             used_shell="/bin/sh"
         )
         if hot_deploy:
+            # We need to wait couple seconds till container
+            # does not update page. HotDeploy needs at least 3 seconds
             sleep(3)
             assert PodmanCLIWrapper.podman_exec_shell_command(
                 cid_file_name=cid,
@@ -173,7 +201,6 @@ class TestPerlHotDeployAppContainer:
                 url=f"http://{cip}", expected_output="new initial value: 0"
             )
         else:
-            sleep(2)
             assert self.s2i_app.test_response(
                 url=f"http://{cip}", expected_output="old initial value: 2"
             )
