@@ -1,6 +1,6 @@
 from container_ci_suite.helm import HelmChartsAPI
 
-from conftest import VARS, TAGS, skip_helm_charts_tests
+from conftest import VARS, skip_helm_charts_tests
 
 
 class TestHelmPerlDancerMysqlAppTemplate:
@@ -29,7 +29,7 @@ class TestHelmPerlDancerMysqlAppTemplate:
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation(
             values={
-                "perl_version": f"{VARS.VERSION_NO_FCGID}{TAGS.get(VARS.OS)}",
+                "perl_version": f"{VARS.VERSION_NO_FCGID}{VARS.TAG}",
                 "namespace": self.hc_api.namespace
             }
         )

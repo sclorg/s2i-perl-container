@@ -1,6 +1,6 @@
 from container_ci_suite.openshift import OpenShiftAPI
 
-from conftest import VARS, MYSQL_VERSION, IMAGE_TAG
+from conftest import VARS, IMAGE_TAG
 
 DEPLOYED_MYSQL_IMAGE = "quay.io/sclorg/mysql-80-c9s:c9s"
 
@@ -79,7 +79,7 @@ class TestDeployDancerExTemplateWithMySQL:
                 "SOURCE_REPOSITORY_REF=master",
                 f"PERL_VERSION={VARS.SHORT_VERSION}",
                 f"NAME={service_name}",
-                f"MYSQL_VERSION={MYSQL_VERSION}"
+                f"MYSQL_VERSION={VARS.MYSQL_VERSION}"
 
             ]
         )
