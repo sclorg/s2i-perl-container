@@ -1,7 +1,7 @@
 from container_ci_suite.openshift import OpenShiftAPI
 
 
-from conftest import VARS, TAGS, skip_helm_charts_tests
+from conftest import VARS, skip_helm_charts_tests
 
 
 # Replacement with 'test_perl_s2i_templates'
@@ -33,7 +33,7 @@ class TestImagestreamsQuickstart:
             name_in_template="perl",
             openshift_args=[
                 "SOURCE_REPOSITORY_REF=master",
-                f"VERSION={VARS.VERSION_NO_FCGID}{TAGS.get(VARS.OS)}",
+                f"VERSION={VARS.VERSION_NO_FCGID}{VARS.TAG}",
                 f"NAME={service_name}"
             ]
         )

@@ -10,22 +10,6 @@ from container_ci_suite.utils import check_variables
 if not check_variables():
     sys.exit(1)
 
-Vars = namedtuple(
-    "Vars", [
-        "OS", "VERSION", "IMAGE_NAME", "IS_MINIMAL", "VERSION_NO_FCGID", "SHORT_VERSION", "TEST_DIR"
-    ]
-)
-VERSION = os.getenv("VERSION")
-VARS = Vars(
-    OS=os.getenv("TARGET").lower(),
-    VERSION=VERSION,
-    IMAGE_NAME=os.getenv("IMAGE_NAME"),
-    IS_MINIMAL="minimal" in VERSION,
-    VERSION_NO_FCGID=VERSION.replace("-mod_fcgid", ""),
-    SHORT_VERSION=VERSION.replace("-mod_fcgid", "").replace(".", ""),
-    TEST_DIR=Path(__file__).parent.absolute()
-)
-
 TAGS = {
     "rhel8": "-ubi8",
     "rhel9": "-ubi9",
@@ -38,9 +22,27 @@ MYSQL_TAGS = {
     "rhel10": "-el10",
 }
 
-IMAGE_TAG = f"mysql:8.0{MYSQL_TAGS.get(VARS.OS)}"
+Vars = namedtuple(
+    "Vars", [
+        "OS", "TAG", "MYSQL_VERSION", "VERSION", "IMAGE_NAME", "IS_MINIMAL",
+        "VERSION_NO_FCGID", "SHORT_VERSION", "TEST_DIR"
+    ]
+)
+VERSION = os.getenv("VERSION")
+OS = os.getenv("TARGET").lower()
+VARS = Vars(
+    OS=OS,
+    TAG=TAGS.get(OS),
+    MYSQL_VERSION=f"8.0{MYSQL_TAGS.get(OS)}",
+    VERSION=VERSION,
+    IMAGE_NAME=os.getenv("IMAGE_NAME"),
+    IS_MINIMAL="minimal" in VERSION,
+    VERSION_NO_FCGID=VERSION.replace("-mod_fcgid", ""),
+    SHORT_VERSION=VERSION.replace("-mod_fcgid", "").replace(".", ""),
+    TEST_DIR=Path(__file__).parent.absolute()
+)
 
-MYSQL_VERSION = f"8.0{MYSQL_TAGS.get(VARS.OS)}"
+IMAGE_TAG = f"mysql:{VARS.MYSQL_VERSION}"
 
 
 def skip_helm_charts_tests():
