@@ -3,15 +3,6 @@ Perl container images
 
 [![Build and push images to Quay.io registry](https://github.com/sclorg/s2i-perl-container/actions/workflows/build-and-push.yml/badge.svg)](https://github.com/sclorg/s2i-perl-container/actions/workflows/build-and-push.yml)
 
-Images available on Quay are:
-* CentOS Stream 9 [perl-5.32](https://quay.io/repository/sclorg/perl-532-c9s)
-* CentOS Stream 10 [perl-5.40](https://quay.io/repository/sclorg/perl-540-c10s)
-* Fedora [perl-5.32](https://quay.io/repository/fedora/perl-532)
-* Fedora [perl-5.34](https://quay.io/repository/fedora/perl-534)
-* Fedora [perl-5.36](https://quay.io/repository/fedora/perl-536)
-* Fedora [perl-5.38](https://quay.io/repository/fedora/perl-538)
-* Fedora [perl-5.40](https://quay.io/repository/fedora/perl-540)
-
 This repository contains the source for building various versions of
 the Perl application as a reproducible container image using
 [source-to-image](https://github.com/openshift/source-to-image).
@@ -29,24 +20,23 @@ For more information about concepts used in these container images, see the
 
 Versions
 --------
-Perl versions currently provided:
-* [perl-5.26](5.26)
-* [perl-5.30](5.30)
-* [perl-5.32](5.32)
-* [perl-5.34](5.34)
-* [perl-5.36](5.36)
-* [perl-5.38](5.38)
-* [perl-5.40](5.40)
-
-RHEL versions currently supported:
-* RHEL8
-* RHEL9
-* RHEL10
-
-CentOS versions currently supported:
-* CentOS Stream 9
-* CentOS Stream 10
-
+Currently supported versions are visible in the following table, expand an entry to see its container registry address.
+<!--
+Table start
+-->
+||CentOS Stream 9|CentOS Stream 10|Fedora|RHEL 8|RHEL 9|RHEL 10|
+|:--|:--:|:--:|:--:|:--:|:--:|:--:|
+|5.26-mod_fcgid||||<details><summary>✓</summary>`registry.redhat.io/rhel8/perl-526-mod_fcgid`</details>|||
+|5.26|||||||
+|5.30|||||||
+|5.32|<details><summary>✓</summary>`quay.io/sclorg/perl-532-c9s`</details>||||<details><summary>✓</summary>`registry.redhat.io/rhel9/perl-532`</details>||
+|5.34|||||||
+|5.36|||<details><summary>✓</summary>`quay.io/fedora/perl-536`</details>||||
+|5.38|||<details><summary>✓</summary>`quay.io/fedora/perl-538`</details>||||
+|5.40||<details><summary>✓</summary>`quay.io/sclorg/perl-540-c10s`</details>|<details><summary>✓</summary>`quay.io/fedora/perl-540`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel10/perl-540`</details>|
+<!--
+Table end
+-->
 
 Installation
 ------------
