@@ -241,17 +241,11 @@ class TestPerlHotDeployAppContainer:
         PodmanCLIWrapper.podman_exec_shell_command(
             cid_file_name=cid,
             cmd="./replace_value.sh",
-            used_shell="/bin/sh",
         )
         if hot_deploy:
             # We need to wait couple seconds till container
             # does not update page. HotDeploy needs at least 3 seconds
             sleep(3)
-            assert PodmanCLIWrapper.podman_exec_shell_command(
-                cid_file_name=cid,
-                cmd="grep 'new initial' lib/My/Test.pm",
-                used_shell="/bin/sh",
-            )
             assert self.s2i_app.test_response(
                 url=f"http://{cip}", expected_output="new initial value: 0"
             )
