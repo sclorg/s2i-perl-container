@@ -61,7 +61,7 @@ prepare() {
 
 run_test_application() {
   local name=$1
-  local cidfile="$CID_FILE_DIR/$name"
+  local cid_file="$CID_FILE_DIR/$name"
   docker run --user=100001 --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
 }
 
