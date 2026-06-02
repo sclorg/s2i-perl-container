@@ -14,5 +14,5 @@ class TestLatestImagestreams:
         Test checks if local imagestream is the latest one
         """
         self.latest_version = self.isc.get_latest_version()
-        assert self.latest_version != ""
+        assert self.latest_version
         self.isc.check_imagestreams(self.latest_version)

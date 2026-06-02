@@ -24,7 +24,6 @@ class TestImagestreamsQuickstart:
         The response is taken from POD `command-app`
         executed inside the same project.
         """
-        skip_helm_charts_tests()
         service_name = f"perl-{VARS.SHORT_VERSION}-testing"
         assert self.oc_api.imagestream_quickstart(
             imagestream_file="imagestreams/perl-rhel.json",
