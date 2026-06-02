@@ -43,8 +43,3 @@ VARS = Vars(
 )
 
 IMAGE_TAG = f"mysql:{VARS.MYSQL_VERSION}"
-
-
-def skip_helm_charts_tests():
-    if VARS.VERSION == "5.32" and VARS.OS == "rhel8":
-        skip(f"Skipping Helm Charts tests for {VARS.VERSION} on {VARS.OS}.")

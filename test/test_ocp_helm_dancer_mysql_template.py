@@ -21,7 +21,6 @@ class TestHelmPerlDancerMysqlAppTemplate:
         Test checks if Helm imagestream and Helm perl dancer application
         works properly and response is as expected.
         """
-        skip_helm_charts_tests()
         self.hc_api.package_name = "redhat-perl-imagestreams"
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()

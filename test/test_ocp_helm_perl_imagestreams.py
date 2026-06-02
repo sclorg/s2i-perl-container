@@ -24,18 +24,18 @@ class TestHelmRHELPerlImageStreams:
         self.hc_api.delete_project()
 
     @pytest.mark.parametrize(
-        "version,registry,expected",
+        "version,registry",
         [
-            ("5.40-ubi10", "registry.redhat.io/ubi10/perl-540:latest", True),
-            ("5.32-ubi9", "registry.redhat.io/ubi9/perl-532:latest", True),
-            ("5.32-ubi8", "registry.redhat.io/ubi8/perl-532:latest", False),
-            ("5.26-ubi8", "registry.redhat.io/ubi8/perl-526:latest", True),
+            ("5.40-ubi10", "registry.redhat.io/ubi10/perl-540:latest"),
+            ("5.32-ubi9", "registry.redhat.io/ubi9/perl-532:latest"),
+            ("5.32-ubi8", "registry.redhat.io/ubi8/perl-532:latest"),
+            ("5.26-ubi8", "registry.redhat.io/ubi8/perl-526:latest"),
         ],
     )
-    def test_package_imagestream(self, version, registry, expected):
+    def test_package_imagestream(self, version, registry):
         """
         Test checks if Helm imagestreams are present
         """
         assert self.hc_api.helm_package()
         assert self.hc_api.helm_installation()
-        assert self.hc_api.check_imagestreams(version=version, registry=registry) == expected
+        assert self.hc_api.check_imagestreams(version=version, registry=registry)
