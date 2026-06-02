@@ -29,7 +29,7 @@ Table start
 |5.26-mod_fcgid||||<details><summary>✓</summary>`registry.redhat.io/rhel8/perl-526-mod_fcgid`</details>|||
 |5.26|||||||
 |5.30|||||||
-|5.32|<details><summary>✓</summary>`quay.io/sclorg/perl-532-c9s`</details>||||<details><summary>✓</summary>`registry.redhat.io/rhel9/perl-532`</details>||
+|5.32|<details><summary>✓</summary>`quay.io/sclorg/perl-532-c9s`</details>|||<details><summary>✓</summary>`registry.redhat.io/rhel8/perl-532`</details>|<details><summary>✓</summary>`registry.redhat.io/rhel9/perl-532`</details>||
 |5.34|||||||
 |5.36|||<details><summary>✓</summary>`quay.io/fedora/perl-536`</details>||||
 |5.38|||<details><summary>✓</summary>`quay.io/fedora/perl-538`</details>||||
