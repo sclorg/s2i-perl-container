@@ -25,6 +25,8 @@ This container image includes an cpanm utility, so users can use it to install P
 modules for their web applications. There is no guarantee for any specific CPAN module
 version, that is included in the image; those versions can be changed anytime.
 
+See [the Red Hat Enterprise Linux Application Streams Life Cycle page](https://access.redhat.com/support/policy/updates/rhel-app-streams-life-cycle) for information about support for this particular stream.
+
 Usage in Openshift
 ------------------
 

@@ -38,6 +38,8 @@ Table start
 Table end
 -->
 
+See [the Red Hat Enterprise Linux Application Streams Life Cycle page](https://access.redhat.com/support/policy/updates/rhel-app-streams-life-cycle) for information about support for a particular stream.
+
 Installation
 ------------
 To build a Perl image, choose either the CentOS Stream or RHEL based image:
