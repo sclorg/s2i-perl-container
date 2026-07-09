@@ -11,13 +11,13 @@ from container_ci_suite.engines.container import ContainerImage
 
 from conftest import VARS
 
-sample_test_app = VARS.TEST_DIR / "sample-test-app"
-bin_app = VARS.TEST_DIR / "binpath"
-fcgi = VARS.TEST_DIR / "fcgi"
-psgi = VARS.TEST_DIR / "psgi"
-psgi_hot_deploy = VARS.TEST_DIR / "psgi-hot_deploy"
-psgi_variables = VARS.TEST_DIR / "psgi-variables"
-warningonstderr = VARS.TEST_DIR / "warningonstderr"
+sample_test_app = VARS.TEST_DIR / "examples" / "sample-test-app"
+bin_app = VARS.TEST_DIR / "examples" / "binpath"
+fcgi = VARS.TEST_DIR / "examples" / "fcgi"
+psgi = VARS.TEST_DIR / "examples" / "psgi"
+psgi_hot_deploy = VARS.TEST_DIR / "examples" / "psgi-hot_deploy"
+psgi_variables = VARS.TEST_DIR / "examples" / "psgi-variables"
+warningonstderr = VARS.TEST_DIR / "examples" / "warningonstderr"
 
 
 def build_npm_app(app_path: Path) -> ContainerTestLib:
@@ -133,9 +133,7 @@ class TestPerlExampleAppContainer:
     See parametrized parameters for more details.
     """
 
-    def test_run_app_test(
-        self, application_path, container_args, page, expected_output
-    ):
+    def test_run_app_test(self, application_path, container_args, page, expected_output):
         """
         Test class checks specific applications
         and response works as expected. See parametrized parameters for more
