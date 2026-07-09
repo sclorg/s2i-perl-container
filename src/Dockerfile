@@ -12,12 +12,12 @@ ENV PERL_VERSION={{ spec.version }} \
 
 ENV SUMMARY="Platform for building and running Perl {{ spec.version }} applications" \
     DESCRIPTION="Perl {{ spec.version }} available as container is a base platform for \
-building and running various Perl {{ spec.version }} applications and frameworks. \
-Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
-Perl is good at handling processes and files, and is especially good at handling text. \
-Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
-different things, Perl's most common applications are system administration utilities \
-and web programming."
+    building and running various Perl {{ spec.version }} applications and frameworks. \
+    Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
+    Perl is good at handling processes and files, and is especially good at handling text. \
+    Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
+    different things, Perl's most common applications are system administration utilities \
+    and web programming."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
@@ -34,13 +34,17 @@ LABEL summary="$SUMMARY" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build <SOURCE-REPOSITORY> {{ spec.img_name }}:latest <APP-NAME>"
 
-{% if spec.prod == "rhel8" and spec.version == "5.26" %}
+{% if spec.prod == "rhel8" %}
+{% if spec.version == "5.26" %}
 # perl-FCGI module is missing a default stream
 RUN dnf -y module enable perl-FCGI:0.78
+{% else %}
+RUN dnf -y module reset perl
+{% endif %}
 {% endif %}
 
 {% if spec.prod == "rhel8" %}
-RUN {{ spec.environment_setup }} && \
+RUN {{ spec.environment_setup }}
     dnf -y --allowerasing distrosync && \
 {% else %}
 RUN dnf -y --allowerasing distrosync && \

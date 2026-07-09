@@ -11,12 +11,12 @@ ENV PERL_VERSION=5.32 \
 
 ENV SUMMARY="Platform for building and running Perl 5.32 applications" \
     DESCRIPTION="Perl 5.32 available as container is a base platform for \
-building and running various Perl 5.32 applications and frameworks. \
-Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
-Perl is good at handling processes and files, and is especially good at handling text. \
-Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
-different things, Perl's most common applications are system administration utilities \
-and web programming."
+    building and running various Perl 5.32 applications and frameworks. \
+    Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
+    Perl is good at handling processes and files, and is especially good at handling text. \
+    Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
+    different things, Perl's most common applications are system administration utilities \
+    and web programming."
 
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
@@ -33,8 +33,9 @@ LABEL summary="$SUMMARY" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
       usage="s2i build <SOURCE-REPOSITORY> ubi8/perl-532:latest <APP-NAME>"
 
+RUN dnf -y module reset perl
 
-RUN dnf -y module enable perl:5.32 && \ && \
+RUN dnf -y module enable perl:5.32 && \
     dnf -y --allowerasing distrosync && \
     INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \

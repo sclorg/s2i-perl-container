@@ -59,9 +59,6 @@ COPY_RULES:
   - src: src/root/opt/app-root/etc/httpdconf.sed
     dest: root/opt/app-root/etc/httpdconf.sed
 
-  - src: src/root/opt/app-root/etc/httpdconf-fed.sed
-    dest: root/opt/app-root/etc/httpdconf-fed.sed
-
   - src: src/root/opt/app-root/etc/httpd.d/50-mpm.conf.template
     dest: root/opt/app-root/etc/httpd.d/50-mpm.conf.template
 
