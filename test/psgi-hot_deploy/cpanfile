@@ -1,3 +1,0 @@
-requires 'Cwd';
-requires 'Exporter';
-requires 'File::Basename';
