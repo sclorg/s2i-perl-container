@@ -1,0 +1,132 @@
+version: 1
+
+specs:
+  distroinfo:
+
+    fedora41:
+      distros:
+        - fedora-41-x86_64
+      s2i_base: quay.io/fedora/s2i-base
+      s2i_base_tag: 41
+      org: "fedora"
+      prod: "fedora"
+      openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+      redhat_component: "perl-{{ spec.short }}-container"
+      img_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+    
+    fedora43:
+      distros:
+        - fedora-43-x86_64
+      s2i_base: quay.io/fedora/s2i-base
+      s2i_base_tag: 43
+      org: "fedora"
+      prod: "fedora"
+      openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+      redhat_component: "perl-{{ spec.short }}-container"
+      img_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+    
+    rhel8:
+       distros:
+         - rhel-8-x86_64
+       s2i_base: ubi8/s2i-base
+       ubi: "ubi8"
+       org: "rhel8"
+       prod: "rhel8"
+       openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+       redhat_component: "perl-{{ spec.short }}-container"
+       img_name: "{{ spec.ubi }}/perl-{{ spec.short }}"
+       pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+       environment_setup: >-4
+           dnf -y module enable perl:{{ spec.version }} && \
+
+    rhel9:
+       distros:
+         - rhel-9-x86_64
+       s2i_base: ubi9/s2i-base
+       ubi: "ubi9"
+       org: "rhel9"
+       prod: "rhel9"
+       openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+       redhat_component: "perl-{{ spec.short }}-container"
+       img_name: "{{ spec.ubi }}/perl-{{ spec.short }}"
+       pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+       environment_setup: >-4
+           { dnf -y module enable perl:{{ spec.version }} || :; } && \
+    rhel10:
+       distros:
+         - rhel-10-x86_64
+       s2i_base: ubi10/s2i-base
+       ubi: "ubi10"
+       org: "rhel10"
+       prod: "rhel10"
+       openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+       redhat_component: "perl-{{ spec.short }}-container"
+       img_name: "{{ spec.org }}/perl-{{ spec.short }}"
+       pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+    c9s:
+      distros:
+        - centos-stream-9-x86_64
+      s2i_base: quay.io/sclorg/s2i-base-c9s
+      s2i_base_tag: c9s
+      org: "sclorg"
+      prod: "c9s"
+      openshift_tags: "database,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+      redhat_component: "perl-{{ spec.short }}-container"
+      img_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+      environment_setup: >-4
+           { dnf -y module enable perl:{{ spec.version }} || :; } && \
+
+    c10s:
+      distros:
+        - centos-stream-10-x86_64
+      s2i_base: quay.io/sclorg/s2i-base-c10s
+      s2i_base_tag: c10s
+      org: "sclorg"
+      prod: "c10s"
+      openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+      redhat_component: "perl-{{ spec.short }}-container"
+      img_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
+
+  version:
+    "5.26-mod_fcgid":
+      version: "5.26"
+      short: "526"
+      common_image_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      rhel_image_name: "rhel8/perl-{{ spec.short }}"
+      latest_fedora: "f38"
+
+    "5.32":
+      version: "5.32"
+      short: "532"
+      common_image_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      rhel_image_name: "rhel9/perl-{{ spec.short }}"
+      latest_fedora: "f38"
+
+    "5.40":
+      version: "5.40"
+      short: "540"
+      common_image_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
+      c9s_image_name: "sclorg/perl-{{ spec.short }}-c10s"
+      rhel_image_name: "rhel10/perl-{{ spec.short }}"
+      latest_fedora: "f41"
+
+
+matrix:
+  include:
+    - version: "5.26-mod_fcgid"
+      distros:
+        - rhel-8-x86_64
+    - version: "5.32"
+      distros:
+        - rhel-8-x86_64
+        - rhel-9-x86_64
+        - centos-stream-9-x86_64
+    - version: "5.40"
+      distros:
+        - fedora-41-x86_64
+        - centos-stream-10-x86_64
+        - rhel-10-x86_64

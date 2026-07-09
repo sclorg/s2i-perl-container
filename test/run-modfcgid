@@ -48,7 +48,7 @@ container_ip() {
 }
 
 run_s2i_build() {
-  ct_s2i_build_as_df file://${test_dir}/${test_name} ${IMAGE_NAME} ${IMAGE_NAME}-testapp $(ct_build_s2i_npm_variables) "$@"
+  ct_s2i_build_as_df file://${test_dir}/examples/${test_name} ${IMAGE_NAME} ${IMAGE_NAME}-testapp $(ct_build_s2i_npm_variables) "$@"
 }
 
 prepare() {
@@ -59,7 +59,7 @@ prepare() {
   # TODO: S2I build require the application is a valid 'GIT' repository, we
   # should remove this restriction in the future when a file:// is used.
   info "Build the test application image"
-  pushd ${test_dir}/${test_name} >/dev/null
+  pushd ${test_dir}/examples/${test_name} >/dev/null
   git init
   git config user.email "build@localhost" && git config user.name "builder"
   git add -A && git commit -m "Sample commit"
@@ -85,7 +85,7 @@ cleanup() {
   if image_exists ${IMAGE_NAME}-testapp; then
     docker rmi -f ${IMAGE_NAME}-testapp
   fi
-  rm -rf ${test_dir}/${test_name}/.git
+  rm -rf ${test_dir}/examples/${test_name}/.git
 }
 
 test_s2i_usage() {
