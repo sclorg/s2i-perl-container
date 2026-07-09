@@ -4,8 +4,8 @@ Perl 5.32 container image
 This container image includes Perl 5.32 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.32 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS Stream images are available on [Quay.io](https://quay.io/organization/sclorg),
-and the Fedora images are available in [Quay.io](https://quay.io/organization/fedora).
+the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
 Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -50,7 +50,7 @@ Source-to-Image framework and scripts
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#images-create-s2i_create-images)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
-an input, use a builder image like this PHP container image, and produce
+an input, use a builder image like this Perl container image, and produce
 a new image that runs the assembled application as an output.
 
 To support the Source-to-Image framework, important scripts are included in the builder image:
@@ -184,7 +184,7 @@ file inside your source code repository.
 
 * **HTTPD_MAX_REQUEST_WORKERS**
 
-    Number of simultaneous requests that will be handled by Apache httpd. The default
+    Number of simultaneous requests that will be handled by Apache. The default
     is 256, but it will be automatically lowered if memory is limited.
 
 * **PSGI_FILE**
@@ -220,5 +220,6 @@ See also
 
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for RHEL8 is called `Dockerfile.rhel8`, Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`,
-Dockerfile for RHEL9 is called `Dockerfile.rhel9`, and the Fedora Dockerfile is called `Dockerfile.fedora`.
+Dockerfile for RHEL8 is called `Dockerfile.rhel8`, Dockerfile for RHEL9 is called `Dockerfile.rhel9`, Dockerfile for RHEL10 is called `Dockerfile.rhel10`,
+Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`, Dockerfile for CentOS Stream 10 is called `Dockerfile.c10s`
+and the Fedora Dockerfile is called `Dockerfile.fedora`.

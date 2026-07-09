@@ -9,9 +9,9 @@ ENV PERL_VERSION=5.40 \
     PERL_SHORT_VER=540 \
     NAME=perl
 
-ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
-    DESCRIPTION="Perl $PERL_VERSION available as container is a base platform for \
-building and running various Perl $PERL_VERSION applications and frameworks. \
+ENV SUMMARY="Platform for building and running Perl 5.40 applications" \
+    DESCRIPTION="Perl 5.40 available as container is a base platform for \
+building and running various Perl 5.40 applications and frameworks. \
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
 Perl is good at handling processes and files, and is especially good at handling text. \
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
@@ -21,25 +21,23 @@ and web programming."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with mod_fcgid and Perl $PERL_VERSION" \
+      io.k8s.display-name="Apache 2.4 with mod_fcgid and Perl 5.40" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}","${NAME}-${PERL_SHORT_VER}" \
+      io.openshift.tags="builder,perl,perl540,perl-540" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="sclorg/${NAME}-${PERL_SHORT_VER}-c10s" \
-      com.redhat.component="${NAME}-${PERL_SHORT_VER}-container" \
-      version="1" \
+      name="sclorg/perl-540-c10s" \
+      com.redhat.component="perl-540-container" \
       com.redhat.license_terms="https://www.redhat.com/en/about/red-hat-end-user-license-agreements#UBI" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/sclorg/${NAME}-${PERL_SHORT_VER}-c10s:latest <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> sclorg/perl-540-c10s:latest <APP-NAME>"
 
-# Deselect a default stream
+
 RUN dnf -y --allowerasing distrosync && \
     INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     dnf install -y --setopt=tsflags=nodocs $INSTALL_PKGS && \
-    rpm -V $INSTALL_PKGS && \
-    perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION $PERL_VERSION" && \
+    perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION 5.40" && \
     dnf -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH

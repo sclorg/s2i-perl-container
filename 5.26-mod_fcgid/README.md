@@ -50,7 +50,7 @@ Source-to-Image framework and scripts
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#images-create-s2i_create-images)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
-an input, use a builder image like this Node.js container image, and produce
+an input, use a builder image like this Perl container image, and produce
 a new image that runs the assembled application as an output.
 
 To support the Source-to-Image framework, important scripts are included in the builder image:
@@ -220,4 +220,6 @@ See also
 
 Dockerfile and other sources are available on https://github.com/sclorg/s2i-perl-container.
 In that repository you also can find another versions of Perl environment Dockerfiles.
-Dockerfile for RHEL8 is called `Dockerfile.rhel8` and the Fedora Dockerfile is called `Dockerfile.fedora`.
+Dockerfile for RHEL8 is called `Dockerfile.rhel8`, Dockerfile for RHEL9 is called `Dockerfile.rhel9`, Dockerfile for RHEL10 is called `Dockerfile.rhel10`,
+Dockerfile for CentOS Stream 9 is called `Dockerfile.c9s`, Dockerfile for CentOS Stream 10 is called `Dockerfile.c10s`
+and the Fedora Dockerfile is called `Dockerfile.fedora`.

@@ -29,7 +29,7 @@ index 029051c..0c491b2 100644
 @@ -124,6 +124,17 @@ sub run {
          delete $env->{HTTP_CONTENT_TYPE};
          delete $env->{HTTP_CONTENT_LENGTH};
- 
+
 +        # mod_fcgid provides wrong SCRIPT_NAME and PATH_INFO for virtual FCGI script handlers
 +        # <https://github.com/plack/Plack/issues/308>
 +        # <https://github.com/plack/Plack/issues/147>
@@ -44,6 +44,6 @@ index 029051c..0c491b2 100644
          # lighttpd munges multiple slashes in PATH_INFO into one. Try recovering it
          my $uri = URI->new("http://localhost" .  $env->{REQUEST_URI});
          $env->{PATH_INFO} = uri_unescape($uri->path);
--- 
+--
 2.17.2
 

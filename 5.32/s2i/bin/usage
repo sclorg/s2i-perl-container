@@ -3,10 +3,10 @@
 DISTRO=`cat /etc/*-release | grep ^ID= | grep -Po '".*?"' | tr -d '"'`
 NAMESPACE=sclorg
 if [[ $DISTRO =~ rhel* ]]; then
-  NAMESPACE=rhel9
+  NAMESPACE=rhel10
   DISTRO=""
 else
-  DISTRO="-c9s"
+  DISTRO="-c10s"
 fi
 
 cat <<EOF

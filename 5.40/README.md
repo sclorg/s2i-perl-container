@@ -2,8 +2,10 @@ Perl 5.40 container image
 =========================
 
 This container image includes Perl 5.40 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.40 applications.
-Users can choose Fedora based builder image.
-The Fedora images are available in [Quay.io](https://quay.io/fedora/).
+Users can choose between RHEL, CentOS and Fedora based builder images.
+The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
+the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
+and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
 The resulting image can be run using [podman](https://github.com/containers/libpod).
 
 Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
@@ -28,7 +30,7 @@ See [the Red Hat Enterprise Linux Application Streams Life Cycle page](https://a
 Usage in Openshift
 ------------------
 
-In this example, we will assume that you are using the `ubi9/perl-540` image, available via `perl:5.40` imagestream tag in Openshift.
+In this example, we will assume that you are using the `ubi10/perl-540` image, available via `perl:5.40` imagestream tag in Openshift.
 To build a simple [perl-sample-app](https://github.com/sclorg/dancer-ex.git) application in Openshift:
 
 ```
@@ -48,7 +50,7 @@ Source-to-Image framework and scripts
 This image supports the [Source-to-Image](https://docs.openshift.com/container-platform/4.14/openshift_images/create-images.html#images-create-s2i_create-images)
 (S2I) strategy in OpenShift. The Source-to-Image is an OpenShift framework
 which makes it easy to write images that take application source code as
-an input, use a builder image like this PHP container image, and produce
+an input, use a builder image like this Perl container image, and produce
 a new image that runs the assembled application as an output.
 
 To support the Source-to-Image framework, important scripts are included in the builder image:
@@ -69,10 +71,10 @@ To use the Perl image in a Dockerfile, follow these steps:
 #### 1. Pull a base builder image to build on
 
 ```
-podman pull ubi9/perl-540
+podman pull ubi10/perl-540
 ```
 
-An ubi9 image `ubi9/perl-540` is used in this example.
+An ubi10 image `ubi10/perl-540` is used in this example.
 
 #### 2. Pull and application code
 
@@ -95,13 +97,13 @@ For all these three parts, users can either setup all manually and use commands 
 ##### 3.1 To use your own setup, create a Dockerfile with this content:
 
 ```
-FROM ubi9/perl-540
+FROM ubi10/perl-540
 
 # Add application sources
 ADD app-src .
 
 # Set the paths to local Perl modules
-ENV PATH=/opt/app-root/src/extlib/bin:${PATH}
+ENV PATH=${PATH}:/opt/app-root/src/extlib/bin
 ENV PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
 # Install the dependencies
@@ -132,7 +134,7 @@ CMD exec httpd -C 'Include /opt/app-root/etc/httpd.conf' -D FOREGROUND
 ##### 3.2 To use the Source-to-Image scripts and build an image using a Dockerfile, create a Dockerfile with this content:
 
 ```
-FROM ubi9/perl-540
+FROM ubi10/perl-540
 
 # Add application sources to a directory that the assemble scriptexpects them
 # and set permissions so that the container runs without root access
@@ -182,7 +184,7 @@ file inside your source code repository.
 
 * **HTTPD_MAX_REQUEST_WORKERS**
 
-    Number of simultaneous requests that will be handled by Apache httpd. The default
+    Number of simultaneous requests that will be handled by Apache. The default
     is 256, but it will be automatically lowered if memory is limited.
 
 * **PSGI_FILE**

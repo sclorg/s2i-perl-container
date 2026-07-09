@@ -11,9 +11,9 @@ ENV PERL_VERSION=5.40 \
     PATH=/opt/app-root/src/extlib/bin:$PATH \
     PERL5LIB=/opt/app-root/src/extlib/lib/perl5
 
-ENV SUMMARY="Platform for building and running Perl $PERL_VERSION applications" \
-    DESCRIPTION="Perl $PERL_VERSION available as container is a base platform for \
-building and running various Perl $PERL_VERSION applications and frameworks. \
+ENV SUMMARY="Platform for building and running Perl 5.40 applications" \
+    DESCRIPTION="Perl 5.40 available as container is a base platform for \
+building and running various Perl 5.40 applications and frameworks. \
 Perl is a high-level programming language with roots in C, sed, awk and shell scripting. \
 Perl is good at handling processes and files, and is especially good at handling text. \
 Perl's hallmarks are practicality and efficiency. While it is used to do a lot of \
@@ -23,17 +23,16 @@ and web programming."
 LABEL summary="$SUMMARY" \
       description="$DESCRIPTION" \
       io.k8s.description="$DESCRIPTION" \
-      io.k8s.display-name="Apache 2.4 with mod_fcgid and Perl $PERL_VERSION" \
+      io.k8s.display-name="Apache 2.4 with mod_fcgid and Perl 5.40" \
       io.openshift.expose-services="8080:http" \
       io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="fedora/$NAME-$PERL_SHORT_VER" \
+      name="fedora/$NAME-540" \
       com.redhat.component="$NAME" \
-      version="$VERSION" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/fedora/$NAME-$PERL_SHORT_VER <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> quay.io/fedora/$NAME-540 <APP-NAME>"
 
 RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
     dnf install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
