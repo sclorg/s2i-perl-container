@@ -4,9 +4,7 @@ Perl 5.40 container image
 This container image includes Perl 5.40 as an [S2I](https://github.com/openshift/source-to-image) base image for your Perl 5.40 applications.
 Users can choose between RHEL, CentOS and Fedora based builder images.
 The RHEL images are available in the [Red Hat Container Catalog](https://access.redhat.com/containers/),
-the CentOS images are available on [Docker Hub](https://hub.docker.com/r/centos/),
-and the Fedora images are available in [Fedora Registry](https://registry.fedoraproject.org/).
-The resulting image can be run using [podman](https://github.com/containers/libpod).
+the CentOS Stream images are available on [Quay.io](https://quay.io/organization/sclorg), and the Fedora images are available in [Quay.io](https://quay.io/organization/fedora). The resulting image can be run using podman.
 
 Note: while the examples in this README are calling `podman`, you can replace any such calls by `docker` with the same arguments.
 
