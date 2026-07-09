@@ -72,7 +72,7 @@ specs:
       s2i_base_tag: c9s
       org: "sclorg"
       prod: "c9s"
-      openshift_tags: "database,perl,perl{{ spec.short }},perl-{{ spec.short }}"
+      openshift_tags: "builder,perl,perl{{ spec.short }},perl-{{ spec.short }}"
       redhat_component: "perl-{{ spec.short }}-container"
       img_name: "{{ spec.org }}/perl-{{ spec.short }}-{{ spec.prod }}"
       pkgs: "perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch"
