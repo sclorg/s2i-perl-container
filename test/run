@@ -6,22 +6,27 @@
 # IMAGE_NAME specifies a name of the candidate image used for testing.
 # The image has to be available before this script is executed.
 #
-IMAGE_NAME=${IMAGE_NAME-sclorg/perl-540-c10s}
+IMAGE_NAME=${IMAGE_NAME-sclorg/perl-532-c9s}
 
 # TODO: Make command compatible for Mac users
 test_dir="$(readlink -f $(dirname "${BASH_SOURCE[0]}"))"
 image_dir=$(readlink -f ${test_dir}/..)
+
 TEST_LIST="\
 test_sample_test_app
 test_binpath
 test_psgi
+test_psgi_hot_deploy_without_reload
+test_psgi_hot_deploy_with_reload
 test_psgi_variables
 test_warningonstderr
+test_fcgi
 test_npm
 test_from_dockerfile
 "
-
 source "${test_dir}/test-lib.sh"
+
+ct_init
 
 # TODO: This should be part of the image metadata
 test_port=8080
@@ -34,10 +39,12 @@ image_exists() {
   docker inspect $1 &>/dev/null
 }
 
-kill_container_if_exists() {
-  local name=$1
-  local cid="$(ct_get_cid "$name")"
-  image_exists "$cid" && docker stop "$cid" && rm -f "$CID_FILE_DIR/$name"
+container_exists() {
+  image_exists $(cat $cid_file)
+}
+
+container_ip() {
+  docker inspect --format="{{ .NetworkSettings.IPAddress }}" $(cat $cid_file)
 }
 
 run_s2i_build() {
@@ -60,9 +67,17 @@ prepare() {
 }
 
 run_test_application() {
-  local name=$1
-  local cid_file="$CID_FILE_DIR/$name"
   docker run --user=100001 --rm --cidfile=${cid_file} ${IMAGE_NAME}-testapp
+}
+
+cleanup_test_app() {
+  info "Cleaning up the test application"
+  if [ -f $cid_file ]; then
+    if container_exists; then
+      docker stop $(cat $cid_file)
+    fi
+    rm $cid_file
+  fi
 }
 
 cleanup() {
@@ -80,15 +95,12 @@ test_s2i_usage() {
 
 test_docker_run_usage() {
   info "Testing 'docker run' usage"
-  local cid_file="$(mktemp -u --suffix=.cid --tmpdir=$CID_FILE_DIR)"
-  docker run --cidfile "$cid_file" ${IMAGE_NAME} &>/dev/null
+  docker run ${IMAGE_NAME} &>/dev/null
 }
 
 test_scl_usage() {
   local run_cmd="$1"
   local expected="$2"
-  local name="$3"
-  local cid_file="$CID_FILE_DIR/$name"
 
   info "Testing the image SCL enable"
   out=$(docker run --rm ${IMAGE_NAME} /bin/bash -c "${run_cmd}")
@@ -106,6 +118,39 @@ test_scl_usage() {
     echo "ERROR[exec /bin/sh -ic "${run_cmd}"] Expected '${expected}', got '${out}'"
     return 1
   fi
+}
+
+# Perform GET request to the application container.
+# First argument is request URI path.
+# Second argument is expected HTTP response code.
+# Third argument is PCRE regular expression that must match the response body.
+test_response() {
+  local uri_path="$1"
+  local expected_code="$2"
+  local body_regexp="$3"
+
+  local url="http://$(container_ip):${test_port}${uri_path}"
+  info "Testing the HTTP response for <${url}>"
+  local max_attempts=10
+  local sleep_time=1
+  local attempt=1
+  local result=1
+  while [ $attempt -le $max_attempts ]; do
+    response=$(curl -s -w '%{http_code}' "${url}")
+    status=$?
+    if [ $status -eq 0 ]; then
+      response_code=$(printf '%s' "$response" | tail -c 3)
+      response_body=$(printf '%s' "$response" | head -c -3)
+      if [ "$response_code" -eq "$expected_code" ]; then
+        result=0
+      fi
+      printf '%s' "$response_body" | grep -qP -e "$body_regexp" || result=1;
+      break
+    fi
+    attempt=$(( $attempt + 1 ))
+    sleep $sleep_time
+  done
+  return $result
 }
 
 # Match PCRE regular expression against container standard output.
@@ -129,26 +174,40 @@ test_stderr() {
 }
 
 test_connection() {
-    local name=$1
-    ct_test_response "http://$(ct_get_cip $name):${test_port}/" 200 ''
+    test_response '/' 200 ''
 }
 
 test_application() {
-  local name=$1
-  
   # Verify that the HTTP connection can be established to test application container
-  run_test_application "$name" &
+  local version
+
+  version="5.26"
+  run_test_application &
 
   # Wait for the container to write it's CID file
-  ct_wait_for_cid "$CID_FILE_DIR/$name"
+  ct_wait_for_cid $cid_file
 
-  test_scl_usage "perl --version" "v${VERSION}." "$name"
+  if [ x"$VERSION" == "x5.30-mod_fcgid" ]; then
+    version="5.30"
+  elif [ x"$VERSION" == "x5.26-mod_fcgid" ]; then
+    version="5.26"
+  elif [ x"$VERSION" == "x5.32" ]; then
+    version="5.32"
+  elif [ x"$VERSION" == "x5.34" ]; then
+    version="5.34"
+  elif [ x"$VERSION" == "x5.36" ]; then
+    version="5.36"
+  elif [ x"$VERSION" == "x5.38" ]; then
+    version="5.38"
+  elif [ x"$VERSION" == "x5.40" ]; then
+    version="5.40"
+  fi
+  test_scl_usage "perl --version" "v${version}."
   ct_check_testcase_result $?
 
-  test_connection "$name"
+  test_connection
   ct_check_testcase_result $?
-
-  kill_container_if_exists "$name"
+  cleanup_test_app
 }
 
 # Build application, run it, perform test function, clean up.
@@ -168,21 +227,22 @@ do_test() {
 
     tmp_dir=$(mktemp -d)
     ct_check_testcase_result $?
-    cid_file="$CID_FILE_DIR/$test_name"
+    cid_file="${tmp_dir}/cid"
     s2i_args="--pull-policy=never"
 
     # Build and run the test application
     prepare
     run_s2i_build $s2i_args "$@"
     ct_check_testcase_result $?
-    run_test_application "$test_name" >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
-    ct_wait_for_cid "$CID_FILE_DIR/$test_name"
+    run_test_application >"${tmp_dir}/out" 2>"${tmp_dir}/err" &
+    ct_wait_for_cid $cid_file
 
     # Perform user-supplied test function
-    $test_function "$test_name";
+    $test_function;
     ct_check_testcase_result $?
 
     # Terminate the test application and clean up
+    cleanup_test_app
     cleanup
     rm -rf "$tmp_dir"
     info "All tests for the ${test_name} finished successfully."
@@ -197,7 +257,7 @@ test_sample_test_app() {
     test_name='sample-test-app'
     info "Starting tests for ${test_name}"
 
-    cid_file="$CID_FILE_DIR/$test_name"
+    cid_file=$(mktemp -u --suffix=.cid)
 
     # Since we built the candidate image locally, we don't want S2I attempt to pull
     # it from Docker hub
@@ -216,10 +276,10 @@ test_sample_test_app() {
     ct_check_testcase_result $?
 
     # Test application with default UID
-    test_application "$test_name"
+    test_application
 
     # Test application with random UID
-    CONTAINER_ARGS="-u 12345" test_application "$test_name"
+    CONTAINER_ARGS="-u 12345" test_application
 
     info "All tests for the ${test_name} finished successfully."
     cleanup
@@ -227,8 +287,7 @@ test_sample_test_app() {
 
 # Check scripts installed from CPAN are available to the application.
 test_2_response() {
-    local name=$1
-    ct_test_response "http://$(ct_get_cip $name):${test_port}/" 200 'Usage'
+    test_response '/' 200 'Usage'
 }
 
 test_binpath() {
@@ -237,8 +296,7 @@ test_binpath() {
 
 # Check a single PSGI application is recognized a mod_perl is autoconfigured.
 test_3_response() {
-    local name=$1
-    ct_test_response "http://$(ct_get_cip $name):${test_port}/" 200 '<title>Web::Paste::Simple'
+    test_response '/' 200 '<title>Web::Paste::Simple'
 }
 
 test_psgi() {
@@ -247,9 +305,8 @@ test_psgi() {
 
 # Check variables can select a PSGI application and set URI path.
 test_4_response() {
-    local name=$1
-    ct_test_response "http://$(ct_get_cip $name):${test_port}/path" 200 '<title>Web::Paste::Simple' && \
-    ct_test_response "http://$(ct_get_cip $name):${test_port}/cpanfile" 200 'requires'
+    test_response '/path' 200 '<title>Web::Paste::Simple' && \
+    test_response '/cpanfile' 200 'requires'
 }
 
 test_psgi_variables() {
@@ -261,14 +318,74 @@ test_psgi_variables() {
 # TODO: send error_log to stderr after dropping support for broken
 # docker < 1.9.
 test_5_response() {
-    local name=$1
-    ct_test_response "http://$(ct_get_cip $name):${test_port}/" 200 'Text in HTTP body' && \
+    test_response '/' 200 'Text in HTTP body' && \
     test_stdout '"GET /[^"]*" 200 ' && \
     test_stdout 'Warning on stderr'
 }
 
 test_warningonstderr() {
     do_test 'warningonstderr' 'test_5_response'
+}
+
+# Check that httpd starts *.fcgi scripts via FCGI interface.
+# Checks it also recognizes index.fcgi as an index document.
+test_6_function() {
+    test_response '/another.fcgi' 200 'Another FCGI script.'
+    test_response '/' 200 'Index FCGI script.'
+}
+
+test_fcgi() {
+    do_test 'fcgi' 'test_6_function'
+}
+
+test_7_response() {
+    test_response '/' 200 'old initial value: 0'
+    ct_check_testcase_result $?
+
+    test_response '/' 200 'old initial value: 1'
+    ct_check_testcase_result $?
+
+    # If we don't set PSGI_RELOAD, this change don't affects application.
+    sleep 2
+    info "Changing source code of application"
+    docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
+    ct_check_testcase_result $?
+    sleep 2
+
+    test_response '/' 200 'old initial value: 2'
+    ct_check_testcase_result $?
+}
+
+test_psgi_hot_deploy_without_reload() {
+    do_test 'psgi-hot_deploy' 'test_7_response' \
+	'--env=PSGI_FILE=./index.psgi'
+}
+
+test_8_response() {
+    test_response '/' 200 'old initial value: 0'
+    ct_check_testcase_result $?
+
+    test_response '/' 200 'old initial value: 1'
+    ct_check_testcase_result $?
+
+    # If we set PSGI_RELOAD, this change affects application.
+    sleep 3
+    info "Changing source code of application"
+    docker exec $(cat ${cid_file}) /bin/sh -c "sed -ie 's/old initial value/new initial value/' lib/My/Test.pm"
+    ct_check_testcase_result $?
+
+    info "Check if new value is present"
+    docker exec $(cat ${cid_file}) /bin/sh -c "grep 'new initial' lib/My/Test.pm"
+    ct_check_testcase_result $?
+    sleep 3
+
+    test_response '/' 200 'new initial value: 0'
+    ct_check_testcase_result $?
+}
+
+test_psgi_hot_deploy_with_reload() {
+    do_test 'psgi-hot_deploy' 'test_8_response' \
+	'--env=PSGI_FILE=./index.psgi' '--env=PSGI_RELOAD=1'
 }
 
 test_npm() {
@@ -306,8 +423,5 @@ function test_from_dockerfile(){
   ct_check_testcase_result $t2
 }
 
-ct_init
-
+# Run the chosen tests
 TEST_SET=${TESTS:-$TEST_LIST} ct_run_tests_from_testset
-
-# vim: set tabstop=2:shiftwidth=2:expandtab:
