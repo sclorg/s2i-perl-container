@@ -97,9 +97,7 @@ class TestPerlSampleTestAppContainer:
         assert self.s2i_app.create_container(
             cid_file_name=cid_file_name, container_args=container_arg
         )
-        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
-        cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
-        assert cid
+        assert ContainerImage.wait_for_cid(cid_file_name=self.s2i_app.cid_file_dir / cid_file_name)
         cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
         assert cip
         assert self.s2i_app.test_response(url=f"http://{cip}", expected_code=200)
@@ -145,9 +143,7 @@ class TestPerlExampleAppContainer:
             cid_file_name=cid_file_name,
             container_args=f"--user=100001 {container_args}",
         )
-        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
-        cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
-        assert cid
+        assert ContainerImage.wait_for_cid(cid_file_name=self.s2i_app.cid_file_dir / cid_file_name)
         cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
         assert cip
         if application_path == warningonstderr:
@@ -220,7 +216,7 @@ class TestPerlHotDeployAppContainer:
             cid_file_name=cid_file_name,
             container_args=f"--user=100001 {container_args}",
         )
-        assert ContainerImage.wait_for_cid(cid_file_name=cid_file_name)
+        assert ContainerImage.wait_for_cid(cid_file_name=self.s2i_app.cid_file_dir / cid_file_name)
         cid = self.s2i_app.get_cid(cid_file_name=cid_file_name)
         assert cid
         cip = self.s2i_app.get_cip(cid_file_name=cid_file_name)
