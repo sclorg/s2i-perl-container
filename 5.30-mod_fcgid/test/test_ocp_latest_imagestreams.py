@@ -1,1 +1,0 @@
-../../test/test_ocp_latest_imagestreams.py

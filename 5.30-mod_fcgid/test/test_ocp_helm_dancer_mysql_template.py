@@ -1,1 +1,0 @@
-../../test/test_ocp_helm_dancer_mysql_template.py
