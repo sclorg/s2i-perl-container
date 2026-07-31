@@ -8,8 +8,7 @@ ENV PERL_VERSION={{ spec.version }} \
     PERL_SHORT_VER={{ spec.short }} \
     VERSION=0 \
     NAME=perl \
-    PATH=/opt/app-root/src/extlib/bin:$PATH \
-    PERL5LIB=/opt/app-root/src/extlib/lib/perl5
+    PATH=/opt/app-root/src/extlib/bin:$PATH
 
 ENV SUMMARY="Platform for building and running Perl {{ spec.version }} applications" \
     DESCRIPTION="Perl {{ spec.version }} available as container is a base platform for \
@@ -25,19 +24,19 @@ LABEL summary="$SUMMARY" \
       io.k8s.description="$DESCRIPTION" \
       io.k8s.display-name="Apache 2.4 with mod_fcgid and Perl {{ spec.version }}" \
       io.openshift.expose-services="8080:http" \
-      io.openshift.tags="builder,${NAME},${NAME}${PERL_SHORT_VER}" \
+      io.openshift.tags="{{ spec.openshift_tags }}" \
       io.openshift.s2i.scripts-url="image:///usr/libexec/s2i" \
       io.s2i.scripts-url="image:///usr/libexec/s2i" \
-      name="fedora/$NAME-{{ spec.short }}" \
-      com.redhat.component="$NAME" \
+      name="{{ spec.img_name }}" \
+      com.redhat.component="{{ spec.redhat_component }}" \
       maintainer="SoftwareCollections.org <sclorg@redhat.com>" \
       help="For more information visit https://github.com/sclorg/s2i-${NAME}-container" \
-      usage="s2i build <SOURCE-REPOSITORY> quay.io/fedora/$NAME-{{ spec.short }} <APP-NAME>"
+      usage="s2i build <SOURCE-REPOSITORY> {{ spec.img_name }}:latest <APP-NAME>"
 
-RUN INSTALL_PKGS="perl perl-devel mod_fcgid perl-App-cpanminus perl-FCGI patch" && \
+RUN INSTALL_PKGS="{{ spec.pkgs}}" && \
     dnf install -y --setopt=tsflags=nodocs  $INSTALL_PKGS && \
     rpm -V $INSTALL_PKGS && \
-    perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION $PERL_VERSION" && \
+    perl -v | grep -qe "v$PERL_VERSION\." && echo "Found VERSION {{ spec.version }}" && \
     dnf -y clean all --enablerepo='*'
 
 # Copy the S2I scripts from the specific language image to $STI_SCRIPTS_PATH
